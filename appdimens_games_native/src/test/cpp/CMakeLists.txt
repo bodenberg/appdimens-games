@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.16)
+project(appdimens_games_test LANGUAGES CXX)
+enable_testing()
+add_executable(native_test native_test.cpp ../../main/cpp/src/appdimens_games.cpp)
+target_include_directories(native_test PRIVATE ../../main/cpp/include)
+target_compile_features(native_test PRIVATE cxx_std_17)
+target_compile_options(native_test PRIVATE -Wall -Wextra -Werror -pedantic)
+add_test(NAME native_contract COMMAND native_test)

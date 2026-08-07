@@ -25,5 +25,10 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "AppDimens"
-include(":app")
+include(":appdimens_games_core")
+include(":appdimens_games_native")
+include(":appdimens_games_android")
+include(":appdimens_games_graphics")
+include(":appdimens_games_compose")
 include(":appdimens_games")
+include(":appdimens_games_bom")

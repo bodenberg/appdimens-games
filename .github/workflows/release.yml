@@ -1,0 +1,63 @@
+name: Release
+
+on:
+  push:
+    tags: ['v3.1.6']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing v3.1.6 tag to publish
+        required: true
+        default: v3.1.6
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build and publish GitHub release
+    if: github.event_name == 'push' || inputs.tag == 'v3.1.6'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref }}
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Verify release version
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_TAG: ${{ inputs.tag }}
+        run: |
+          test "$(sed -n 's/^VERSION_NAME=//p' gradle.properties)" = '3.1.6'
+          release_tag="$GITHUB_REF_NAME"
+          if [ "$EVENT_NAME" = 'workflow_dispatch' ]; then release_tag="$INPUT_TAG"; fi
+          test "$release_tag" = 'v3.1.6'
+      - name: Install Android packages
+        run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0' 'cmake;3.22.1' 'ndk;27.2.12479018'
+      - name: Validate and build release artifacts
+        run: |
+          tools/validate.sh
+          ./gradlew --stacktrace --no-daemon check lint assembleRelease :appdimens_games_core:build :appdimens_games_bom:build
+      - name: Collect artifacts and checksums
+        run: |
+          mkdir -p dist
+          find . -path '*/build/outputs/aar/*.aar' -exec cp {} dist/ \;
+          find appdimens_games_core appdimens_games_graphics appdimens_games_bom -path '*/build/libs/*.jar' -exec cp {} dist/ \;
+          (cd dist && sha256sum * > SHA256SUMS)
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v3.1.6
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+          files: dist/*
