@@ -87,7 +87,8 @@ Veja [Vulkan, OpenGL e engines](docs/guides/GRAPHICS.md).
 * meça no hardware alvo — throttling, ART e drivers alteram resultados.
 
 Detalhes: [arquitetura](docs/ARCHITECTURE.md), [performance](docs/PERFORMANCE.md),
-[migração](docs/MIGRATION.md) e [validação](docs/VALIDATION.md).
+[migração](docs/MIGRATION.md), [dependências auditadas](docs/DEPENDENCIES.md) e
+[validação](docs/VALIDATION.md).
 
 ## Build e validação
 
@@ -101,7 +102,7 @@ O primeiro comando não depende do Android SDK: compila o core com `javac -Xlint
 
 ## Compatibilidade
 
-Android 6/API 23+, Java 17, C++17, CMake 3.22.1 e ABIs `arm64-v8a`, `armeabi-v7a`,
+Android 6/API 23+, Java 17, C++17, CMake 4.1.2 e ABIs `arm64-v8a`, `armeabi-v7a`,
 `x86` e `x86_64`. Consulte [SECURITY.md](SECURITY.md) para reportar vulnerabilidades.
 
 Apache License 2.0 — veja [LICENSE](LICENSE).
