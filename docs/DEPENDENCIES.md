@@ -8,9 +8,9 @@ Auditoria realizada em 7 de agosto de 2026 diretamente nos metadados oficiais do
 
 | Componente | Versão adotada | Decisão |
 |---|---:|---|
-| Android Gradle Plugin | 8.13.2 | último patch estável da linha 8, sem migração disruptiva ao built-in Kotlin do AGP 9 |
-| Gradle Wrapper | 8.14.4 | elimina o aviso de compatibilidade do Kotlin 2.2 e possui SHA-256 fixado |
-| Kotlin/Compose plugin | 2.2.21 | último patch 2.2 compatível com AGP 8.13; 2.4.10 falhou na validação por metadata incompatível |
+| Android Gradle Plugin | 9.3.1 | release estável absoluto mais recente no Google Maven |
+| Gradle Wrapper | 9.7.0 | release estável absoluto mais recente, com SHA-256 oficial fixado |
+| Kotlin/Compose plugin | 2.4.10 | release estável absoluto mais recente; Android usa o suporte Kotlin built-in do AGP 9 |
 | Compose BOM | 2026.06.01 | release estável mais recente no Google Maven |
 | Android SDK | 36 | API estável usada para compilação |
 | Build Tools | 36.1.0 | revisão estável da geração 36 |
@@ -18,10 +18,16 @@ Auditoria realizada em 7 de agosto de 2026 diretamente nos metadados oficiais do
 | CMake | 4.1.2 | pacote estável atual do Android SDK |
 | JUnit 4 | 4.13.2 | release final mais recente da linha JUnit 4 |
 
+O lint do AGP 9.3.1 já anuncia `compileSdk 37`, porém o repositório estável oficial do
+Android SDK ainda não publica `platforms;android-37`. A biblioteca permanece em API 36
+até que o pacote possa ser instalado de forma reproduzível, sem depender de preview.
+
 O catálogo foi reduzido às quatro dependências realmente consumidas. Isso evita alertas
 falsos, resolução desnecessária e atualizações de bibliotecas que não fazem parte do binário.
-Atualizações de major do AGP/Kotlin devem ocorrer em uma alteração dedicada, acompanhadas de
-build limpo de todos os AARs, lint e inspeção do metadata Kotlin.
+O plugin legado `org.jetbrains.kotlin.android` foi removido porque o AGP 9 fornece Kotlin
+diretamente. O plugin `org.jetbrains.kotlin.plugin.compose` continua explícito para manter o
+compilador Compose sincronizado com Kotlin 2.4.10. Atualizações futuras de major devem ser
+acompanhadas de build limpo dos AARs, lint e inspeção do metadata Kotlin.
 
 O wrapper verifica a distribuição antes da execução por meio de `distributionSha256Sum`.
 Dependabot monitora Gradle e GitHub Actions semanalmente, mas nenhuma atualização automática

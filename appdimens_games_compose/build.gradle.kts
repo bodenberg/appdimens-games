@@ -1,5 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-plugins { alias(libs.plugins.android.library); alias(libs.plugins.kotlin.android); alias(libs.plugins.kotlin.compose) }
+plugins { alias(libs.plugins.android.library); alias(libs.plugins.kotlin.compose) }
 group = providers.gradleProperty("GROUP").get(); version = providers.gradleProperty("VERSION_NAME").get()
 android {
     namespace = "io.github.bodenberg.appdimens.games.compose"; compileSdk = 36

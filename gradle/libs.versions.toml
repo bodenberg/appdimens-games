@@ -1,7 +1,7 @@
 [versions]
 # Intentionally minimal: every declared coordinate is consumed by a module.
-agp = "8.13.2"
-kotlin = "2.2.21"
+agp = "9.3.1"
+kotlin = "2.4.10"
 composeBom = "2026.06.01"
 junit = "4.13.2"
 
@@ -13,5 +13,4 @@ junit = { module = "junit:junit", version.ref = "junit" }
 
 [plugins]
 android-library = { id = "com.android.library", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
