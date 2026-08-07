@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 3.22.1)
+project(appdimens_games VERSION 3.1.6 LANGUAGES CXX)
+add_library(appdimens_games SHARED src/appdimens_games.cpp src/jni_bridge.cpp)
+target_include_directories(appdimens_games PUBLIC include)
+target_compile_features(appdimens_games PUBLIC cxx_std_17)
+target_compile_options(appdimens_games PRIVATE
+    -fvisibility=hidden -ffunction-sections -fdata-sections -Wall -Wextra -Werror
+    $<$<CONFIG:Release>:-O3;-ffast-math>
+)
+target_link_options(appdimens_games PRIVATE -Wl,--gc-sections -Wl,--no-undefined)

@@ -1,0 +1,63 @@
+name: Release
+
+on:
+  push:
+    tags: ['v3.1.6']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing v3.1.6 tag to publish
+        required: true
+        default: v3.1.6
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build and publish GitHub release
+    if: github.event_name == 'push' || inputs.tag == 'v3.1.6'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref }}
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3
+      - uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4
+      - name: Verify release version
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_TAG: ${{ inputs.tag }}
+        run: |
+          test "$(sed -n 's/^VERSION_NAME=//p' gradle.properties)" = '3.1.6'
+          release_tag="$GITHUB_REF_NAME"
+          if [ "$EVENT_NAME" = 'workflow_dispatch' ]; then release_tag="$INPUT_TAG"; fi
+          test "$release_tag" = 'v3.1.6'
+      - name: Install Android packages
+        run: sdkmanager 'platforms;android-36' 'build-tools;36.1.0' 'cmake;4.1.2' 'ndk;30.0.15729638'
+      - name: Validate and build release artifacts
+        run: |
+          tools/validate.sh
+          ./gradlew --stacktrace --no-daemon check lint assembleRelease :appdimens_games_core:build :appdimens_games_bom:build
+      - name: Collect artifacts and checksums
+        run: |
+          mkdir -p dist
+          find . -path '*/build/outputs/aar/*.aar' -exec cp {} dist/ \;
+          find appdimens_games_core appdimens_games_graphics appdimens_games_bom -path '*/build/libs/*.jar' -exec cp {} dist/ \;
+          (cd dist && sha256sum * > SHA256SUMS)
+      - uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
+        with:
+          tag_name: v3.1.6
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+          files: dist/*
