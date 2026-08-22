@@ -1,0 +1,32 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.vanniktech.maven.publish)
+}
+
+android {
+    namespace = "com.appdimens.games"
+    compileSdk = 35
+
+    defaultConfig {
+        minSdk = 24
+        consumerProguardFiles("consumer-rules.pro")
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions { jvmTarget = "17" }
+
+    testOptions { unitTests.isReturnDefaultValues = true }
+}
+
+dependencies {
+    api(libs.androidx.annotation)
+    // Compose é opcional em runtime: a API code (Kotlin/Java) funciona sem Compose.
+    compileOnly(libs.androidx.compose.runtime)
+    compileOnly(libs.androidx.compose.ui)
+    testImplementation(libs.junit)
+}
