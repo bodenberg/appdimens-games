@@ -26,6 +26,11 @@
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|density|uiMode" />
 
         <activity
+            android:name=".ComposeGameActivity"
+            android:resizeableActivity="true"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|density|uiMode" />
+
+        <activity
             android:name=".VulkanGameActivity"
             android:resizeableActivity="true"
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|density|uiMode" />

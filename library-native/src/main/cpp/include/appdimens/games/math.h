@@ -98,13 +98,11 @@ inline float toPx(float dp, const Metrics& m) { return dp * m.density; }
 struct Vec2 { float x, y; };
 struct Vec3 { float x, y, z; };
 
-/// Scales a world/design point with the FIT factor (letterbox-consistent).
+/// Scales a world/design point with the FIT factor (letterbox-consistent,
+/// identical to ViewportMode::FitAll: min(widthDp/designW, heightDp/designH)).
 inline Vec2 scaleVecFit(Vec2 v, const Metrics& m,
                         float designW, float designH) {
-    const float mn = m.widthDp < m.heightDp ? m.widthDp : m.heightDp;
-    const float mx = m.widthDp < m.heightDp ? m.heightDp : m.widthDp;
-    const float s = std::fmin(std::fmin(mn / designW, mx / designH),
-                              std::fmin(mx / designW, mn / designH));
+    const float s = std::fmin(m.widthDp / designW, m.heightDp / designH);
     return {v.x * s * m.density, v.y * s * m.density};
 }
 

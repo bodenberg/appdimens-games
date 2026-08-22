@@ -55,11 +55,27 @@ class VulkanGameActivity : Activity(), SurfaceHolder.Callback2, Choreographer.Fr
 
     override fun surfaceCreated(holder: SurfaceHolder) {
         GameScreen.updateFromContext(this, fullscreen = true)
+        publishNativeMetrics()
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
         // THE resize story: new snapshot published; all kernels adjust on the next frame.
         GameScreen.updateFromContext(this, fullscreen = true)
+        publishNativeMetrics()
+    }
+
+    /** Mirrors the live snapshot into the C++ hub so JNI kernels stay in sync. */
+    private fun publishNativeMetrics() {
+        if (!NativeBridge.isAvailable) return
+        val cfg = resources.configuration
+        NativeBridge.updateMetrics(
+            widthDp = cfg.screenWidthDp.toFloat(),
+            heightDp = cfg.screenHeightDp.toFloat(),
+            smallestWidthDp = cfg.smallestScreenWidthDp.toFloat(),
+            densityDpi = cfg.densityDpi.toFloat(),
+            fontScale = cfg.fontScale,
+            fullscreen = true
+        )
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) { /* demo */ }
@@ -83,7 +99,10 @@ class VulkanGameActivity : Activity(), SurfaceHolder.Callback2, Choreographer.Fr
         fpsFrames++
         if (fpsWindowStart == 0L) fpsWindowStart = frameTimeNanos
         if (frameTimeNanos - fpsWindowStart >= 1_000_000_000L) {
-            title = "Vulkan surface · ${fpsFrames} FPS · scale=${"%.2f".format(factor)}"
+            // Exercise the JNI kernel path too (same math, native hub).
+            val nativePx = if (NativeBridge.isAvailable) NativeBridge.scaled(48f) else 0f
+            title = "Vulkan · ${fpsFrames} FPS · scale=${"%.2f".format(factor)}" +
+                if (nativePx > 0f) " · native48=${"%.1f".format(nativePx)}px" else " · native off"
             fpsFrames = 0; fpsWindowStart = frameTimeNanos
         }
         Choreographer.getInstance().postFrameCallback(this)

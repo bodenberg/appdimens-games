@@ -2,6 +2,7 @@ package com.appdimens.games.resize
 
 import android.content.Context
 import com.appdimens.games.core.GameScreen
+import kotlin.math.min
 
 /**
  * [EN] Container-aware auto-fit extensions for game HUD (dynamic score bars,

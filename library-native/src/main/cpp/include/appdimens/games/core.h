@@ -72,7 +72,9 @@ struct Metrics {
         m.wFactor = widthDp * Constants::INV_BASE_RATIO;
         m.hFactor = heightDp * Constants::INV_BASE_RATIO;
         m.arMul = arMultiplier(mn, mx);
-        const float logAr = std::log(((mx / mn) / Constants::REFERENCE_AR));
+        const float logAr = mn > 0.0f
+            ? std::log((mx / mn) / Constants::REFERENCE_AR)
+            : 0.0f;
         m.scaledArMul = 1.0f + (sw - Constants::BASE_WIDTH_DP) *
             (Constants::ADJUSTMENT_SCALE + Constants::SENSITIVITY_DEFAULT * logAr);
 

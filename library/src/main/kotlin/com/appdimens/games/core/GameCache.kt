@@ -23,10 +23,11 @@ object GameCache {
 
     private const val PARTITION_SIZE = 512
 
-    private val partitions = ConcurrentHashMap<GameMetrics, AtomicReferenceArray<Slot?>>()
+    @PublishedApi
+    internal val partitions = ConcurrentHashMap<GameMetrics, AtomicReferenceArray<Slot?>>()
 
-    /** Immutable cached entry: 64-bit key + raw float bits. */
-    class Slot(@JvmField val key: Long, @JvmField val valueBits: Long)
+    /** Immutable cached entry: 64-bit key + raw float bits (32-bit). */
+    class Slot(@JvmField val key: Long, @JvmField val valueBits: Int)
 
     // ─── Key packing ───────────────────────────────────────────────────────
     // [63] applyAR | [62..31] base float bits | [30..27] strategy | [26..24] valueType

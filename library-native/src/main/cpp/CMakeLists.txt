@@ -13,4 +13,4 @@ target_include_directories(appdimens_games PRIVATE
 
 # Header-first core: only the JNI bridge is compiled; hot math is inline.
 target_compile_options(appdimens_games PRIVATE
-    -O3 -ffast-math=no -fno-exceptions -fvisibility=hidden)
+    -O3 -fno-fast-math -fno-exceptions -fvisibility=hidden)

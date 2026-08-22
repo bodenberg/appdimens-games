@@ -2,6 +2,7 @@ package com.appdimens.games.compat
 
 import android.content.Context
 import androidx.annotation.Keep
+import com.appdimens.games.code.sdpa
 
 /**
  * [EN] DEPRECATED 2.0.1 migration shim. Maps the old gateway names to the unified

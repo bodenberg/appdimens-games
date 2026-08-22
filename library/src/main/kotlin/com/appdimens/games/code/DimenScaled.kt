@@ -2,6 +2,7 @@ package com.appdimens.games.code
 
 import android.content.Context
 import com.appdimens.games.common.DpQualifier
+import com.appdimens.games.common.Inverter
 import com.appdimens.games.common.Orientation
 import com.appdimens.games.common.UiModeType
 import com.appdimens.games.core.GameMetrics
@@ -58,7 +59,7 @@ class DimenScaled private constructor(private val baseValue: Float) {
         val base = resolveOverride(m) ?: baseValue
         if (ignoreMultiWindows && isConstrained(m)) return base * m.density
         return GameMath.toPx(
-            GameMath.calculateScaledDp(base, m, DpQualifier.SMALL_WIDTH, applyAspectRatio, customSensitivityK),
+            GameMath.calculateScaledDp(base, m, DpQualifier.SMALL_WIDTH, Inverter.DEFAULT, applyAspectRatio, customSensitivityK),
             m
         )
     }
@@ -68,7 +69,7 @@ class DimenScaled private constructor(private val baseValue: Float) {
         val m = resolveMetrics(ignoreMultiWindows)
         val base = resolveOverride(m) ?: baseValue
         if (ignoreMultiWindows && isConstrained(m)) return base
-        return GameMath.calculateScaledDp(base, m, DpQualifier.SMALL_WIDTH, applyAspectRatio, customSensitivityK)
+        return GameMath.calculateScaledDp(base, m, DpQualifier.SMALL_WIDTH, Inverter.DEFAULT, applyAspectRatio, customSensitivityK)
     }
 
     private fun resolveOverride(m: GameMetrics): Float? {

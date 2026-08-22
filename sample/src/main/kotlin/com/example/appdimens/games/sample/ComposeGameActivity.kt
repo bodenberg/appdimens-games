@@ -25,6 +25,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.appdimens.games.auto.compose.asdp
@@ -111,9 +112,9 @@ private fun GameScene() {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            HudChip("SCORE ${((t * 100).toInt())}", hudIcon)
-            HudChip("HP ▮▮▮▮▮", hudIcon)
-            HudChip("×${"%.2f".format(metrics.scale)}", hudIcon)
+            HudChip("SCORE ${((t * 100).toInt())}", hudIconInv)
+            HudChip("HP ▮▮▮▮▮", hudIconInv)
+            HudChip("×${"%.2f".format(metrics.scale)}", hudIconInv)
         }
 
         Column(
@@ -123,7 +124,7 @@ private fun GameScene() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                "${metrics.screenWidthDp}×${metrics.screenHeightDp} dp · sw=${metrics.smallestWidthDp} · " +
+                "${metrics.screenWidthDp}×${metrics.screenHeightDp} dp · sw=${metrics.smallestScreenWidthDp} · " +
                     "fullscreen=${metrics.isFullscreen}",
                 color = Color(0xFF8A93A5), fontSize = 12.sp
             )
@@ -136,15 +137,16 @@ private fun GameScene() {
 }
 
 @Composable
-private fun HudChip(label: String, iconBaseDp: Float) {
+private fun HudChip(label: String, iconBaseDp: Dp) {
     val m = GameScreen.metrics()
     Text(
         label,
         color = Color.White,
-        fontSize = with(m) { iconBaseDp * scale }.sp.coerceAtLeast(10.sp),
+        // Fonte proporcional ao ícone, limitada para o HUD caber sempre na tela.
+        fontSize = (iconBaseDp.value * 0.55f).coerceIn(11f, 15f).sp,
         fontWeight = FontWeight.SemiBold,
         modifier = Modifier
             .background(Color(0x80101420))
-            .padding(horizontal = 10.dp, vertical = 6.dp)
+            .padding(horizontal = 8.dp, vertical = 4.dp)
     )
 }

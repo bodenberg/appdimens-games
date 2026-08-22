@@ -5,9 +5,15 @@ on:
     branches: [ main, "feat/**" ]
   pull_request:
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   oracle:
-    runs-on: ubuntu-latest
+    name: Formula oracle audit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -16,17 +22,21 @@ jobs:
         run: python3 scripts/oracle.py
 
   android:
-    runs-on: ubuntu-latest
+    name: Build & unit tests (all modules)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+      # O projeto fixa o toolchain da daemon JVM em 25 (gradle/gradle-daemon-jvm.properties).
       - uses: actions/setup-java@v4
-        with: { distribution: temurin, java-version: "17" }
+        with: { distribution: temurin, java-version: "25" }
+      - uses: android-actions/setup-android@v3
       - uses: gradle/actions/setup-gradle@v4
         with: { gradle-version: "9.5.0" }
+      # Componentes exatamente como usados pelo projeto (AGP 9.3.1 defaults).
+      - name: Install Android packages
+        run: sdkmanager 'platforms;android-37' 'build-tools;36.0.0' 'cmake;3.22.1' 'ndk;28.2.13676358'
       - name: Build & test (JVM unit tests)
-        run: |
-          gradle :library:testDebugUnitTest \
-                    :library-percent:testDebugUnitTest \
-                    :library-fluid:testDebugUnitTest \
-                    :library-fit:testDebugUnitTest \
-                    :sample:assembleDebug :benchlab:assembleDebug --no-daemon
+        # Agregação na raiz cobre todos os módulos Android (library* + sample + benchlab).
+        # Variantes debug e release exercitam R8 do sample e o build nativo (JNI/C++).
+        run: gradle assembleDebug assembleRelease testDebugUnitTest --no-daemon

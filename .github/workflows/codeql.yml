@@ -20,26 +20,43 @@ jobs:
   analyze:
     name: Analyze ${{ matrix.language }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
         language: [java-kotlin, cpp]
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      # Toolchain da daemon JVM do projeto = 25 (gradle/gradle-daemon-jvm.properties).
       - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '25'
       - if: matrix.language == 'java-kotlin'
         uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4
         with: { gradle-version: "9.5.0" }
       - uses: github/codeql-action/init@c4dd10e44af883a891fe31ced449bcb4a6728b9b # v3
         with:
           languages: ${{ matrix.language }}
+      # Todos os módulos Kotlin publicados (o módulo nativo fica fora aqui:
+      # C++ é coberto pela matriz 'cpp' abaixo).
       - name: Build analyzed sources (java-kotlin)
         if: matrix.language == 'java-kotlin'
-        run: gradle :library:assembleRelease --no-daemon
+        run: |
+          gradle :library:assembleRelease \
+                 :library-auto:assembleRelease \
+                 :library-density:assembleRelease \
+                 :library-diagonal:assembleRelease \
+                 :library-fill:assembleRelease \
+                 :library-fit:assembleRelease \
+                 :library-fluid:assembleRelease \
+                 :library-interpolated:assembleRelease \
+                 :library-logarithmic:assembleRelease \
+                 :library-percent:assembleRelease \
+                 :library-perimeter:assembleRelease \
+                 :library-power:assembleRelease \
+                 :library-resize:assembleRelease \
+                 :library-units:assembleRelease --no-daemon
       - name: Build analyzed sources (cpp)
         if: matrix.language == 'cpp'
         run: |

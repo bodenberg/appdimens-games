@@ -15,20 +15,24 @@ Compared to the deprecated `appdimens-games` 2.0.1, which hashed parameters and 
 
 ## Methodology (BenchLab module)
 
-Identical to the family BenchLab:
+Runs **100% on a background thread** and streams **per-case** results to the UI as each
+measurement completes — the main thread is never blocked (no ANR). A failing case is
+reported and skipped instead of killing the run.
 
-* Warm-up: 20,000 ops; Measure: 15 samples × 50,000 ops;
-* Order rotation across libraries; anti-DCE checksum sink;
-* Stats: **median / min / P90** per library; ratios reported vs games-3.0.
+* Warm-up: 3,000 ops; Measure: 9 samples × 10,000 ops;
+* Anti-DCE checksum sink;
+* Stats: **median / min / P90** per case; ratios reported vs games-3.0.
 
-Libraries compared on-device: `games-3.0 (new)` · `games-2.0.1 (legacy)` · `dynamic-3.1.9`.
+Cases compared on-device: `games-3.0 kernel` · `games-3.0 ext (16.sdp)` ·
+`games-3.0 AR-aware` · `games-2.0.1 legacy gateway` · `dynamic-3.1.9 facade` ·
+`dynamic-3.1.9 sdpa`.
 
 ## Running
 
 ```bash
 ./gradlew :benchlab:installDebug
 adb shell am start -n com.example.benchlab/.BenchlabActivity
-# press RUN — results appear on screen (ns/op)
+# press RUN — results stream on screen per case (ns/op), summary ratios at the end
 ```
 
 Expected outcome on modern devices (consistent with family numbers): games-3.0 fast lanes at single-digit ns/op, legacy gateway typically **10–50× slower**, dynamic comparable to games-3.0 (same architecture).

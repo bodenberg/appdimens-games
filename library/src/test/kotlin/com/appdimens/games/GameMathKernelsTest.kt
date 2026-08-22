@@ -12,12 +12,12 @@ import org.junit.Test
  */
 class GameMathKernelsTest {
 
-    private fun m(w: Int, h: Int, sw: Int = 0, dpi: Int = 160): GameMetrics =
-        GameMetrics.of(w, h, sw, dpi)
+    private fun m(w: Int, h: Int, sw: Int = 0, densityDpi: Int = 160): GameMetrics =
+        GameMetrics.of(w, h, sw, densityDpi)
 
     private val phone = m(360, 800)
     private val land = m(800, 360)
-    private val tablet = m(600, 960, dpi = 320)
+    private val tablet = m(600, 960, densityDpi = 320)
     private val ref = m(300, 533)
 
     @Test fun scaled_16_phone_is19_2() {

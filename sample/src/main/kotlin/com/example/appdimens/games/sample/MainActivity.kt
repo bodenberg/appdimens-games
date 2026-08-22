@@ -60,10 +60,10 @@ class MainActivity : ComponentActivity() {
                     "Live snapshot",
                     listOf(
                         "window: ${m.screenWidthDp}×${m.screenHeightDp} dp",
-                        "sw: ${m.smallestWidthDp} dp",
+                        "sw: ${m.smallestScreenWidthDp} dp",
                         "density: ${m.density}",
                         "fullscreen: ${m.isFullscreen}",
-                        "player sdpa(px): ${64f.sdpa(null)}",
+                        "player sdpa(px): ${64.sdpa(null)}",
                         "hud sdp(px): ${DimenSdp.sdp(null, 48)}"
                     )
                 )

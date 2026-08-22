@@ -129,14 +129,23 @@ data class ViewportTransform(
  */
 object WorldScale {
 
-    /** FIT factor in px per world unit (letterbox-consistent). */
-    @JvmStatic fun fitPx(metrics: GameMetrics, designW: Float, designH: Float): Float =
-        minOf(metrics.minDimensionDp / minOf(designW, designH),
-              metrics.maxDimensionDp / maxOf(designW, designH)) * metrics.density
+    /** [EN] FIT factor in px per world unit — identical math to [ViewportMode.FIT_ALL]
+     *  (`min(windowW/designW, windowH/designH)`), so sprites and viewport agree exactly.
+     *  [PT] Fator FIT em px por unidade de mundo — matemática idêntica ao
+     *  [ViewportMode.FIT_ALL], sprites e viewport concordam exatamente. */
+    @JvmStatic fun fitPx(metrics: GameMetrics, designW: Float, designH: Float): Float {
+        val wDp = metrics.screenWidthDp.coerceAtLeast(1).toFloat()
+        val hDp = metrics.screenHeightDp.coerceAtLeast(1).toFloat()
+        return minOf(wDp / designW, hDp / designH) * metrics.density
+    }
 
-    /** FILL factor in px per world unit (cover). */
-    @JvmStatic fun fillPx(metrics: GameMetrics, designW: Float, designH: Float): Float =
-        maxOf(metrics.minDimensionDp / designW, metrics.maxDimensionDp / designH) * metrics.density
+    /** [EN] FILL (cover) factor in px per world unit — matches [ViewportMode.CROP].
+     *  [PT] Fator FILL (cover) em px por unidade de mundo — equivale ao [ViewportMode.CROP]. */
+    @JvmStatic fun fillPx(metrics: GameMetrics, designW: Float, designH: Float): Float {
+        val wDp = metrics.screenWidthDp.coerceAtLeast(1).toFloat()
+        val hDp = metrics.screenHeightDp.coerceAtLeast(1).toFloat()
+        return maxOf(wDp / designW, hDp / designH) * metrics.density
+    }
 
     /** Scales a point from world/design space into px using the FIT factor. */
     @JvmStatic fun toScreen(v: Vec2, metrics: GameMetrics, designW: Float, designH: Float): Vec2 {
