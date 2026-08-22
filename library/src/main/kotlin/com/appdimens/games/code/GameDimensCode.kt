@@ -5,191 +5,173 @@ import com.appdimens.games.common.DpQualifier
 import com.appdimens.games.common.Inverter
 import com.appdimens.games.core.GameMetrics
 import com.appdimens.games.core.GameScreen
+import com.appdimens.games.core.GameScreenConstants as C
 import com.appdimens.games.math.GameMath
 
 /**
- * [EN] Code-side (non-Compose) scaled dimension extensions for Kotlin & Java games.
- * Family-identical stems: `sdp/hdp/wdp` (+`a` aspect-ratio, `i` resize-invariant, `ia`),
- * `Px` variants, inverters and facilitators. All read the live [GameScreen] snapshot,
- * so values auto-adjust on window resize; `i` variants stay anchored to the frozen
- * fullscreen reference.
+ * [EN] Scaled dimension extensions — **identical usage to `appdimens-dynamic` / `-kmp`**.
+ * Stems `sdp/hdp/wdp` with suffixes `a` (aspect-ratio refinement), `i`
+ * (`ignoreMultiWindows`: invariant under resized windows / multi-window),
+ * `ia` (both). Code-side results are **pixels** (family convention); Compose
+ * counterparts return [androidx.compose.ui.unit.Dp].
  *
- * [PT] Extensões de dimensão escalada para jogos Kotlin/Java (fora do Compose).
- * Stems idênticos à família: `sdp/hdp/wdp` (+`a` proporção, `i` invariante a resize, `ia`),
- * variantes `Px`, inversores e facilitadores. Todas leem o snapshot vivo do [GameScreen],
- * então os valores se ajustam automaticamente no redimensionamento; as variantes `i`
- * permanecem ancoradas na referência fullscreen congelada.
- *
- * ```kotlin
- * val button = 48.sdp(context)      // auto-adjusts on resize
- * val hud    = 48.sdpi(context)     // invariant under split-screen / resized window
- * ```
+ * [PT] Extensões de dimensão escalada — **uso idêntico ao appdimens-dynamic/-kmp**.
+ * Stems `sdp/hdp/wdp` com sufixos `a`, `i` e `ia`. No lado code o resultado é em
+ * **pixels** (convenção da família); no Compose retorna-se Dp.
  */
 
-// ─── Core resolvers ────────────────────────────────────────────────────────
-
-/** Resolves with live metrics unless [ignoreResize] anchors to the frozen fullscreen snapshot. */
 @PublishedApi
-internal fun resolveMetrics(ignoreResize: Boolean): GameMetrics =
-    if (ignoreResize) GameScreen.invariantMetrics() else GameScreen.metrics()
+internal fun resolveMetrics(ignoreMultiWindows: Boolean): GameMetrics =
+    if (ignoreMultiWindows) GameScreen.invariantMetrics() else GameScreen.metrics()
 
 @PublishedApi
 internal fun isConstrained(metrics: GameMetrics): Boolean =
     !metrics.isFullscreen || metrics.minDimensionDp <= 0f
 
+private fun Float.pxOf(m: GameMetrics): Float = this * m.density
+
 // ─── sdp family (SMALL_WIDTH anchored — rotation-invariant) ────────────────
 
-/** [EN] Scaled dp by smallest width. [PT] Dp escalado pela menor largura. */
-fun Int.sdp(context: Context?): Float = toFloat() * resolveMetrics(false).scale
+/** [EN] Scaled by smallest width, in px. [PT] Escala pela menor largura, em px. */
+fun Int.sdp(context: Context?): Float {
+    val m = resolveMetrics(false)
+    return (toFloat() * m.scale).pxOf(m)
+}
 
-/** Aspect-ratio aware SCALED. */
-fun Int.sdpa(context: Context?): Float = toFloat() * resolveMetrics(false).defaultScaledAspectRatioMultiplier
+fun Int.sdpa(context: Context?): Float {
+    val m = resolveMetrics(false)
+    return (toFloat() * m.defaultScaledAspectRatioMultiplier).pxOf(m)
+}
 
-/** Resize-invariant SCALED (`i`). */
+/** `i` — ignores multi-window/resized-window adjustments (invariant). */
 fun Int.sdpi(context: Context?): Float {
     val m = resolveMetrics(true)
-    return if (isConstrained(m)) toFloat() else toFloat() * m.scale
+    val v = if (isConstrained(m)) toFloat() else toFloat() * m.scale
+    return v.pxOf(m)
 }
 
-/** Invariant + aspect ratio (`ia`). */
 fun Int.sdpia(context: Context?): Float {
     val m = resolveMetrics(true)
-    return if (isConstrained(m)) toFloat() else toFloat() * m.defaultScaledAspectRatioMultiplier
-}
-
-/** [EN] Pixel result of [sdp]. [PT] Resultado em pixels de [sdp]. */
-fun Int.sdpPx(context: Context?): Float {
-    val m = resolveMetrics(false)
-    return toFloat() * m.scale * m.density
-}
-
-fun Int.sdpaPx(context: Context?): Float {
-    val m = resolveMetrics(false)
-    return toFloat() * m.defaultScaledAspectRatioMultiplier * m.density
-}
-
-fun Int.sdpiPx(context: Context?): Float {
-    val m = resolveMetrics(true)
-    return if (isConstrained(m)) toFloat() * m.density else toFloat() * m.scale * m.density
+    val v = if (isConstrained(m)) toFloat() else toFloat() * m.defaultScaledAspectRatioMultiplier
+    return v.pxOf(m)
 }
 
 // ─── hdp family (HEIGHT qualifier) ─────────────────────────────────────────
 
-/** Scaled dp by current height. */
-fun Int.hdp(context: Context?): Float = toFloat() * resolveMetrics(false).screenHeightFactor
-
-fun Int.hdpa(context: Context?): Float =
-    toFloat() * resolveMetrics(false).screenHeightFactor * resolveMetrics(false).defaultAspectRatioMultiplier
-
+fun Int.hdp(context: Context?): Float {
+    val m = resolveMetrics(false)
+    return (toFloat() * m.screenHeightFactor).pxOf(m)
+}
+fun Int.hdpa(context: Context?): Float {
+    val m = resolveMetrics(false)
+    return (toFloat() * m.screenHeightFactor * m.defaultAspectRatioMultiplier).pxOf(m)
+}
 fun Int.hdpi(context: Context?): Float {
     val m = resolveMetrics(true)
-    return if (isConstrained(m)) toFloat() else toFloat() * m.screenHeightFactor
+    val v = if (isConstrained(m)) toFloat() else toFloat() * m.screenHeightFactor
+    return v.pxOf(m)
 }
-
 fun Int.hdpia(context: Context?): Float {
     val m = resolveMetrics(true)
-    return if (isConstrained(m)) toFloat()
+    val v = if (isConstrained(m)) toFloat()
     else toFloat() * m.screenHeightFactor * m.defaultAspectRatioMultiplier
-}
-
-fun Int.hdpPx(context: Context?): Float = hdp(context) * resolveMetrics(false).density
-fun Int.hdpiPx(context: Context?): Float {
-    val m = resolveMetrics(true)
-    return (if (isConstrained(m)) toFloat() else toFloat() * m.screenHeightFactor) * m.density
+    return v.pxOf(m)
 }
 
 // ─── wdp family (WIDTH qualifier) ──────────────────────────────────────────
 
-/** Scaled dp by current width. */
-fun Int.wdp(context: Context?): Float = toFloat() * resolveMetrics(false).screenWidthFactor
-
-fun Int.wdpa(context: Context?): Float =
-    toFloat() * resolveMetrics(false).screenWidthFactor * resolveMetrics(false).defaultAspectRatioMultiplier
-
+fun Int.wdp(context: Context?): Float {
+    val m = resolveMetrics(false)
+    return (toFloat() * m.screenWidthFactor).pxOf(m)
+}
+fun Int.wdpa(context: Context?): Float {
+    val m = resolveMetrics(false)
+    return (toFloat() * m.screenWidthFactor * m.defaultAspectRatioMultiplier).pxOf(m)
+}
 fun Int.wdpi(context: Context?): Float {
     val m = resolveMetrics(true)
-    return if (isConstrained(m)) toFloat() else toFloat() * m.screenWidthFactor
+    val v = if (isConstrained(m)) toFloat() else toFloat() * m.screenWidthFactor
+    return v.pxOf(m)
 }
-
 fun Int.wdpia(context: Context?): Float {
     val m = resolveMetrics(true)
-    return if (isConstrained(m)) toFloat()
+    val v = if (isConstrained(m)) toFloat()
     else toFloat() * m.screenWidthFactor * m.defaultAspectRatioMultiplier
+    return v.pxOf(m)
 }
 
-fun Int.wdpPx(context: Context?): Float = wdp(context) * resolveMetrics(false).density
-fun Int.wdpiPx(context: Context?): Float {
-    val m = resolveMetrics(true)
-    return (if (isConstrained(m)) toFloat() else toFloat() * m.screenWidthFactor) * m.density
-}
+// ─── Inverters (family naming: sdpPh/Lh/Pw/Lw · hdpLw/hdpPw · wdpLh/wdpPh) ──
 
-// ─── Inverters (family parity) ─────────────────────────────────────────────
+/** SW→PH in portrait. */
+fun Int.sdpPh(context: Context?, ignoreMultiWindows: Boolean = false): Float =
+    inverted(context, Inverter.SW_TO_PH, ignoreMultiWindows)
 
-/**
- * [EN] SW behaves as WIDTH in landscape (`SW_TO_LW`) — landscape-first HUD.
- * [PT] SW comporta-se como largura em paisagem — HUD landscape-first.
- */
-fun Int.sdpLw(context: Context?, ignoreResize: Boolean = false): Float =
-    invertScaled(this, context, Inverter.SW_TO_LW, ignoreResize)
+/** SW→LH in landscape. */
+fun Int.sdpLh(context: Context?, ignoreMultiWindows: Boolean = false): Float =
+    inverted(context, Inverter.SW_TO_LH, ignoreMultiWindows)
 
-/** HEIGHT behaves as WIDTH in landscape (`PH_TO_LW`). */
-fun Int.hdpLw(context: Context?, ignoreResize: Boolean = false): Float =
-    invertScaled(this, context, Inverter.PH_TO_LW, ignoreResize)
+/** SW→PW in portrait. */
+fun Int.sdpPw(context: Context?, ignoreMultiWindows: Boolean = false): Float =
+    inverted(context, Inverter.SW_TO_PW, ignoreMultiWindows)
 
-/** SMALL_WIDTH behaves as HEIGHT in portrait (`SW_TO_PH`). */
-fun Int.sdpPh(context: Context?, ignoreResize: Boolean = false): Float =
-    invertScaled(this, context, Inverter.SW_TO_PH, ignoreResize)
+/** SW→LW in landscape. */
+fun Int.sdpLw(context: Context?, ignoreMultiWindows: Boolean = false): Float =
+    inverted(context, Inverter.SW_TO_LW, ignoreMultiWindows)
 
-private fun Number.invertScaled(
-    receiver: Number, @Suppress("UNUSED_PARAMETER") ctx: Context?,
-    inverter: Inverter, ignoreResize: Boolean,
+/** PH→LW (HEIGHT behaves as WIDTH in landscape). */
+fun Int.hdpLw(context: Context?, ignoreMultiWindows: Boolean = false): Float =
+    inverted(context, Inverter.PH_TO_LW, ignoreMultiWindows, DpQualifier.HEIGHT)
+
+/** LH→PW (landscape HEIGHT behaves as portrait WIDTH). */
+fun Int.hdpPw(context: Context?, ignoreMultiWindows: Boolean = false): Float =
+    inverted(context, Inverter.LH_TO_PW, ignoreMultiWindows, DpQualifier.HEIGHT)
+
+/** PW→LH (WIDTH behaves as HEIGHT in landscape). */
+fun Int.wdpLh(context: Context?, ignoreMultiWindows: Boolean = false): Float =
+    inverted(context, Inverter.PW_TO_LH, ignoreMultiWindows, DpQualifier.WIDTH)
+
+/** LW→PH (landscape WIDTH behaves as portrait HEIGHT). */
+fun Int.wdpPh(context: Context?, ignoreMultiWindows: Boolean = false): Float =
+    inverted(context, Inverter.LW_TO_PH, ignoreMultiWindows, DpQualifier.WIDTH)
+
+private fun Number.inverted(
+    @Suppress("UNUSED_PARAMETER") context: Context?,
+    inverter: Inverter,
+    ignoreMultiWindows: Boolean,
+    qualifier: DpQualifier = DpQualifier.SMALL_WIDTH,
 ): Float {
-    val m = resolveMetrics(ignoreResize)
-    if (ignoreResize && isConstrained(m)) return toFloat()
-    return GameMath.calculateScaledDp(receiver.toFloat(), m, DpQualifier.SMALL_WIDTH, inverter)
+    val m = resolveMetrics(ignoreMultiWindows)
+    if (ignoreMultiWindows && isConstrained(m)) return toFloat().pxOf(m)
+    return GameMath.toPx(GameMath.calculateScaledDp(toFloat(), m, qualifier, inverter), m)
 }
 
-// ─── Generic escape hatch ──────────────────────────────────────────────────
+// ─── Escape hatches (family signatures) ────────────────────────────────────
 
 /**
- * [EN] Full-control resolver (mirrors Dynamic's `toDynamicScaledDp`).
- * [PT] Resolver de controle total (espelha o `toDynamicScaledDp` do Dynamic).
+ * [EN] Full-control resolver returning **dp** — mirrors `toDynamicScaledDp`.
+ * [PT] Resolver de controle total retornando **dp** — espelha `toDynamicScaledDp`.
  */
-fun Number.toGameScaledDp(
+fun Number.toDynamicScaledDp(
     context: Context?,
     qualifier: DpQualifier = DpQualifier.SMALL_WIDTH,
     inverter: Inverter = Inverter.DEFAULT,
-    ignoreResize: Boolean = false,
+    ignoreMultiWindows: Boolean = false,
     applyAspectRatio: Boolean = false,
     customSensitivityK: Float? = null,
 ): Float {
-    val m = resolveMetrics(ignoreResize)
-    if (ignoreResize && isConstrained(m)) return toFloat()
-    return GameMath.calculateScaledDp(
-        toFloat(), m, qualifier, inverter, applyAspectRatio, customSensitivityK
-    )
+    val m = resolveMetrics(ignoreMultiWindows)
+    if (ignoreMultiWindows && isConstrained(m)) return toFloat()
+    return GameMath.calculateScaledDp(toFloat(), m, qualifier, inverter, applyAspectRatio, customSensitivityK)
 }
 
-/** Pixel version of [toGameScaledDp]. */
-fun Number.toGameScaledPx(
+/** Pixel variant of [toDynamicScaledDp]. */
+fun Number.toDynamicScaledPx(
     context: Context?,
     qualifier: DpQualifier = DpQualifier.SMALL_WIDTH,
     inverter: Inverter = Inverter.DEFAULT,
-    ignoreResize: Boolean = false,
+    ignoreMultiWindows: Boolean = false,
     applyAspectRatio: Boolean = false,
     customSensitivityK: Float? = null,
-): Float = toGameScaledDp(context, qualifier, inverter, ignoreResize, applyAspectRatio, customSensitivityK)
-    .let { dp -> dp * resolveMetrics(ignoreResize).density }
-
-// ─── Float receivers (game-loop friendly, no boxing) ───────────────────────
-
-/** Float receiver variants — zero boxing in hot loops. */
-fun Float.sdpG(context: Context?): Float = this * resolveMetrics(false).scale
-fun Float.sdpaG(context: Context?): Float = this * resolveMetrics(false).defaultScaledAspectRatioMultiplier
-fun Float.sdpiG(context: Context?): Float {
-    val m = resolveMetrics(true)
-    return if (isConstrained(m)) this else this * m.scale
-}
-fun Float.hdpG(context: Context?): Float = this * resolveMetrics(false).screenHeightFactor
-fun Float.wdpG(context: Context?): Float = this * resolveMetrics(false).screenWidthFactor
-fun Float.sdpGPx(context: Context?): Float { val m = resolveMetrics(false); return this * m.scale * m.density }
+): Float = toDynamicScaledDp(
+    context, qualifier, inverter, ignoreMultiWindows, applyAspectRatio, customSensitivityK
+) * resolveMetrics(ignoreMultiWindows).density

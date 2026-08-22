@@ -27,8 +27,12 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.appdimens.games.auto.compose.asdp
+import com.appdimens.games.compose.AppDimensProvider
+import com.appdimens.games.compose.currentDimenMetrics
+import com.appdimens.games.compose.sdpi
+import com.appdimens.games.compose.sdp
 import com.appdimens.games.core.GameScreen
-import com.appdimens.games.math.GameMath
 import kotlinx.coroutines.delay
 
 /**
@@ -44,7 +48,9 @@ class ComposeGameActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         GameScreen.updateFromContext(this)
-        setContent { GameScene() }
+        setContent {
+            AppDimensProvider { GameScene() }
+        }
     }
 }
 
@@ -52,7 +58,7 @@ private data class Sprite(val fx: Float, val fy: Float, val hue: Float)
 
 @Composable
 private fun GameScene() {
-    val metrics = GameScreen.metrics()
+    val metrics = currentDimenMetrics()
     var t by remember { mutableStateOf(0f) }
 
     // Game loop tick (~60 FPS). Metrics come from GameScreen — updated by the provider.
@@ -64,11 +70,11 @@ private fun GameScene() {
         }
     }
 
-    // Strategy-driven sizes (dp): recomputed automatically when metrics change.
-    val playerDp = GameMath.calculateAutoDp(48f, metrics)      // BALANCED
-    val enemyDp = GameMath.calculateAutoDp(32f, metrics)
-    val hudPad = 12f * metrics.scale                            // scaled (auto)
-    val hudIcon = 20f                                           // invariant (i): raw base
+    // Family-standard sizes (recomputed automatically when the window changes).
+    val playerDp = 48f.asdp      // BALANCED strategy (library-auto)
+    val enemyDp = 32f.asdp
+    val hudPadDp = 12.sdp        // scaled — follows the window
+    val hudIconInv = 20.sdpi     // invariant (`i`) HUD element
 
     Box(
         Modifier
@@ -78,8 +84,8 @@ private fun GameScene() {
         Canvas(Modifier.fillMaxSize()) {
             val w = size.width
             val h = size.height
-            val playerPx = playerDp * metrics.density
-            val enemyPx = enemyDp * metrics.density
+            val playerPx = playerDp.value * metrics.density
+            val enemyPx = enemyDp.value * metrics.density
 
             // Player (center)
             drawCircle(Color(0xFF00E5FF), radius = playerPx / 2f, center = Offset(w / 2f, h / 2f))
@@ -101,7 +107,7 @@ private fun GameScene() {
         Row(
             Modifier
                 .fillMaxWidth()
-                .padding(horizontal = hudPad.dp, vertical = hudPad.dp),
+                .padding(horizontal = hudPadDp, vertical = hudPadDp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -135,7 +141,7 @@ private fun HudChip(label: String, iconBaseDp: Float) {
     Text(
         label,
         color = Color.White,
-        fontSize = (iconBaseDp * 0.9f * m.scale).sp.coerceAtLeast(10.sp),
+        fontSize = with(m) { iconBaseDp * scale }.sp.coerceAtLeast(10.sp),
         fontWeight = FontWeight.SemiBold,
         modifier = Modifier
             .background(Color(0x80101420))
