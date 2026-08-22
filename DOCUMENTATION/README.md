@@ -4,7 +4,7 @@
 
 ## Quick links
 
-0. [Guide for Beginners](GUIDE-FOR-BEGINNERS.md) — start here
+0. **[Guide for Beginners — full tutorials per stack](GUIDE-FOR-BEGINNERS.md)** 📘 Kotlin · Compose · C++/NDK · OpenGL ES · Vulkan · DirectX · Unity/Godot/MAUI — *start here*
 1. [Mathematics & Calculus](MATHEMATICS-AND-CALCULUS.md)
 2. [Modules & Artifacts](MODULES.md)
 3. [Native Game Engines — C/C++/NDK · OpenGL ES · Vulkan · DirectX · JNI (exemplos completos)](NATIVE-GAME-ENGINES.md)
