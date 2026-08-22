@@ -10,11 +10,11 @@
 
 | You're sizing… | Use | One-liner |
 |---|---|---|
-| HUD buttons/icons | DEFAULT | `48.sdp(ctx)` / `AppDimensGamesJava.hud(48f)` |
-| Player/enemy/projectile | BALANCED ⭐ | `64f.asdp(ctx)` / `playerSize(64f)` |
+| HUD buttons/icons | DEFAULT | `48.sdp(ctx)` |
+| Player/enemy/projectile | BALANCED ⭐ | `64f.asdp(ctx)` |
 | World bounds/containers | PERCENTAGE | `200f.psdp(ctx)` · `10.spaceW(ctx)` |
 | Background/parallax | FILL | `100f.flsdp(ctx)` |
-| Puzzle board/map | FIT | `AppDimensGamesJava.viewportContent(100f)` |
+| Puzzle board/map | FIT | library-fit `ftsdp`: `100f.ftsdp(ctx)` |
 | Score/dialog text | FLUID | `16f.fsdp(ctx)` |
 | TV/large-screen UI | LOGARITHMIC | `50f.logsdp(ctx)` |
 | Touch targets | DIAGONAL | `48f.dgsdp(ctx)` · physical: `2f.cmPx(ctx)` |
@@ -34,7 +34,7 @@ class MyGame : Activity() {
     }
 }
 // loop code anywhere:
-val enemy = AppDimensGamesJava.playerSize(32f)
+val enemy = 32.asdp(context)   // library-auto satellite
 ```
 
 Compose games: wrap content in `AppDimensGamesProvider { ... }` — done.

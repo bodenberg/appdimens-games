@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace = "com.example.appdimens.games.sample"
-    compileSdk = 35
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.example.appdimens.games.sample"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 37
         versionCode = 1
         versionName = "3.0.0"
     }
@@ -26,11 +26,12 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions { jvmTarget = "17" }
+    kotlin { compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) } }
 }
 
 dependencies {
     implementation(project(":library"))
+    implementation(project(":library-auto"))
     implementation(project(":library-fluid"))
     implementation(project(":library-fit"))
     implementation(project(":library-fill"))

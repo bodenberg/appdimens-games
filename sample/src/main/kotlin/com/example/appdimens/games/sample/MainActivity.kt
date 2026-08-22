@@ -17,7 +17,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.appdimens.games.code.AppDimensGamesJava
+import com.appdimens.games.code.DimenSdp
+import com.appdimens.games.code.sdpa
 import com.appdimens.games.core.GameScreen
 
 /**
@@ -62,8 +63,8 @@ class MainActivity : ComponentActivity() {
                         "sw: ${m.smallestWidthDp} dp",
                         "density: ${m.density}",
                         "fullscreen: ${m.isFullscreen}",
-                        "player(BALANCED): ${AppDimensGamesJava.playerSize(64f)}",
-                        "hud(DEFAULT): ${AppDimensGamesJava.hud(48f)}"
+                        "player sdpa(px): ${64f.sdpa(null)}",
+                        "hud sdp(px): ${DimenSdp.sdp(null, 48)}"
                     )
                 )
                 Spacer(Modifier.height(24.dp))

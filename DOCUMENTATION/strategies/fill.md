@@ -12,7 +12,7 @@ Constants: `W₀=300 · H₀=533 · diag₀=611.6305 · perim₀=833 · K=0.08/3
 
 ## How to use
 ```kotlin
-val bg = AppDimensGamesJava.background(100f)
+100f.flsdp(context)
 ```
 Suffixes: `a` (aspect ratio), `i` (invariant to window resize), `ia`. All values auto-adjust on resize except `i`.
 

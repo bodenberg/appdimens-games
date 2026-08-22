@@ -16,8 +16,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.appdimens.dynamic.code.DimenSdp
-import com.appdimens.games.code.AppDimensGamesJava
+import com.appdimens.dynamic.code.DimenSdp as DynamicDimenSdp
+import com.appdimens.games.code.DimenSdp
 import com.appdimens.games.core.GameScreen
 import com.appdimens.games.math.GameMath
 import kotlin.math.abs
@@ -107,15 +107,20 @@ class BenchlabActivity : ComponentActivity() {
         val legacyFast = measure(SAMPLES, OPS) {
             com.appdimens.games.AppDimensGames.getInstance().calculateButtonSize(16f)
         }
-        val dynFast = measure(SAMPLES, OPS) { DimenSdp.sdp(ctx, 16f) / resources.displayMetrics.density }
+        val dynFast = measure(SAMPLES, OPS) { DynamicDimenSdp.sdp(ctx, 16f) / resources.displayMetrics.density }
+
+        val newFamilyExt = measure(SAMPLES, OPS) { DimenSdp.sdp(ctx, 16) }
 
         // ── Benchmark B: AR-aware path ───────────────────────────────────────
         val newAr = measure(SAMPLES, OPS) { GameMath.calculateScaledDp(16f, GameScreen.metrics(), applyAspectRatio = true) }
-        val dynAr = measure(SAMPLES, OPS) { DimenSdp.sdpa(ctx, 16f) / resources.displayMetrics.density }
+        val dynAr = measure(SAMPLES, OPS) { DynamicDimenSdp.sdpa(ctx, 16f) / resources.displayMetrics.density }
 
         return buildString {
             appendLine("=== Fast lane (scaled, sw) — ns/op ===")
             row("games 3.0", newFast); row("games 2.0.1", legacyFast); row("dynamic 3.1.9", dynFast)
+            appendLine()
+            appendLine("=== Family extension (16.sdp ctx) — ns/op ===")
+            row("games 3.0 ext", newFamilyExt)
             appendLine()
             appendLine("=== Aspect-ratio aware — ns/op ===")
             row("games 3.0 (sdpa)", newAr); row("dynamic 3.1.9 (sdpa)", dynAr)

@@ -48,9 +48,10 @@ Satellites depend **only** on core (no cross-imports — family contract). Compo
 
 | 2.0.1 (deprecated) | 3.0.0 |
 |---|---|
-| `AppDimensGames.getInstance().initialize(ctx)` | `GameScreen.updateFromContext(ctx)` (or keep `AppDimensGames.initialize`) |
-| `games.calculateButtonSize(48f)` | `AppDimensGamesJava.hud(48f)` |
-| `games.calculatePlayerSize(64f)` | `AppDimensGamesJava.playerSize(64f)` |
-| `GameVector2D` + `calculateVector2D` | `Vec2` + `WorldScale`/`ViewportTransform` |
+| `AppDimensGames.getInstance().initialize(ctx)` | `GameScreen.updateFromContext(ctx)` (compat: `GamesCompat.initialize`) |
+| `games.calculateButtonSize(48f)` | `48.sdpa(ctx)` (DEFAULT ≈ sdpa) |
+| `games.calculatePlayerSize(64f)` | `64.asdp(ctx)` (auto satellite) |
+| `GameVector2D` + `calculateVector2D` | `Vec2` + `WorldScale`/`ViewportTransform` (world layer) |
 | `games.cm(2f)` | `2f.cmPx(ctx)` (units module) |
+| fluent `smart()` builder | family `scaledDp()` builder (`16.scaledDp().aspectRatio(true).screen(...).sdp(ctx)`) |
 | hash-per-call cache | snapshot factors (≈2 ns) |

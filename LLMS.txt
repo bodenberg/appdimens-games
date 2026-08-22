@@ -1,25 +1,56 @@
 # AppDimens Games 3.0 — LLM index
 # Family: appdimens (hub) · appdimens-dynamic 3.x (Android) · appdimens-kmp 1.x (KMP) · appdimens-games 3.0 (GAMES)
-# Math: bit-parity across all family members. Constants: W0=300, H0=533, diag0=611.6305 (family literal),
-# perim0=833, ARref=1.78, inv300=1/300, ADJ=0.10/30, K=0.08/30.
+# API vocabulary is IDENTICAL across the family (stems/suffixes/facilitators/builders).
+# Math is bit-parity everywhere. Constants: W0=300, H0=533, diag0=611.6305 (family literal,
+# true sqrt=611.628155…), perim0=833, ARref=1.78, inv300=1/300, ADJ=0.10/30, K=0.08/30.
 
-## Artifacts
-io.github.bodenberg:appdimens-games (core) + -percent -power -fluid -auto -diagonal -fill -fit
--interpolated -logarithmic -perimeter -density -resize -units -native -bom (version 3.0.0)
+## Toolchain
+AGP 9.x · Kotlin 2.x · Gradle 9.1 · compileSdk 37 · minSdk 24 · JDK 17
 
-## Key API
-- Kotlin/Java code: Int/Float.sdp/sdpa/sdpi/sdpia(context), hdp*, wdp*, Px variants;
-  AppDimensGamesJava.hud/playerSize/worldSize/background/viewportContent/touchTarget;
-  fluent: 64f.smart().forElement(GameElementType.PLAYER).dp
-- Compose: AppDimensGamesProvider { 48.bdp; 16.sdp; 20.sdpi }
-- Native C++: appdimens::games::Metrics::make + updateMetrics + math::scaledDp/autoDp/... + render::vkViewport/dxViewport/glRect
-- Pure C: appdimens_games_c.h (adg_make/adg_scaled/adg_auto/...)
-- C#: AppDimensGames.Screen.Update + MathKernels.Auto/Scaled/ScaledInvariant + World.ViewportRect
+## Artifacts (version 3.0.0)
+io.github.bodenberg:appdimens-games (core) + -auto -density -diagonal -fill -fit -fluid
+-interpolated -logarithmic -percent -perimeter -power -resize -units -native + -bom
+
+## Kotlin/Java code API (returns PX)
+Int/Float extensions: sdp sdpa sdpi sdpia · hdp hdpa hdpi hdpia · wdp wdpa wdpi wdpia (+Px variants)
+Text: ssp sspa sspi sspia · hsp wsp · sem hem wem (fixed)
+Inverters (family naming): sdpPh sdpLh sdpPw sdpLw · hdpLw hdpPw · wdpLh wdpPh
+Facilitators: Number.sdpRotate / .sdpMode / .sdpQualifier / .sdpScreen
+Builder: Number.scaledDp() → DimenScaled (.aspectRatio/.ignoreMultiWindows/.screen/.qualifier/.orientation → .sdp(ctx)|.dp(ctx))
+Java facade: DimenSdp.{sdp,sdpa,sdpi,sdpia,hdp,hdpi,wdp,wdpi}(ctx,v), getDimensionInPx/Dp(...), scaled(v), warmupCache()
+Escape hatch: Number.toDynamicScaledDp/Px(context, qualifier, inverter, ignoreMultiWindows, applyAspectRatio, customSensitivityK)
+Deprecated 2.x gateway names → com.appdimens.games.compat.GamesCompat (migration only)
+
+## Compose API (@get:Composable)
+Provider: AppDimensProvider { } · Locals: LocalDimenMetrics, LocalUiModeType · currentDimenMetrics()
+Number.sdp/.sdpa/.sdpi/.sdpia : Dp · Number.sdpPx/.sdpaPx/.sdpiPx : Float
+hdp/hdpa/hdpi(+Px) · wdp/wdpa/wdpi(+Px) · Text: Number.ssp/.sspi : TextUnit · Number.semPx : Float
+
+## Satellite prefixes (code+compose, suffixes a/i/ia)
+psdp phdp pwdp + spaceW/Sw/H(i) · pwsdp · fsdp · asdp (gameplay ⭐) · dgsdp · flsdp · ftsdp ·
+isdp · logsdp · prsdp · dsdp
 
 ## Resize semantics
-Default values auto-adjust on window resize (live GameScreen snapshot).
-Suffix `i` = invariant: anchored to frozen FULLSCREEN metrics; under true multi-window returns base value (family parity).
-`a` = aspect-ratio multiplier 1+K*ln((max/min)/1.78).
+Default values auto-adjust on window resize via GameScreen live snapshot.
+Suffix `i` = ignoreMultiWindows → invariant: anchored to frozen FULLSCREEN metrics;
+under true multi-window returns base value (family parity). `a` = 1+K·ln((max/min)/1.78).
 
-## Strategies (13): scaled(sdp) percentage/balanced/logarithmic/power/fluid/interpolated/diagonal/perimeter/fit/fill/autosize/none
-Formulas: see DOCUMENTATION/MATHEMATICS-AND-CALCULUS.md; oracle: scripts/oracle.py (30 cases).
+## Engine wiring (non-Compose)
+Activity/Surface/Vulkan: GameScreen.updateFromContext(context[, fullscreen]) per resize/config change.
+
+## Native engines
+C++20 header-only: namespace appdimens::games — Metrics::make + updateMetrics + metrics()/invariantMetrics();
+math::{scaledDp,scaledArDp,widthDp,heightDp,calculateScaledDp,percentOfAxisDp,powerDp,fluidDp,autoDp,
+logarithmicDp,interpolatedDp,diagonalDp,perimeterDp,fitDp,fillDp,densityDp,toPx,scaleVecFit};
+render::{viewportRect,glRect,vkViewport,dxViewport,ortho}. Field-compatible with VkViewport/D3D11_VIEWPORT.
+Pure C99 single header: c/appdimens_games_c.h (adg_*).
+JNI bridge: com.appdimens.games.jni.NativeBridge.{updateMetrics,scaled,scaledAr,scaledInvariant,power,fluid,auto,logarithmic,diagonal,fit,fill,toPx}
+
+## C# (Unity/Godot)
+AppDimensGames.Screen.Update(wDp,hDp,dpi[,fontScale,fullscreen]) · MathKernels.* (Scaled/ScaledAr/
+ScaledInvariant/Auto/Fluid/Fit/Fill/…) · World.ViewportRect(mode,w,h,dw,dh) · Units.CmToPx…
+
+## Strategies (13)
+scaled(sdp) percentage/balanced(auto) logarithmic power fluid interpolated diagonal perimeter fit fill autosize none.
+Formulas: DOCUMENTATION/MATHEMATICS-AND-CALCULUS.md · Oracle validator: scripts/oracle.py (30 cases).
+Agent skill: skills/SKILL.md + skills/library-map.md + skills/reference.md

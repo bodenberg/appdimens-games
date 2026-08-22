@@ -3,33 +3,36 @@ package com.appdimens.games.compose
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import com.appdimens.games.common.DpQualifier
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import com.appdimens.games.common.UiModeType
 import com.appdimens.games.core.GameMetrics
 import com.appdimens.games.core.GameScreen
 
 /**
- * [EN] CompositionLocal holding the current [GameMetrics]. Recomputed automatically
- * by [AppDimensGamesProvider] whenever the Compose configuration (window size,
- * density, orientation, font scale, uiMode) changes — this is the auto-resize
- * mechanism for Compose games.
+ * [EN] CompositionLocals — family parity with `AppDimensProvider` / `LocalDimenMetrics`
+ * from appdimens-dynamic/kmp.
  *
- * [PT] CompositionLocal que guarda o [GameMetrics] atual. Recalculado automaticamente
- * pelo [AppDimensGamesProvider] sempre que a configuração do Compose (tamanho da
- * janela, densidade, orientação, escala de fonte, uiMode) mudar — este é o mecanismo
- * de ajuste automático para jogos em Compose.
+ * [PT] CompositionLocals — paridade com `AppDimensProvider` / `LocalDimenMetrics`.
  */
-val LocalGameMetrics = androidx.compose.runtime.compositionLocalOf { GameMetrics.DEFAULT }
+val LocalDimenMetrics = compositionLocalOf { GameMetrics.DEFAULT }
+val LocalUiModeType = compositionLocalOf { UiModeType.NORMAL }
 
 /**
- * [EN] Provides the live game metrics to the composition tree.
- * [PT] Fornece as métricas vivas do jogo à árvore de composição.
+ * [EN] Provides live game metrics to the composition tree. Any window change
+ * (resize, rotation, split-screen, font scale, density) recomposes automatically —
+ * this is the auto-adjust mechanism for Compose games.
+ *
+ * [PT] Fornece as métricas vivas à árvore de composição. Qualquer mudança de janela
+ * (resize, rotação, split-screen, escala de fonte, densidade) recomputa automaticamente.
  */
 @Composable
-fun AppDimensGamesProvider(content: @Composable () -> Unit) {
+fun AppDimensProvider(content: @Composable () -> Unit) {
     val configuration = LocalConfiguration.current
     val density = LocalDensity.current
     val metrics = remember(configuration, density.density) {
@@ -39,113 +42,124 @@ fun AppDimensGamesProvider(content: @Composable () -> Unit) {
             smallestScreenWidthDp = configuration.smallestScreenWidthDp,
             densityDpi = (density.density * 160f).toInt(),
             fontScaleBits = configuration.fontScale.toRawBits(),
+            uiMode = UiModeType.fromConfigValue(
+                configuration.uiMode and android.content.res.Configuration.UI_MODE_TYPE_MASK
+            ),
             isFullscreen = !GameScreen.isMultiWindowLikely(configuration)
         )
     }
-    androidx.compose.runtime.SideEffect { GameScreen.update(metrics) }
-    CompositionLocalProvider(LocalGameMetrics provides metrics, content = content)
+    SideEffect { GameScreen.update(metrics) }
+    CompositionLocalProvider(
+        LocalDimenMetrics provides metrics,
+        LocalUiModeType provides metrics.uiMode,
+        content = content
+    )
 }
 
-/** Current snapshot inside composition. / Snapshot atual dentro da composição. */
+/** Current snapshot inside composition. / Snapshot atual na composição. */
 @Composable
 @ReadOnlyComposable
-fun currentGameMetrics(): GameMetrics = LocalGameMetrics.current
+fun currentDimenMetrics(): GameMetrics = LocalDimenMetrics.current
 
-// ─── SCALED family (sdp/hdp/wdp + a/i/ia + Px) ─────────────────────────────
+// ─── Kernel plumbing ───────────────────────────────────────────────────────
 
 @Composable
-private fun Number.dpScaled(f: (Float, GameMetrics) -> Float): Float {
-    val m = LocalGameMetrics.current
-    return f(toFloat(), m)
+private fun Number.computeScaled(inv: Boolean, ar: Boolean): Float {
+    val m = LocalDimenMetrics.current
+    if (inv && !m.isFullscreen) return toFloat()
+    return if (ar) toFloat() * m.defaultScaledAspectRatioMultiplier else toFloat() * m.scale
 }
 
-private fun Float.scaledOrBase(m: GameMetrics): Float =
-    if (!m.isFullscreen) this else this * m.scale
+@Composable
+private fun Number.computeAxis(inv: Boolean, height: Boolean): Float {
+    val m = LocalDimenMetrics.current
+    if (inv && !m.isFullscreen) return toFloat()
+    return if (height) toFloat() * m.screenHeightFactor else toFloat() * m.screenWidthFactor
+}
 
-private fun Float.scaledArOrBase(m: GameMetrics): Float =
-    if (!m.isFullscreen) this else this * m.defaultScaledAspectRatioMultiplier
+// ─── sdp family ────────────────────────────────────────────────────────────
 
-/** Scaled dp (smallest width). / Dp escalado (menor largura). */
+/** Scaled dp by smallest width. / Dp escalado pela menor largura. */
 @get:Composable
-val Number.sdp: androidx.compose.ui.unit.Dp
-    get() = androidx.compose.ui.unit.Dp(dpScaled { b, m -> b * m.scale })
+val Number.sdp: Dp get() = computeScaled(false, false).dp
 
-/** Aspect-ratio aware. */
+/** Aspect-ratio refined (`a`). */
 @get:Composable
-val Number.sdpa: androidx.compose.ui.unit.Dp
-    get() = androidx.compose.ui.unit.Dp(dpScaled { b, m -> b * m.defaultScaledAspectRatioMultiplier })
+val Number.sdpa: Dp get() = computeScaled(false, true).dp
 
-/** Resize-invariant (`i`): frozen fullscreen reference under resized windows. */
+/** Resize-invariant (`i`). */
 @get:Composable
-val Number.sdpi: androidx.compose.ui.unit.Dp
-    get() = androidx.compose.ui.unit.Dp(dpScaled { b, m -> b.scaledOrBase(m) })
+val Number.sdpi: Dp get() = computeScaled(true, false).dp
 
-/** Invariant + aspect ratio (`ia`). */
+/** Invariant + AR (`ia`). */
 @get:Composable
-val Number.sdpia: androidx.compose.ui.unit.Dp
-    get() = androidx.compose.ui.unit.Dp(dpScaled { b, m -> b.scaledArOrBase(m) })
+val Number.sdpia: Dp get() = computeScaled(true, true).dp
 
 /** Pixels. */
 @get:Composable
-val Number.sdpPx: Float
-    get() = dpScaled { b, m -> b * m.scale * m.density }
+val Number.sdpPx: Float get() = computeScaled(false, false) * LocalDimenMetrics.current.density
 
 @get:Composable
-val Number.sdpiPx: Float
-    get() = dpScaled { b, m -> b.scaledOrBase(m) * m.density }
-
-// hdp (height)
-@get:Composable
-val Number.hdp: androidx.compose.ui.unit.Dp
-    get() = androidx.compose.ui.unit.Dp(dpScaled { b, m -> b * m.screenHeightFactor })
+val Number.sdpaPx: Float get() = computeScaled(false, true) * LocalDimenMetrics.current.density
 
 @get:Composable
-val Number.hdpi: androidx.compose.ui.unit.Dp
-    get() = androidx.compose.ui.unit.Dp(dpScaled { b, m -> if (!m.isFullscreen) b else b * m.screenHeightFactor })
+val Number.sdpiPx: Float get() = computeScaled(true, false) * LocalDimenMetrics.current.density
+
+// ─── hdp family ────────────────────────────────────────────────────────────
 
 @get:Composable
-val Number.hdpPx: Float
-    get() = dpScaled { b, m -> b * m.screenHeightFactor * m.density }
-
-// wdp (width)
-@get:Composable
-val Number.wdp: androidx.compose.ui.unit.Dp
-    get() = androidx.compose.ui.unit.Dp(dpScaled { b, m -> b * m.screenWidthFactor })
+val Number.hdp: Dp get() = computeAxis(false, true).dp
 
 @get:Composable
-val Number.wdpi: androidx.compose.ui.unit.Dp
-    get() = androidx.compose.ui.unit.Dp(dpScaled { b, m -> if (!m.isFullscreen) b else b * m.screenWidthFactor })
+val Number.hdpa: Dp
+    get() = (computeAxis(false, true) * LocalDimenMetrics.current.defaultAspectRatioMultiplier).dp
 
 @get:Composable
-val Number.wdpPx: Float
-    get() = dpScaled { b, m -> b * m.screenWidthFactor * m.density }
+val Number.hdpi: Dp get() = computeAxis(true, true).dp
 
-// ─── Strategy shortcuts in composition (game-first API) ────────────────────
-
-/** BALANCED strategy inside composition. */
 @get:Composable
-val Number.bdp: androidx.compose.ui.unit.Dp
-    get() = androidx.compose.ui.unit.Dp(dpScaled { b, m ->
-        com.appdimens.games.math.GameMath.calculateAutoDp(b, m)
-    })
+val Number.hdpPx: Float get() = computeAxis(false, true) * LocalDimenMetrics.current.density
 
-/** FIT strategy (letterbox world scale). */
-@get:Composable
-val Number.ftdp: androidx.compose.ui.unit.Dp
-    get() = androidx.compose.ui.unit.Dp(dpScaled { b, m ->
-        com.appdimens.games.math.GameMath.calculateFitDp(b, m)
-    })
+// ─── wdp family ────────────────────────────────────────────────────────────
 
-/** FILL strategy (cover). */
 @get:Composable
-val Number.fltdp: androidx.compose.ui.unit.Dp
-    get() = androidx.compose.ui.unit.Dp(dpScaled { b, m ->
-        com.appdimens.games.math.GameMath.calculateFillDp(b, m)
-    })
+val Number.wdp: Dp get() = computeAxis(false, false).dp
 
-/** DIAGONAL strategy. */
 @get:Composable
-val Number.dgtdp: androidx.compose.ui.unit.Dp
-    get() = androidx.compose.ui.unit.Dp(dpScaled { b, m ->
-        com.appdimens.games.math.GameMath.calculateDiagonalDp(b, m)
-    })
+val Number.wdpa: Dp
+    get() = (computeAxis(false, false) * LocalDimenMetrics.current.defaultAspectRatioMultiplier).dp
+
+@get:Composable
+val Number.wdpi: Dp get() = computeAxis(true, false).dp
+
+@get:Composable
+val Number.wdpPx: Float get() = computeAxis(false, false) * LocalDimenMetrics.current.density
+
+// ─── ssp family (text; sp via Dp×fontScale handled by Compose sp) ──────────
+
+private fun Float.spValue(m: GameMetrics): Float =
+    this * m.scale // sp value in dp-scale terms; Compose applies fontScale on render
+
+@get:Composable
+val Number.ssp: androidx.compose.ui.unit.TextUnit
+    get() {
+        val m = LocalDimenMetrics.current
+        return androidx.compose.ui.unit.TextUnit(toFloat() * m.scale, androidx.compose.ui.unit.TextUnitType.Sp)
+    }
+
+@get:Composable
+val Number.sspi: androidx.compose.ui.unit.TextUnit
+    get() {
+        val m = LocalDimenMetrics.current
+        val v = if (!m.isFullscreen) toFloat() else toFloat() * m.scale
+        return androidx.compose.ui.unit.TextUnit(v, androidx.compose.ui.unit.TextUnitType.Sp)
+    }
+
+/** Fixed text (`sem`) — ignores system font scale at render time is not possible in sp;
+ *  provide px instead for pixel-exact fixed text. */
+@get:Composable
+val Number.semPx: Float
+    get() {
+        val m = LocalDimenMetrics.current
+        return toFloat() * m.scale * m.density
+    }

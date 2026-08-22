@@ -12,8 +12,8 @@ Constants: `W₀=300 · H₀=533 · diag₀=611.6305 · perim₀=833 · K=0.08/3
 
 ## How to use
 ```kotlin
-val player = GameMath.calculateAutoDp(64f, metrics)
-// or fluent: 64f.smart().forElement(GameElementType.PLAYER).dp
+val player = 64f.asdp(context)          // code → px
+// Compose: 48.asdp                     // Dp, reactive
 ```
 Suffixes: `a` (aspect ratio), `i` (invariant to window resize), `ia`. All values auto-adjust on resize except `i`.
 
