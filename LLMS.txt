@@ -1,0 +1,25 @@
+# AppDimens Games 3.0 — LLM index
+# Family: appdimens (hub) · appdimens-dynamic 3.x (Android) · appdimens-kmp 1.x (KMP) · appdimens-games 3.0 (GAMES)
+# Math: bit-parity across all family members. Constants: W0=300, H0=533, diag0=611.6305 (family literal),
+# perim0=833, ARref=1.78, inv300=1/300, ADJ=0.10/30, K=0.08/30.
+
+## Artifacts
+io.github.bodenberg:appdimens-games (core) + -percent -power -fluid -auto -diagonal -fill -fit
+-interpolated -logarithmic -perimeter -density -resize -units -native -bom (version 3.0.0)
+
+## Key API
+- Kotlin/Java code: Int/Float.sdp/sdpa/sdpi/sdpia(context), hdp*, wdp*, Px variants;
+  AppDimensGamesJava.hud/playerSize/worldSize/background/viewportContent/touchTarget;
+  fluent: 64f.smart().forElement(GameElementType.PLAYER).dp
+- Compose: AppDimensGamesProvider { 48.bdp; 16.sdp; 20.sdpi }
+- Native C++: appdimens::games::Metrics::make + updateMetrics + math::scaledDp/autoDp/... + render::vkViewport/dxViewport/glRect
+- Pure C: appdimens_games_c.h (adg_make/adg_scaled/adg_auto/...)
+- C#: AppDimensGames.Screen.Update + MathKernels.Auto/Scaled/ScaledInvariant + World.ViewportRect
+
+## Resize semantics
+Default values auto-adjust on window resize (live GameScreen snapshot).
+Suffix `i` = invariant: anchored to frozen FULLSCREEN metrics; under true multi-window returns base value (family parity).
+`a` = aspect-ratio multiplier 1+K*ln((max/min)/1.78).
+
+## Strategies (13): scaled(sdp) percentage/balanced/logarithmic/power/fluid/interpolated/diagonal/perimeter/fit/fill/autosize/none
+Formulas: see DOCUMENTATION/MATHEMATICS-AND-CALCULUS.md; oracle: scripts/oracle.py (30 cases).

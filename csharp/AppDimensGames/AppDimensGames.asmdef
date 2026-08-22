@@ -1,0 +1,13 @@
+{
+    "name": "AppDimensGames",
+    "rootNamespace": "AppDimensGames",
+    "references": [],
+    "includePlatforms": ["Android", "iOS", "Standalone"],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "noEngineReferences": false
+}
