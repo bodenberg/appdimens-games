@@ -1,6 +1,6 @@
 [versions]
 agp = "8.7.3"
-kotlin = "2.1.0"
+kotlin = "2.4.10"
 vanniktech = "0.30.0"
 dokka = "2.0.0"
 coreKtx = "1.15.0"
