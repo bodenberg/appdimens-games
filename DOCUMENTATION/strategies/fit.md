@@ -1,0 +1,33 @@
+# Fit (letterbox) — `ftsdp…`
+
+> **Artifact:** `io.github.bodenberg:appdimens-games-fit:3.0.0`
+
+## What it is
+Puzzle boards, strategy maps, anything that must be fully visible.
+
+## Calculation used
+``f(b)=b·min(min/300, max/533)``
+
+Constants: `W₀=300 · H₀=533 · diag₀=611.6305 · perim₀=833 · K=0.08/30`.
+
+## How to use
+```kotlin
+val board = AppDimensGamesJava.viewportContent(100f)
+```
+Suffixes: `a` (aspect ratio), `i` (invariant to window resize), `ia`. All values auto-adjust on resize except `i`.
+
+## Why use it
+Consistent, predictable scaling across phones → tablets → TVs with a single line of code, at O(1) cost.
+
+## When to use it
+See the decision flow in [the index](../README.md).
+
+## Advantages & trade-offs
+- ✅ Zero-allocation hot path (~2 ns fast lane), lock-free cache
+- ✅ Bit-parity with dynamic/kmp family
+- ⚠️ Pick by element type — see recommendation below
+
+## Recommended usage strategy
+Follow [GUIDE-FOR-BEGINNERS](../GUIDE-FOR-BEGINNERS.md): start with SCALED, switch per element type.
+
+[Back to index](../README.md)

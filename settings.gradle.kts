@@ -1,16 +1,9 @@
 pluginManagement {
     repositories {
-        google {
-            content {
-                includeGroupByRegex("com\\.android.*")
-                includeGroupByRegex("com\\.google.*")
-                includeGroupByRegex("androidx.*")
-            }
-        }
+        google { content { includeGroupByRegex("com\\.android.*"); includeGroupByRegex("com\\.google.*"); includeGroupByRegex("androidx.*") } }
         mavenCentral()
         gradlePluginPortal()
-        maven { url = uri("https://jitpack.io") }
-        maven { url = uri("https://repo.maven.apache.org/maven2") }
+        maven(url = "https://jitpack.io")
     }
 }
 dependencyResolutionManagement {
@@ -18,12 +11,27 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        gradlePluginPortal()
-        maven { url = uri("https://jitpack.io") }
-        maven { url = uri("https://repo.maven.apache.org/maven2") }
+        maven(url = "https://jitpack.io")
     }
 }
 
-rootProject.name = "AppDimens"
-include(":app")
-include(":appdimens_games")
+rootProject.name = "AppDimens Games"
+
+include(":library")
+include(":library-bom")
+include(":library-auto")
+include(":library-density")
+include(":library-diagonal")
+include(":library-fill")
+include(":library-fit")
+include(":library-fluid")
+include(":library-interpolated")
+include(":library-logarithmic")
+include(":library-percent")
+include(":library-perimeter")
+include(":library-power")
+include(":library-resize")
+include(":library-units")
+include(":library-native")
+include(":sample")
+include(":benchlab")
