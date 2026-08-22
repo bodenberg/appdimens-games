@@ -7,8 +7,8 @@
 0. [Guide for Beginners](GUIDE-FOR-BEGINNERS.md) — start here
 1. [Mathematics & Calculus](MATHEMATICS-AND-CALCULUS.md)
 2. [Modules & Artifacts](MODULES.md)
-3. [Native Game Engines (C/C++/JNI/GL/Vulkan/DirectX)](NATIVE-GAME-ENGINES.md)
-4. [C# / Unity](CSHARP-UNITY.md)
+3. [Native Game Engines — C/C++/NDK · OpenGL ES · Vulkan · DirectX · JNI (exemplos completos)](NATIVE-GAME-ENGINES.md)
+4. [C# / Unity / Godot / MAUI — bootstrap, uGUI, câmera letterbox, DOTS/Burst](CSHARP-UNITY.md)
 5. [Performance / BenchLab](../PERFORMANCE.md)
 
 ## Strategy docs
