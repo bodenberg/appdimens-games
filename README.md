@@ -27,6 +27,26 @@
 
 ---
 
+## 🤔 What is it? (30 seconds)
+
+**AppDimens Games answers one question for your game:** *"how big should this element be on THIS screen?"* — instantly, precisely and consistently across phones → foldables → tablets → TVs, in every stack you ship (Kotlin/Java/Compose/C/C++/C#).
+
+```text
+window resize ─▶ snapshot (all factors precomputed once)
+                    └─▶ size = base × factor   ≈ 2 ns · zero alloc · per frame OK
+```
+
+- **Auto-adjust:** every value follows rotation/split-screen/fold resizes automatically.
+- **`i` suffix = invariant:** HUD elements pinned to the frozen fullscreen reference.
+- **Family math:** bit-exact with appdimens-dynamic 3.x / kmp 1.x — one vocabulary everywhere.
+
+**Pick by element:** HUD→`sdp` · gameplay⭐→`asdp`(auto) · background→`flsdp`(fill) ·
+board visible→`ftsdp`(fit) · text→`fsdp`(fluid) · TV→`logsdp` · physical touch→`dgsdp`/`cmPx`.
+
+Full tutorial with copy-paste steps for each stack: **[GUIDE-FOR-BEGINNERS.md](DOCUMENTATION/GUIDE-FOR-BEGINNERS.md)** 📘
+
+---
+
 ## 📦 Installation
 
 ```kotlin
@@ -130,24 +150,37 @@ AppDimensProvider {
 }
 ```
 
-### Native engines — C / C++ / JNI / GL / Vulkan / DirectX
+### Native engines — C / C++ / NDK · OpenGL ES · Vulkan · DirectX
+
+**How it works natively — 3 steps:** ① build+publish a snapshot on every resize (`Metrics::make` precomputes all factors; keep the object alive — the hub stores its address) → ② read `metrics()` once per frame (lock-free atomic load) → ③ size with single-multiply kernels + letterbox via `render::*`.
 
 ```cpp
-#include "appdimens/games/core.h"
-#include "appdimens/games/math.h"
-#include "appdimens/games/render.h"
+#include "appdimens/games/core.h"   // Metrics::make / updateMetrics / metrics()
+#include "appdimens/games/math.h"   // autoDp / scaledDp / toPx …
+#include "appdimens/games/render.h" // glRect / vkViewport / dxViewport / ortho
 
-void onSurfaceChanged(float wDp, float hDp, float dpi) {
-    updateMetrics(Metrics::make(wDp, hDp, 0.f, dpi));   // auto-adjust publish
+// STEP ① — publish (onSurfaceChanged | swapchain recreate | ResizeBuffers):
+static Metrics g_m;                                  // ⚠️ lifetime rule!
+void OnResize(int wPx, int hPx, float dpi) {
+    const float d = dpi / 160.f;
+    g_m = Metrics::make(wPx/d, hPx/d, /*swDp*/0.f, dpi, 1.f, /*fullscreen*/true);
+    updateMetrics(g_m);
 }
-void frame() {
-    const Metrics& m = metrics();
-    float playerPx = math::toPx(math::autoDp(64.f, m), m); // single multiply
-}
-auto vp = render::vkViewport(render::Mode::FitAll, sw, sh, 1920.f, 1080.f);
+// STEP ②+③ — per frame:
+float playerPx = math::autoDp(64.f, metrics()) * metrics().density;   // BALANCED ⭐
+float hudInv   = invariantMetrics().fullscreen                         // `i` invariant
+                   ? math::scaledDp(48.f, invariantMetrics()) * metrics().density : 48.f;
+auto vp = render::vkViewport(render::Mode::FitAll, surfW, surfH, 1920.f, 1080.f);
 ```
 
-Pure C: [`c/appdimens_games_c.h`](library-native/src/main/cpp/c/appdimens_games_c.h). Unity/C#: [`csharp/`](csharp/AppDimensGames/AppDimensGames.cs).
+| Stack | You call | Tutorial |
+|---|---|---|
+| **OpenGL ES** | `glRect(FitAll…)` + `ortho(…)` + kernels | [Guide §5](DOCUMENTATION/GUIDE-FOR-BEGINNERS.md#5-tutorial-d--opengl-es-3x-c) |
+| **Vulkan** | `VK_ERROR_OUT_OF_DATE_KHR` → republish + `vkViewport` | [Guide §6](DOCUMENTATION/GUIDE-FOR-BEGINNERS.md#6-tutorial-e--vulkan) |
+| **DirectX 11/12** | `ResizeBuffers` → republish + `dxViewport` | [Guide §7](DOCUMENTATION/GUIDE-FOR-BEGINNERS.md#7-tutorial-f--directx-1112-windowsxbox-shared-code) |
+| **Pure C (raylib/SDL)** | header-only `adg_*` API | [Native §2](DOCUMENTATION/NATIVE-GAME-ENGINES.md) |
+
+**Unity/C#:** bootstrap + `MathKernels.Scaled/ScaledInvariant/Auto/Fit/Fill` + `World.ViewportRect(letterbox)` + `Units.CmToPx(2f)` → [Guide §8](DOCUMENTATION/GUIDE-FOR-BEGINNERS.md#8-tutorial-g--unity-c) · deep dive [CSHARP-UNITY.md](DOCUMENTATION/CSHARP-UNITY.md) (uGUI, câmera letterbox, Godot 4, MAUI, DOTS/Burst).
 
 ---
 
