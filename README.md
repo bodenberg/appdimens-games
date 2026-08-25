@@ -1,6 +1,7 @@
 <div align="center">
 
 # 🎮 AppDimens Games
+<img referrerpolicy="no-referrer-when-downgrade" src="https://static.scarf.sh/a.png?x-pxid=67e3226a-74b2-4b63-aef1-523d4ba8eba8" />
 
 ### Unified, high-performance dimension scaling for Android games — Compose · Kotlin · Java · C++/NDK · C · OpenGL ES · Vulkan · DirectX · Unity/C#
 
