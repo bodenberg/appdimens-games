@@ -33,6 +33,7 @@ android {
 }
 
 dependencies {
+    api(platform(libs.androidx.compose.bom.platform))
     api(project(":library"))
     // Runtime exigido pelo compilador Compose (compileOnly: não vaza p/ consumidores)
     compileOnly(libs.androidx.compose.runtime)

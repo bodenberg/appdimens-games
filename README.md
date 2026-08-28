@@ -5,7 +5,7 @@
 
 ### Unified, high-performance dimension scaling for Android games — Compose · Kotlin · Java · C++/NDK · C · OpenGL ES · Vulkan · DirectX · Unity/C#
 
-[![Version](https://img.shields.io/badge/version-3.0.0-00E5FF?style=flat-square)](#)
+[![Version](https://img.shields.io/badge/version-3.0.1-00E5FF?style=flat-square)](#)
 [![License](https://img.shields.io/badge/License-Apache--2.0-white?style=flat-square)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-Android%20%7B%20NDK%20%7D-3DDC84?style=flat-square)](#)
 [![APIs](https://img.shields.io/badge/Game%20APIs-JNI%20·%20C%20·%20C%23%20·%20Vulkan%20·%20OpenGL%20·%20DirectX%20·%20Compose-orange?style=flat-square)](#)
@@ -51,12 +51,12 @@ Full tutorial with copy-paste steps for each stack: **[GUIDE-FOR-BEGINNERS.md](D
 ## 📦 Installation
 
 ```kotlin
-implementation("io.github.bodenberg:appdimens-games:3.0.0")          // core
+implementation("io.github.bodenberg:appdimens-games:3.0.1")          // core
 // Modular satellites (same shape as dynamic/kmp):
 // appdimens-games-{auto,density,diagonal,fill,fit,fluid,interpolated,
 //                   logarithmic,percent,perimeter,power,resize,units}
-implementation("io.github.bodenberg:appdimens-games-native:3.0.0")   // C/C++/JNI + GL/VK/DX
-implementation(platform("io.github.bodenberg:appdimens-games-bom:3.0.0"))
+implementation("io.github.bodenberg:appdimens-games-native:3.0.1")   // C/C++/JNI + GL/VK/DX
+implementation(platform("io.github.bodenberg:appdimens-games-bom:3.0.1"))
 ```
 
 | Requirement | Version |
@@ -207,7 +207,7 @@ flowchart LR
 
 On-device comparison vs games-2.0.1 & dynamic-3.1.9: [`benchlab/`](benchlab) · [PERFORMANCE.md](PERFORMANCE.md).
 
-## ✨ What's new in 3.0.0
+## ✨ What's new in 3.0.1
 
 | Change | Detail |
 |---|---|

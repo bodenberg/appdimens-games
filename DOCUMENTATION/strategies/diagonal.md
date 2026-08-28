@@ -1,6 +1,6 @@
 # Diagonal — `dgsdp…`
 
-> **Artifact:** `io.github.bodenberg:appdimens-games-diagonal:3.0.0`
+> **Artifact:** `io.github.bodenberg:appdimens-games-diagonal:3.0.1`
 
 ## What it is
 True physical screen size scaling — touch targets, gesture zones.

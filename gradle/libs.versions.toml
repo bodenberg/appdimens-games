@@ -22,6 +22,7 @@ androidx-annotation = { group = "androidx.annotation", name = "annotation", vers
 androidx-window = { module = "androidx.window:window", version.ref = "window" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-compose-bom-platform = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "composeRuntime" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "composeRuntime" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }

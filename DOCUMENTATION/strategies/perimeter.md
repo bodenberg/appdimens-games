@@ -1,6 +1,6 @@
 # Perimeter — `prsdp…`
 
-> **Artifact:** `io.github.bodenberg:appdimens-games-perimeter:3.0.0`
+> **Artifact:** `io.github.bodenberg:appdimens-games-perimeter:3.0.1`
 
 ## What it is
 Balanced W+H general purpose scaling.

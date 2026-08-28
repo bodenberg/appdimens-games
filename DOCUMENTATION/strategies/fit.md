@@ -1,6 +1,6 @@
 # Fit (letterbox) — `ftsdp…`
 
-> **Artifact:** `io.github.bodenberg:appdimens-games-fit:3.0.0`
+> **Artifact:** `io.github.bodenberg:appdimens-games-fit:3.0.1`
 
 ## What it is
 Puzzle boards, strategy maps, anything that must be fully visible.

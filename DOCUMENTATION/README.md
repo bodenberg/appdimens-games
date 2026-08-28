@@ -1,6 +1,6 @@
 # 📚 AppDimens Games — Documentation Index
 
-> **Artifact:** `io.github.bodenberg:appdimens-games:3.0.0` (+13 satellites, BOM, native)
+> **Artifact:** `io.github.bodenberg:appdimens-games:3.0.1` (+13 satellites, BOM, native)
 
 ## Quick links
 

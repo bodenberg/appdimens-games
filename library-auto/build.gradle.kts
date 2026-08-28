@@ -17,6 +17,12 @@ android {
 }
 
 dependencies {
+    // BOM Compose como dependência API: garante alinhamento transitivo da
+    // versão Compose para consumidores (consumidor com Compose 1.7/1.8/etc.
+    // não recebe "módulo não encontrado" — a versão é resolvida pelo BOM).
+    // Os módulos Compose em si permanecem compileOnly (não vazam para
+    // consumidores que não usam Compose).
+    api(platform(libs.androidx.compose.bom.platform))
     api(project(":library"))
     // Compose é opcional em runtime (paridade com :library)
     compileOnly(libs.androidx.compose.runtime)

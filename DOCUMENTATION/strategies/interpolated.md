@@ -1,6 +1,6 @@
 # Interpolated — `isdp…`
 
-> **Artifact:** `io.github.bodenberg:appdimens-games-interpolated:3.0.0`
+> **Artifact:** `io.github.bodenberg:appdimens-games-interpolated:3.0.1`
 
 ## What it is
 Moderated linear growth for secondary/decorative objects.

@@ -1,6 +1,6 @@
 # Resize (container auto-fit)
 
-> **Artifact:** `io.github.bodenberg:appdimens-games-resize:3.0.0`
+> **Artifact:** `io.github.bodenberg:appdimens-games-resize:3.0.1`
 
 ## What it is
 Dynamic score bars, variable text, adaptive panels in HUD.

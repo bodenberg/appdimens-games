@@ -1,6 +1,6 @@
 # Percent + literal space* — `psdp…`, `spaceW/H/Sw`
 
-> **Artifact:** `io.github.bodenberg:appdimens-games-percent:3.0.0`
+> **Artifact:** `io.github.bodenberg:appdimens-games-percent:3.0.1`
 
 ## What it is
 Proportional containers plus true screen-percentage APIs for world bounds and full-bleed layouts.

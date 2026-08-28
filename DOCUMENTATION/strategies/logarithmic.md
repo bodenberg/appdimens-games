@@ -1,6 +1,6 @@
 # Logarithmic (Weber–Fechner) — `logsdp…`
 
-> **Artifact:** `io.github.bodenberg:appdimens-games-logarithmic:3.0.0`
+> **Artifact:** `io.github.bodenberg:appdimens-games-logarithmic:3.0.1`
 
 ## What it is
 Maximum control on TV/large screens; subtle UI elements.

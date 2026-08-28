@@ -1,6 +1,6 @@
 # Scaled — `sdp/hdp/wdp`
 
-> **Artifact:** `io.github.bodenberg:appdimens-games (core):3.0.0`
+> **Artifact:** `io.github.bodenberg:appdimens-games (core):3.0.1`
 
 ## What it is
 The family baseline. Linear growth anchored on the smallest width; rotation-invariant.

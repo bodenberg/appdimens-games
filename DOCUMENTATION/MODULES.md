@@ -46,7 +46,7 @@ Satellites depend **only** on core (no cross-imports — family contract). Compo
 
 ## Migration from 2.0.1
 
-| 2.0.1 (deprecated) | 3.0.0 |
+| 2.0.1 (deprecated) | 3.0.1 (current) |
 |---|---|
 | `AppDimensGames.getInstance().initialize(ctx)` | `GameScreen.updateFromContext(ctx)` (compat: `GamesCompat.initialize`) |
 | `games.calculateButtonSize(48f)` | `48.sdpa(ctx)` (DEFAULT ≈ sdpa) |

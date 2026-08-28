@@ -76,7 +76,7 @@ suffix are excluded from that adjustment on purpose (stable HUD).
 
 ```kotlin
 dependencies {
-    implementation("io.github.bodenberg:appdimens-games:3.0.0")
+    implementation("io.github.bodenberg:appdimens-games:3.0.1")
 }
 ```
 
@@ -127,8 +127,8 @@ DimenSdp.warmupCache();                // pre-touch lazy factors after first pub
 
 ```kotlin
 dependencies {
-    implementation("io.github.bodenberg:appdimens-games:3.0.0")          // core
-    implementation("io.github.bodenberg:appdimens-games-auto:3.0.0")     // gameplay ⭐
+    implementation("io.github.bodenberg:appdimens-games:3.0.1")          // core
+    implementation("io.github.bodenberg:appdimens-games-auto:3.0.1")     // gameplay ⭐
 }
 ```
 

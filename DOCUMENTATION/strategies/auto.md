@@ -1,6 +1,6 @@
 # Auto / Balanced hybrid — `asdp…`
 
-> **Artifact:** `io.github.bodenberg:appdimens-games-auto:3.0.0`
+> **Artifact:** `io.github.bodenberg:appdimens-games-auto:3.0.1`
 
 ## What it is
 ⭐ RECOMMENDED for gameplay objects: linear on phones, logarithmic on tablets/TV.

@@ -1,6 +1,6 @@
 # Density — `dsdp…`
 
-> **Artifact:** `io.github.bodenberg:appdimens-games-density:3.0.0`
+> **Artifact:** `io.github.bodenberg:appdimens-games-density:3.0.1`
 
 ## What it is
 Classic density scaling; useful for pixel-aligned effects.

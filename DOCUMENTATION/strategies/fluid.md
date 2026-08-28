@@ -1,6 +1,6 @@
 # Fluid — `fsdp/fhdp/fwdp`
 
-> **Artifact:** `io.github.bodenberg:appdimens-games-fluid:3.0.0`
+> **Artifact:** `io.github.bodenberg:appdimens-games-fluid:3.0.1`
 
 ## What it is
 CSS-clamp-like typography and bounded HUD elements.

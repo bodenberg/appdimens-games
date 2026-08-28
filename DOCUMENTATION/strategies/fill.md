@@ -1,6 +1,6 @@
 # Fill (cover) — `flsdp…`
 
-> **Artifact:** `io.github.bodenberg:appdimens-games-fill:3.0.0`
+> **Artifact:** `io.github.bodenberg:appdimens-games-fill:3.0.1`
 
 ## What it is
 Backgrounds and parallax layers that must cover any aspect ratio (cropping allowed).

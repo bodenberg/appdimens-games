@@ -17,6 +17,7 @@ android {
 }
 
 dependencies {
+    api(platform(libs.androidx.compose.bom.platform))
     api(project(":library"))
     // Compose é opcional em runtime (paridade com :library)
     compileOnly(libs.androidx.compose.runtime)

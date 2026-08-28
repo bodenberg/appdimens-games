@@ -1,7 +1,7 @@
 # ⚙️ AppDimens Games — Native Game Engines
 ### C · C++20/NDK · OpenGL ES · Vulkan · DirectX 11/12 · JNI
 
-> Artifact: `io.github.bodenberg:appdimens-games-native:3.0.0`
+> Artifact: `io.github.bodenberg:appdimens-games-native:3.0.1`
 > Headers **cross-platform** (Android NDK, Windows, Linux, macOS). Header-only hot paths; the only compiled TU is the optional JNI bridge.
 
 ---
