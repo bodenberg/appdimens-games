@@ -35,7 +35,7 @@ jobs:
       - if: matrix.language == 'java-kotlin'
         uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4
         with: { gradle-version: "9.5.0" }
-      - uses: github/codeql-action/init@c4dd10e44af883a891fe31ced449bcb4a6728b9b # v3
+      - uses: github/codeql-action/init@db488ddef3bf6cb639b32c2e9a7c0a7ea8271d28 # v3
         with:
           languages: ${{ matrix.language }}
       # Todos os módulos Kotlin publicados (o módulo nativo fica fora aqui:
