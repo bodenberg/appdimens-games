@@ -1,0 +1,26 @@
+-keep class com.appdimens.games.core.GameScreen { *; }
+-keep class com.appdimens.games.core.GameMetrics { *; }
+-keep class com.appdimens.games.core.GameCache { *; }
+-keep class com.appdimens.games.compose.LocalDimenMetrics { *; }
+-keep class com.appdimens.games.math.GameMath { *; }
+-keep class com.appdimens.games.resize.DimenGameResize { *; }
+-keep class com.appdimens.games.units.PhysicalUnits { *; }
+-keep class com.appdimens.games.compat.GamesCompat { *; }
+-keep class com.appdimens.games.world.** { *; }
+-keep class com.appdimens.games.common.** { *; }
+-keepclassmembers class com.appdimens.games.** {
+    @androidx.compose.runtime.Composable *;
+}
+-keep class com.appdimens.games.code.DimenScaledKt { *; }
+-keep class com.appdimens.games.auto.compose.DimenAutoComposeKt { *; }
+-keep class com.appdimens.games.fill.compose.DimenFillComposeKt { *; }
+-keep class com.appdimens.games.fit.compose.DimenFitComposeKt { *; }
+-keep class com.appdimens.games.fluid.compose.DimenFluidComposeKt { *; }
+-keep class com.appdimens.games.density.compose.DimenDensityComposeKt { *; }
+-keep class com.appdimens.games.diagonal.compose.DimenDiagonalComposeKt { *; }
+-keep class com.appdimens.games.interpolated.compose.DimenInterpolatedComposeKt { *; }
+-keep class com.appdimens.games.logarithmic.compose.DimenLogarithmicComposeKt { *; }
+-keep class com.appdimens.games.percent.compose.DimenPercentComposeKt { *; }
+-keep class com.appdimens.games.perimeter.compose.DimenPerimeterComposeKt { *; }
+-keep class com.appdimens.games.power.compose.DimenPowerComposeKt { *; }
+-dontwarn com.appdimens.games.**
