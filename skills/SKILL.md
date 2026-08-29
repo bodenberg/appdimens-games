@@ -17,6 +17,16 @@ appdimens-kmp, appdimens-games — same vocabulary).
 5. **Hot paths must not allocate.** Prefer extension fast lanes or
    `GameMath.calculateXxxDp(base, metrics)` with a cached `GameMetrics`.
 
+## Compose version independence
+
+The library declares Jetpack Compose as `compileOnly` (`androidx.compose.runtime`
++ `androidx.compose.ui`; `androidx.compose.material3` is **not** used by the
+library). It compiles against the catalog's Compose but **never ships or pins a
+version** — the published AAR/POM carries no Compose constraint. The consumer's
+Compose (any version) is the single runtime, so there is no version skew and no
+"class/function not found" regardless of the Compose version the app chooses.
+Consumers must apply their own `compose-bom` / Compose dependency.
+
 ## Stem map
 
 | Strategy | Dp stems | Text | Example |

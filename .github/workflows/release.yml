@@ -42,7 +42,7 @@ jobs:
           INPUT_TAG: ${{ inputs.tag }}
         run: |
           test "$(sed -n 's/^VERSION_NAME=//p' gradle.properties)" = '3.0.0'
-          test "$(sed -n 's/^appdimens.version=//p' gradle.properties)" = '3.0.0'
+          test "$(sed -n 's/^appdimens.version=//p' gradle.properties)" = '3.2.0'
           release_tag="$GITHUB_REF_NAME"
           if [ "$EVENT_NAME" = 'workflow_dispatch' ]; then release_tag="$INPUT_TAG"; fi
           test "$release_tag" = 'v3.0.0'

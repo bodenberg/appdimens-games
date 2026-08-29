@@ -142,6 +142,8 @@ val px = 16f.toDynamicScaledPx(ctx)
 
 ### Compose games — same stems, reactive
 
+The library declares Jetpack Compose as `compileOnly` (`androidx.compose.runtime` + `androidx.compose.ui`) and never pins a version, so any Compose version works without conflict — declare your own `compose-bom` / Compose dependency in the game module.
+
 ```kotlin
 AppDimensProvider {
     Box(Modifier.size(48.asdp)) {                 // library-auto satellite
