@@ -14,7 +14,7 @@ espressoCore = "3.7.0"
 annotation = "1.9.1"
 window = "1.5.1"
 appdimensLegacyGames = "2.0.1"
-appdimensDynamic = "3.1.9"
+appdimensDynamic = "3.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
