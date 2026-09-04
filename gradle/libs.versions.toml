@@ -1,6 +1,6 @@
 [versions]
 # Family-aligned toolchain (matches appdimens-dynamic 3.x / appdimens-kmp 1.x)
-agp = "9.3.1"
+agp = "9.4.0"
 kotlin = "2.4.10"
 vanniktech = "0.37.0"
 dokka = "2.2.0"
