@@ -1,7 +1,7 @@
 [versions]
 # Family-aligned toolchain (matches appdimens-dynamic 3.x / appdimens-kmp 1.x)
 agp = "9.3.1"
-kotlin = "2.4.10"
+kotlin = "2.4.20"
 vanniktech = "0.37.0"
 dokka = "2.2.0"
 coreKtx = "1.19.0"
