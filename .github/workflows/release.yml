@@ -33,7 +33,6 @@ jobs:
         with:
           distribution: temurin
           java-version: '25'
-      - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3
       - uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4
         with: { gradle-version: "9.5.0" }
       - name: Verify release version
@@ -46,23 +45,11 @@ jobs:
           release_tag="$GITHUB_REF_NAME"
           if [ "$EVENT_NAME" = 'workflow_dispatch' ]; then release_tag="$INPUT_TAG"; fi
           test "$release_tag" = 'v3.0.0'
-      # Componentes exatamente como usados pelo projeto (AGP 9.3.1 defaults).
-      - name: Install Android packages
-        run: |
-          # O sdkmanager embutido no runner/setup-android não enxerga 'platforms;android-37'
-          # (falhava com "Failed to find package"). Atualiza o cmdline-tools e resolve o
-          # nome real do pacote (android-37 ou android-37.0, formato com API menor).
-          yes | sdkmanager --licenses > /dev/null || true
-          sdkmanager 'cmdline-tools;latest'
-          SDKM="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
-          platform="$("$SDKM" --list 2>/dev/null | awk '{print $1}' | grep -E '^platforms;android-37(\.0)?$' | sort -u | head -n1 || true)"
-          if [ -n "$platform" ]; then
-            "$SDKM" "$platform" 'build-tools;36.0.0' 'cmake;3.22.1' 'ndk;28.2.13676358'
-          else
-            echo "::warning::Pacote android-37 não listado pelo sdkmanager; o AGP fará o download durante o build."
-            "$SDKM" --list 2>/dev/null | awk '{print $1}' | grep '^platforms;' | sort -u || true
-            "$SDKM" 'build-tools;36.0.0' 'cmake;3.22.1' 'ndk;28.2.13676358'
-          fi
+      # Sem android-actions/setup-android nem sdkmanager: o cmdline-tools disponível no
+      # runner (16.0) não lê mais o repositório remoto do SDK ("Failed to find package
+      # 'tools'" / "'platforms;android-37'"). O SDK pré-instalado do runner (ANDROID_HOME)
+      # já tem as licenças aceitas e o AGP baixa sob demanda o que faltar
+      # (platforms;android-37, build-tools, NDK 28.2.13676358, CMake 3.22.1).
       - name: Validate formulas and build release artifacts
         run: |
           python3 scripts/oracle.py
