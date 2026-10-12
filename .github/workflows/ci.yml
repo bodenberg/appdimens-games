@@ -35,7 +35,21 @@ jobs:
         with: { gradle-version: "9.5.0" }
       # Componentes exatamente como usados pelo projeto (AGP 9.3.1 defaults).
       - name: Install Android packages
-        run: sdkmanager 'platforms;android-37' 'build-tools;36.0.0' 'cmake;3.22.1' 'ndk;28.2.13676358'
+        run: |
+          # O sdkmanager embutido no runner/setup-android não enxerga 'platforms;android-37'
+          # (falhava com "Failed to find package"). Atualiza o cmdline-tools e resolve o
+          # nome real do pacote (android-37 ou android-37.0, formato com API menor).
+          yes | sdkmanager --licenses > /dev/null || true
+          sdkmanager 'cmdline-tools;latest'
+          SDKM="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          platform="$("$SDKM" --list 2>/dev/null | awk '{print $1}' | grep -E '^platforms;android-37(\.0)?$' | sort -u | head -n1 || true)"
+          if [ -n "$platform" ]; then
+            "$SDKM" "$platform" 'build-tools;36.0.0' 'cmake;3.22.1' 'ndk;28.2.13676358'
+          else
+            echo "::warning::Pacote android-37 não listado pelo sdkmanager; o AGP fará o download durante o build."
+            "$SDKM" --list 2>/dev/null | awk '{print $1}' | grep '^platforms;' | sort -u || true
+            "$SDKM" 'build-tools;36.0.0' 'cmake;3.22.1' 'ndk;28.2.13676358'
+          fi
       - name: Build & test (JVM unit tests)
         # Agregação na raiz cobre todos os módulos Android (library* + sample + benchlab).
         # Variantes debug e release exercitam R8 do sample e o build nativo (JNI/C++).
