@@ -1,7 +1,7 @@
 # ⚙️ AppDimens Games — Native Game Engines
 ### C · C++20/NDK · OpenGL ES · Vulkan · DirectX 11/12 · JNI
 
-> Artifact: `io.github.bodenberg:appdimens-games-native:3.0.0`
+> Artifact: `io.github.bodenberg:appdimens-games-native:3.2.0`
 > Headers **cross-platform** (Android NDK, Windows, Linux, macOS). Header-only hot paths; the only compiled TU is the optional JNI bridge.
 
 ---
@@ -84,7 +84,9 @@ public:
         const float enemyPx  = appdimens::games::math::autoDp(40.f, m) * m.density;
         const float hudPadPx = appdimens::games::math::scaledDp(12.f, m) * m.density;
 
-        // World point (design space → px, letterbox-consistent):
+        // World point (design space → px, letterbox-consistent).
+        // s = min(widthDp/designW, heightDp/designH) — same factor as render::Mode::FitAll,
+        // so this point lands exactly inside letterbox_ in any orientation:
         auto screenPos = appdimens::games::math::scaleVecFit({960.f, 540.f},
                              m, designW_, designH_);
         (void)playerPx; (void)enemyPx; (void)hudPadPx; (void)screenPos.x; (void)screenPos.y;

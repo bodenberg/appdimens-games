@@ -1,6 +1,6 @@
 # Power (Stevens' law) — `pwsdp…`
 
-> **Artifact:** `io.github.bodenberg:appdimens-games-power:3.0.0`
+> **Artifact:** `io.github.bodenberg:appdimens-games-power:3.2.0`
 
 ## What it is
 Scientific sub-linear growth; configurable exponent for difficulty/UI tuning.

@@ -42,11 +42,11 @@ appdimens-games/
 | `…-native` | JNI + C/C++ + render interop | core |
 | `…-bom` | version alignment | — |
 
-Satellites depend **only** on core (no cross-imports — family contract). Compose runtime is `compileOnly` in core: the code API works without Compose on the classpath.
+Satellites depend **only** on core (no cross-imports — family contract). Compose (`androidx.compose.runtime` + `androidx.compose.ui`) is `compileOnly` in core and satellites: the code API works without Compose on the classpath, and the published POM carries **no** Compose version constraint — the consumer's `compose-bom` (any version) is the single runtime. `material3` is not used by the library.
 
 ## Migration from 2.0.1
 
-| 2.0.1 (deprecated) | 3.0.0 |
+| 2.0.1 (deprecated) | 3.x (3.2.0) |
 |---|---|
 | `AppDimensGames.getInstance().initialize(ctx)` | `GameScreen.updateFromContext(ctx)` (compat: `GamesCompat.initialize`) |
 | `games.calculateButtonSize(48f)` | `48.sdpa(ctx)` (DEFAULT ≈ sdpa) |

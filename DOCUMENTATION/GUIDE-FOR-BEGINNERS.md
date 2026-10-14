@@ -76,7 +76,7 @@ suffix are excluded from that adjustment on purpose (stable HUD).
 
 ```kotlin
 dependencies {
-    implementation("io.github.bodenberg:appdimens-games:3.0.0")
+    implementation("io.github.bodenberg:appdimens-games:3.2.0")
 }
 ```
 
@@ -127,10 +127,16 @@ DimenSdp.warmupCache();                // pre-touch lazy factors after first pub
 
 ```kotlin
 dependencies {
-    implementation("io.github.bodenberg:appdimens-games:3.0.0")          // core
-    implementation("io.github.bodenberg:appdimens-games-auto:3.0.0")     // gameplay ⭐
+    implementation("io.github.bodenberg:appdimens-games:3.2.0")          // core
+    implementation("io.github.bodenberg:appdimens-games-auto:3.2.0")     // gameplay ⭐
+    // Compose is compileOnly in the library (no version pinned) — bring your own:
+    implementation(platform("androidx.compose:compose-bom:<your-version>"))
+    implementation("androidx.compose.ui:ui")
 }
 ```
+
+> **Any Compose version works.** The library compiles against Compose but never ships or
+> pins it, so the Compose your app declares is the single runtime (no version skew).
 
 ```kotlin
 class MainActivity : ComponentActivity() {

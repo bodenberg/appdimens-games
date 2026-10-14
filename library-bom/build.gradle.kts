@@ -7,7 +7,7 @@ plugins {
 
 dependencies {
     constraints {
-        val v = providers.gradleProperty("appdimens.version").orElse("3.0.0").get()
+        val v = providers.gradleProperty("appdimens.version").orElse("3.2.0").get()
         api("io.github.bodenberg:appdimens-games:$v")
         listOf(
             "auto", "density", "diagonal", "fill", "fit", "fluid",
@@ -29,7 +29,7 @@ mavenPublishing {
     coordinates(
         "io.github.bodenberg",
         "appdimens-games-bom",
-        providers.gradleProperty("appdimens.version").orElse("3.0.0").get()
+        providers.gradleProperty("appdimens.version").orElse("3.2.0").get()
     )
     configure(JavaPlatform())
     pom {

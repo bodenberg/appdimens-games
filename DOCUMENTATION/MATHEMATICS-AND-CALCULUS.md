@@ -35,6 +35,7 @@ $$W_0 = 300\ \text{dp},\quad H_0 = 533\ \text{dp},\quad D_0 = 611.6305,\quad P_0
 | PERIMETER | $b\cdot\dfrac{min+max}{833}$ |
 | FIT / FILL | $b\cdot\min/\max\left(\dfrac{min}{300},\ \dfrac{max}{533}\right)$ |
 | DENSITY | $b\cdot\rho$ |
+| World FIT / FILL (`WorldScale.fitPx/fillPx`, native `scaleVecFit`) | $\min/\max\left(\dfrac{w}{W_d},\ \dfrac{h}{H_d}\right)\cdot\rho$ px per world unit — identical to `ViewportMode.FIT_ALL` / `CROP` |
 | AR multiplier | $1 + K\ln\!\big((max/min)/1.78\big)$ |
 
 ## Snapshot pre-computation matrix
