@@ -1,4 +1,4 @@
-# AppDimens Games 3.0 — Skill for Coding Agents
+# AppDimens Games 3.x (3.2.0) — Skill for Coding Agents
 
 Use this skill whenever writing or reviewing code that sizes game UI/HUD/world
 elements on Android with the AppDimens Games library (family: appdimens-dynamic,
@@ -26,6 +26,16 @@ version** — the published AAR/POM carries no Compose constraint. The consumer'
 Compose (any version) is the single runtime, so there is no version skew and no
 "class/function not found" regardless of the Compose version the app chooses.
 Consumers must apply their own `compose-bom` / Compose dependency.
+When editing a library module, keep Compose as `compileOnly` (plus
+`testImplementation` of the runtime for JVM tests) — never `api`/`implementation`.
+
+## World layer (sprites ↔ viewport)
+
+`WorldScale.fitPx/fillPx(metrics, designW, designH)` = `min`/`max(windowW/designW,
+windowH/designH) × density` — the exact factor of `ViewportMode.FIT_ALL` / `CROP`
+(`ViewportTransform`). Use them together so sprites land inside the letterbox.
+Native `math::scaleVecFit` uses the same rule (`render::Mode::FitAll`). Do not
+reintroduce the old min/max-dimension (orientation-agnostic) formula.
 
 ## Stem map
 
@@ -72,6 +82,9 @@ field-compatible with VkViewport/D3D11_VIEWPORT; letterbox via
 ## Validation
 
 Any formula change MUST pass `python3 scripts/oracle.py` (30 cases) and the JVM
-tests with oracle-generated expectations. Constants are family-canonical:
+tests with oracle-generated expectations (`./gradlew testDebugUnitTest`; suites cover
+GameMath, GameCache, GameMetrics, GameScreen, GameWorld, code API, units, resize).
+Release: bump `appdimens.version` in `gradle.properties` (published coordinate;
+`orElse("3.0.0")` is only a fallback) and the check in `.github/workflows/release.yml`. Constants are family-canonical:
 300/533/611.6305(literal)/833/1.78 — never "fix" 611.6305 to the true sqrt;
 parity beats pedantry (delta documented).

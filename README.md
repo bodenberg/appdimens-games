@@ -5,7 +5,7 @@
 
 ### Unified, high-performance dimension scaling for Android games — Compose · Kotlin · Java · C++/NDK · C · OpenGL ES · Vulkan · DirectX · Unity/C#
 
-[![Version](https://img.shields.io/badge/version-3.0.0-00E5FF?style=flat-square)](#)
+[![Version](https://img.shields.io/badge/version-3.2.0-00E5FF?style=flat-square)](#)
 [![License](https://img.shields.io/badge/License-Apache--2.0-white?style=flat-square)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-Android%20%7B%20NDK%20%7D-3DDC84?style=flat-square)](#)
 [![APIs](https://img.shields.io/badge/Game%20APIs-JNI%20·%20C%20·%20C%23%20·%20Vulkan%20·%20OpenGL%20·%20DirectX%20·%20Compose-orange?style=flat-square)](#)
@@ -51,18 +51,20 @@ Full tutorial with copy-paste steps for each stack: **[GUIDE-FOR-BEGINNERS.md](D
 ## 📦 Installation
 
 ```kotlin
-implementation("io.github.bodenberg:appdimens-games:3.0.0")          // core
+implementation("io.github.bodenberg:appdimens-games:3.2.0")          // core
 // Modular satellites (same shape as dynamic/kmp):
 // appdimens-games-{auto,density,diagonal,fill,fit,fluid,interpolated,
 //                   logarithmic,percent,perimeter,power,resize,units}
-implementation("io.github.bodenberg:appdimens-games-native:3.0.0")   // C/C++/JNI + GL/VK/DX
-implementation(platform("io.github.bodenberg:appdimens-games-bom:3.0.0"))
+implementation("io.github.bodenberg:appdimens-games-native:3.2.0")   // C/C++/JNI + GL/VK/DX
+implementation(platform("io.github.bodenberg:appdimens-games-bom:3.2.0"))
 ```
 
 | Requirement | Version |
 |---|---|
 | minSdk / compileSdk | **24 / 37** |
-| AGP / Kotlin / JDK | 9.x / 2.x / 17 |
+| AGP / Kotlin / JDK (bytecode) | 9.3.1 / 2.4.10 / 17 |
+| Gradle (build of this repo) | 9.5.0 (daemon JVM 25) |
+| Jetpack Compose | any version — `compileOnly`, bring your own `compose-bom` |
 
 ---
 
@@ -208,6 +210,16 @@ flowchart LR
 | Snapshot rebuild | once per resize (exact `ln()` only here) |
 
 On-device comparison vs games-2.0.1 & dynamic-3.1.9: [`benchlab/`](benchlab) · [PERFORMANCE.md](PERFORMANCE.md).
+
+## ✨ What's new in 3.2.0
+
+| Change | Detail |
+|---|---|
+| 🧩 **Compose version independence** | Compose is `compileOnly` (`runtime` + `ui`); the published AAR/POM pins **no** Compose version. Your app's Compose is the only runtime — no skew, no "class not found". Declare your own `compose-bom`. |
+| 🎯 `WorldScale` = viewport math | `WorldScale.fitPx`/`fillPx` now use exactly `min`/`max(windowW/designW, windowH/designH)` — identical to `ViewportMode.FIT_ALL` / `CROP`, so sprites and letterbox agree pixel-for-pixel in any orientation. Native `math::scaleVecFit` follows the same rule. |
+| 🛡️ Native robustness | `Metrics::make` guards `ln()` against a zero dimension; built with `-fno-fast-math` (strict IEEE, bit-parity with the JVM kernels). |
+| 🧪 Test coverage | New JVM suites for `GameCache`, `GameMetrics`, `GameScreen`, `GameWorld`, code API, physical units and resize math. |
+| 🧰 Build | Gradle 9.5.0 · AGP 9.3.1 · Kotlin 2.4.10 (Compose plugin aligned on the root classpath). |
 
 ## ✨ What's new in 3.0.0
 

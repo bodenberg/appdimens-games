@@ -1,4 +1,4 @@
-# API Quick Reference — AppDimens Games 3.0 (family parity)
+# API Quick Reference — AppDimens Games 3.2.0 (family parity)
 
 ## Kotlin code (px out)
 Int/Float: sdp sdpa sdpi sdpia · hdp hdpa hdpi hdpia · wdp wdpa wdpi wdpia
@@ -15,6 +15,10 @@ Number.sdp/.sdpa/.sdpi/.sdpia : Dp · Number.sdpPx/.sdpaPx/.sdpiPx : Float
 hdp/hdpa/hdpi(+Px) · wdp/wdpa/wdpi(+Px)
 Text: Number.ssp/.sspi : TextUnit · Number.semPx : Float (fixed px)
 Provider: AppDimensProvider { } · locals LocalDimenMetrics, LocalUiModeType · currentDimenMetrics()
+
+## World layer
+Vec2/Vec3 · RectF · ViewportMode{FIT_ALL,FIT_WIDTH,FIT_HEIGHT,STRETCH,CROP} → ViewportTransform
+WorldScale.fitPx/fillPx(metrics,designW,designH) = min/max(winW/designW, winH/designH)·density (≡ FIT_ALL/CROP) · WorldScale.toScreen(v,…)
 
 ## Satellites prefixes (code + compose, suffixes a/i/ia)
 psdp phdp pwdp + spaceW/Sw/H(i) · pwsdp · fsdp · asdp · dgsdp · flsdp · ftsdp · isdp · logsdp · prsdp · dsdp

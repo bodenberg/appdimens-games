@@ -6,8 +6,8 @@
   - `core/`: GameScreenConstants, GameMetrics (snapshot), GameScreen (live hub + frozen fullscreen for `i`), GameCache (lock-free), MissingModule-ready
   - `math/`: GameMath — 13 kernels, single source of truth (pure Float)
   - `code/`: family extensions (sdp/hdp/wdp/ssp/sem…), Facilitators, DimenScaled builder, DimenSdp Java facade, compat/GamesCompat (deprecated 2.x)
-  - `compose/`: AppDimensProvider, LocalDimenMetrics/LocalUiModeType, same stems as @get:Composable properties
-  - `world/`: Vec2/Vec3, RectF, ViewportMode+ViewportTransform, WorldScale
+  - `compose/` (`AppDimensGamesCompose.kt`; Compose is compileOnly, no version pinned): AppDimensProvider, LocalDimenMetrics/LocalUiModeType, same stems as @get:Composable properties
+  - `world/`: Vec2/Vec3, RectF, ViewportMode+ViewportTransform, WorldScale (fitPx/fillPx ≡ FIT_ALL/CROP)
   - `units/`, `resize/`
 - Satellites (`appdimens-games-<strategy>`): percent·power·fluid·auto·diagonal·fill·fit·interpolated·logarithmic·perimeter·density·resize·units (+BOM)
 - `library-native`: cpp/include/appdimens/games/{core.h,math.h,render.h} + c/appdimens_games_c.h + jni bridge (Kotlin: com.appdimens.games.jni.NativeBridge)
@@ -15,7 +15,7 @@
 - `sample/` (Compose · GLSurfaceView · Vulkan surface) · `benchlab/` (vs games-2.0.1 & dynamic-3.1.9)
 
 ## Toolchain (family-aligned)
-AGP 9.3.1 · Kotlin 2.x · compileSdk 37 · minSdk 24 · JDK 17 · Gradle 9.1
+AGP 9.3.1 · Kotlin 2.4.10 · compileSdk 37 · minSdk 24 · JVM target 17 · Gradle 9.5.0 (daemon JVM 25)
 
 ## Key invariants
 - Hot path = base × precomputed factor; zero allocation; no locks on reads.
