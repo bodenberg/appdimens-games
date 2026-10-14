@@ -2,13 +2,13 @@ name: Release
 
 on:
   push:
-    tags: ['v3.0.0']
+    tags: ['3.2.0', 'v3.2.0']
   workflow_dispatch:
     inputs:
       tag:
-        description: Existing v3.0.0 tag to publish
+        description: Existing 3.2.0 (or v3.2.0) tag to publish
         required: true
-        default: v3.0.0
+        default: '3.2.0'
 
 permissions:
   contents: write
@@ -20,7 +20,7 @@ concurrency:
 jobs:
   release:
     name: Build and publish GitHub release
-    if: github.event_name == 'push' || inputs.tag == 'v3.0.0'
+    if: github.event_name == 'push' || inputs.tag == '3.2.0' || inputs.tag == 'v3.2.0'
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
@@ -40,11 +40,12 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           INPUT_TAG: ${{ inputs.tag }}
         run: |
-          test "$(sed -n 's/^VERSION_NAME=//p' gradle.properties)" = '3.0.0'
+          test "$(sed -n 's/^VERSION_NAME=//p' gradle.properties)" = '3.2.0'
           test "$(sed -n 's/^appdimens.version=//p' gradle.properties)" = '3.2.0'
           release_tag="$GITHUB_REF_NAME"
           if [ "$EVENT_NAME" = 'workflow_dispatch' ]; then release_tag="$INPUT_TAG"; fi
-          test "$release_tag" = 'v3.0.0'
+          test "$release_tag" = '3.2.0' || test "$release_tag" = 'v3.2.0'
+          echo "RELEASE_TAG=$release_tag" >> "$GITHUB_ENV"
       # Sem android-actions/setup-android nem sdkmanager: o cmdline-tools disponível no
       # runner (16.0) não lê mais o repositório remoto do SDK ("Failed to find package
       # 'tools'" / "'platforms;android-37'"). O SDK pré-instalado do runner (ANDROID_HOME)
@@ -62,7 +63,7 @@ jobs:
           (cd dist && sha256sum * > SHA256SUMS)
       - uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
         with:
-          tag_name: v3.0.0
+          tag_name: ${{ env.RELEASE_TAG }}
           generate_release_notes: true
           fail_on_unmatched_files: true
           files: dist/*

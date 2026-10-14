@@ -55,7 +55,7 @@ mavenPublishing {
     coordinates(
         "io.github.bodenberg",
         "appdimens-games-native",
-        providers.gradleProperty("appdimens.version").orElse("3.0.0").get()
+        providers.gradleProperty("appdimens.version").orElse("3.2.0").get()
     )
     configure(AndroidSingleVariantLibrary())
     pom {

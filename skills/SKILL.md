@@ -84,7 +84,9 @@ field-compatible with VkViewport/D3D11_VIEWPORT; letterbox via
 Any formula change MUST pass `python3 scripts/oracle.py` (30 cases) and the JVM
 tests with oracle-generated expectations (`./gradlew testDebugUnitTest`; suites cover
 GameMath, GameCache, GameMetrics, GameScreen, GameWorld, code API, units, resize).
-Release: bump `appdimens.version` in `gradle.properties` (published coordinate;
-`orElse("3.0.0")` is only a fallback) and the check in `.github/workflows/release.yml`. Constants are family-canonical:
+Release (current: **3.2.0**): bump together `appdimens.version` (published coordinate)
+and `VERSION_NAME` in `gradle.properties`, the `orElse("…")` fallbacks in every
+module `build.gradle.kts`, `versionName` of `sample`/`benchlab`, and the tag/version
+checks in `.github/workflows/release.yml` (tags are bare, e.g. `3.2.0`; `v3.2.0` also accepted). Constants are family-canonical:
 300/533/611.6305(literal)/833/1.78 — never "fix" 611.6305 to the true sqrt;
 parity beats pedantry (delta documented).
