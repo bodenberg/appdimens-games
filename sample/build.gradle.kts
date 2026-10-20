@@ -33,6 +33,7 @@ dependencies {
     implementation(project(":library-fluid"))
     implementation(project(":library-fit"))
     implementation(project(":library-fill"))
+    implementation(project(":library-custom"))
     implementation(project(":library-native"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)

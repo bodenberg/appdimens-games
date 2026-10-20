@@ -30,6 +30,7 @@ Each doc follows the family skeleton: *What it is · Calculation · How to use �
 | 11 | Perimeter | [perimeter.md](strategies/perimeter.md) | `…-perimeter` |
 | 12 | Density | [density.md](strategies/density.md) | `…-density` |
 | 13 | Resize (container fit) | [resize.md](strategies/resize.md) | `…-resize` |
+| 14 | Custom (`cdp/csp`, unreleased) — your own strategy, free-form formulas | [custom.md](strategies/custom.md) | `…-custom` |
 
 ## Decision flow
 

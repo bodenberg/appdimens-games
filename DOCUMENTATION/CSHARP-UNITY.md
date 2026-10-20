@@ -289,6 +289,31 @@ protected override void OnSizeAllocated(double w, double h)   // or Window.SizeC
 
 ---
 
+## 7️⃣ Custom strategies (unreleased) — `AppDimensGamesCustom*.cs`
+
+Drop `AppDimensGamesCustom.cs` and `AppDimensGamesCustom.Engine.cs` next to `AppDimensGames.cs` (Unity 2021.2+ / .NET Standard 2.1; the engine is generated from `AppDimens.Net.Custom` by `scripts/sync-csharp-custom.py`, so results match every AppDimens platform).
+
+```csharp
+using AppDimensGames.Custom;
+
+public static class GameStrategies
+{
+    public static readonly ScalingStrategy Hud = ScalingStrategy.Define("hud", b =>
+    {
+        b.Axis = ScalingAxis.Min;
+        b.Curve = ScalingCurve.Expression("clamp(pow(ratio, 0.85) * (1 + 0.05 * log(aspectRatio / 1.78)), 0.75, 2.5)");
+        b.IgnoreFontScale();
+        b.On(DeviceClass.Tv, r => r.Curve = ScalingCurve.Expression("height / 540"));
+    });
+}
+
+rect.sizeDelta = new Vector2(CustomKernels.Cdp(64f, GameStrategies.Hud), CustomKernels.Cdp(64f, GameStrategies.Hud));
+label.fontSize = Mathf.RoundToInt(CustomKernels.Csp(18f, GameStrategies.Hud));      // final size (policy applied)
+ScalingStrategies.LoadJson(Resources.Load<TextAsset>("appdimens-strategies").text); // same JSON as the other platforms
+```
+
+Device class: `SystemInfo.deviceType` Desktop → `desktop`, Console → `tv`, else phone/tablet by size; override with `CustomGames.DeviceClassResolver = m => …`. Full guide: [strategies/custom.md](strategies/custom.md).
+
 ## 🧵 Performance rules (managed)
 
 | Rule | Why |

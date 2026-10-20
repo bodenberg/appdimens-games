@@ -54,7 +54,8 @@ Full tutorial with copy-paste steps for each stack: **[GUIDE-FOR-BEGINNERS.md](D
 implementation("io.github.bodenberg:appdimens-games:3.2.0")          // core
 // Modular satellites (same shape as dynamic/kmp):
 // appdimens-games-{auto,density,diagonal,fill,fit,fluid,interpolated,
-//                   logarithmic,percent,perimeter,power,resize,units}
+//                   logarithmic,percent,perimeter,power,resize,units,custom*}
+// *custom: unreleased — your own strategies (DOCUMENTATION/strategies/custom.md)
 implementation("io.github.bodenberg:appdimens-games-native:3.2.0")   // C/C++/JNI + GL/VK/DX
 implementation(platform("io.github.bodenberg:appdimens-games-bom:3.2.0"))
 ```
@@ -141,6 +142,7 @@ val px = 16f.toDynamicScaledPx(ctx)
 | logarithmic | `logsdp…` | `50f.logsdp(ctx)` |
 | perimeter | `prsdp…` | `16f.prsdp(ctx)` |
 | density | `dsdp…` | `16f.dsdp(ctx)` |
+| custom *(unreleased)* | `cdp/csp` + your strategy | `64f.cdp(Hud)` — DSL/JSON, rules per device, free-form formulas → [custom.md](DOCUMENTATION/strategies/custom.md) |
 
 ### Compose games — same stems, reactive
 
@@ -185,7 +187,7 @@ auto vp = render::vkViewport(render::Mode::FitAll, surfW, surfH, 1920.f, 1080.f)
 | **DirectX 11/12** | `ResizeBuffers` → republish + `dxViewport` | [Guide §7](DOCUMENTATION/GUIDE-FOR-BEGINNERS.md#7-tutorial-f--directx-1112-windowsxbox-shared-code) |
 | **Pure C (raylib/SDL)** | header-only `adg_*` API | [Native §2](DOCUMENTATION/NATIVE-GAME-ENGINES.md) |
 
-**Unity/C#:** bootstrap + `MathKernels.Scaled/ScaledInvariant/Auto/Fit/Fill` + `World.ViewportRect(letterbox)` + `Units.CmToPx(2f)` → [Guide §8](DOCUMENTATION/GUIDE-FOR-BEGINNERS.md#8-tutorial-g--unity-c) · deep dive [CSHARP-UNITY.md](DOCUMENTATION/CSHARP-UNITY.md) (uGUI, câmera letterbox, Godot 4, MAUI, DOTS/Burst).
+**Unity/C#:** bootstrap + `MathKernels.Scaled/ScaledInvariant/Auto/Fit/Fill` + `World.ViewportRect(letterbox)` + `Units.CmToPx(2f)` + custom strategies `CustomKernels.Cdp(64f, hud)` → [Guide §8](DOCUMENTATION/GUIDE-FOR-BEGINNERS.md#8-tutorial-g--unity-c) · deep dive [CSHARP-UNITY.md](DOCUMENTATION/CSHARP-UNITY.md) (uGUI, câmera letterbox, Godot 4, MAUI, DOTS/Burst).
 
 ---
 

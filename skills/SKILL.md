@@ -44,6 +44,7 @@ reintroduce the old min/max-dimension (orientation-agnostic) formula.
 | scaled (core) | sdp/hdp/wdp | ssp/hsp/wsp · sem/hem/wem | `48.sdp(ctx)` · `16.ssp(ctx)` |
 | percent | psdp/phdp/pwdp + spaceW/Sw/H | pssp… | `10.spaceW(ctx)` |
 | power | pwsdp… | pwssp… | `48f.pwsdp(ctx)` |
+| custom *(unreleased)* | cdp, cdpi, cdpDp | csp, cspDp | `64f.cdp(Hud)` — your own strategy (DSL/JSON, rules per device class, free-form `expression("…")`/`formula("…")`); C# `CustomKernels.Cdp(64f, hud)`; see DOCUMENTATION/strategies/custom.md |
 | fluid | fsdp… | fssp… | `16f.fsdp(ctx)` |
 | auto ⭐ gameplay | asdp… | assp… | `64f.asdp(ctx)` |
 | diagonal | dgsdp… | dgssp… | `48f.dgsdp(ctx)` |

@@ -13,10 +13,10 @@ appdimens-games/
 │   └── resize/  binary-search auto-fit
 ├── library-{strategy}/ → io.github.bodenberg:appdimens-games-{strategy}
 │   percent · power · fluid · auto · diagonal · fill · fit · interpolated ·
-│   logarithmic · perimeter · density · resize · units
+│   logarithmic · perimeter · density · resize · units · custom (unreleased)
 ├── library-bom/        → appdimens-games-bom
 ├── library-native/     → appdimens-games-native (C++20 core + C99 header + JNI)
-├── csharp/AppDimensGames/  Unity/Godot single-file port
+├── csharp/AppDimensGames/  Unity/Godot port (core single file + custom strategies)
 ├── sample/             demo game (Compose · OpenGL ES · Vulkan surface)
 └── benchlab/           on-device comparison vs games-2.0.1 and dynamic-3.1.9
 ```
@@ -39,6 +39,7 @@ appdimens-games/
 | `…-density` | `dsdp…` | core |
 | `…-resize` | container auto-fit | core |
 | `…-units` | mm/cm/inch | core |
+| `…-custom` *(unreleased)* | `cdp/csp` — your own strategies (DSL, JSON, rules, free-form formulas, presets) | core |
 | `…-native` | JNI + C/C++ + render interop | core |
 | `…-bom` | version alignment | — |
 
