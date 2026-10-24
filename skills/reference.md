@@ -36,4 +36,4 @@ Kotlin JNI: com.appdimens.games.jni.NativeBridge.updateMetrics/scaled/scaledAr/s
 
 ## C#
 AppDimensGames.Screen.Update(wDp,hDp,dpi) · MathKernels.Scaled/ScaledAr/ScaledInvariant/Width/Height/
-PercentOfWidth/Power/Fluid/Auto/Logarithmic/Interpolated/Diagonal/Fit/Fill/ToPx · Custom: CustomKernels.Cdp/CdpInvariant/CdpPx/Csp/CspPx/Factor/Explain, ScalingStrategy.Define, ScalingStrategies.LoadJson, CustomGames.DeviceClassResolver · World.ViewportRect(mode,w,h,dw,dh) · Units.Mm/Cm/InchToPx
+PercentOfWidth/Power/Fluid/Auto/Logarithmic/Interpolated/Diagonal/Fit/Fill/ToPx · Custom: CustomKernels.Cdp/CdpInvariant/CdpPx/Csp/CspPx/Factor/Explain (strategy or formula string), CustomGames.Formula("base * …"), CustomScaleStrategy.Create(screen => factor), ScalingStrategy.Define, ScalingStrategies.LoadJson, CustomGames.DeviceClassResolver · World.ViewportRect(mode,w,h,dw,dh) · Units.Mm/Cm/InchToPx

@@ -2,6 +2,59 @@
 
 > **Unreleased** — on `main`, ships with the next release. Same engine and JSON format as every AppDimens platform (`appdimens-dynamic-custom`, KMP, Web, React Native, Flutter, Apple, .NET).
 
+## Quick start: just write the formula
+
+The easiest way is to write the formula yourself. You get the value you pass (`base`, for example 64) and the screen, and you return the scaled value. There is nothing to configure.
+
+```kotlin
+import com.appdimens.games.custom.*
+import com.appdimens.games.code.custom.*       // px, live GameScreen snapshot
+// import com.appdimens.games.compose.custom.*  // Compose: Dp / TextUnit
+
+// 1. Inline: the formula is the value
+val buttonPx = 64.cdp("base * pow(sw / 360, 0.8)")          // also cdpDp, cdpi, csp, cspDp
+val labelPx = 18.csp("base * min(sw / 360, 1.3)")
+
+// 2. Named, to reuse it everywhere
+val Hud = scalingFormula("base * (tablet ? 0.9 : 1) * clamp(sw / 360, 0.85, 1.6)")
+val iconPx = 48.cdp(Hud)
+
+// 3. In code, with no limits (not JSON-serializable)
+val Fancy = scalingFormula { base, screen -> base * (screen.smallestWidthDp / 360f).pow(0.8f) }
+
+// 4. Programmable factor: return the factor that multiplies every value
+val Product = CustomScaleStrategy { screen ->
+    val width = screen.widthDp
+    (width / 360f).coerceIn(0.85f, 1.80f)
+}
+val padPx = 16.cdp(Product)    // 16 × factor
+```
+
+| Form | You return | Cost per value | JSON |
+|---|---|---|---|
+| `64.cdp("…")` / `scalingFormula("…")` | the final value (`base` = input) | one multiply when shaped `base * (…)`, otherwise cached | yes |
+| `scalingFormula { base, screen -> … }` | the final value | cached per value and window | no |
+| `CustomScaleStrategy { screen -> … }` | the **factor** (any Kotlin: `if`, `when`, helpers, `coerceIn`…) | one multiply (the lambda runs once per window) | no |
+
+In the lambdas, `screen` is a `ScreenSnapshot`: `widthDp`, `heightDp`, `smallestWidthDp`, `minDp`, `maxDp`, `aspectRatio`, `density`, `fontScale`, `isLandscape`, `isMultiWindow`, `device` (`DeviceClass.PHONE`, `TABLET`, `TV`…). The game window maps through `GameMetrics.toScreenSnapshot()`. Lambdas must be pure (they must not read mutable state), because results are memoized per window. A non-finite factor throws when the window resolves.
+
+Compose: `Modifier.size(64.cdp("base * pow(sw / 360, 0.8)"))` · `fontSize = 18.csp("…")`. Java / engines: `DimenCustom.cdp(64f, "…")` · `DimenCustom.formula("…")`. C#: `64f.Cdp("base * pow(sw / 360, 0.8)")` · `CustomKernels.Csp(18f, "…")` · `CustomGames.Formula("…")` · `CustomScaleStrategy.Create(screen => Math.Clamp(screen.WidthDp / 360f, 0.85f, 1.8f))`.
+
+| You write | Means |
+|---|---|
+| `base` | the value you pass (`64` in `64.cdp(…)`) |
+| `sw` · `width` · `height` | smallest width · window width · window height (dp) |
+| `shortSide` · `longSide` · `diagonal` · `aspectRatio` | other window measures |
+| `ratio` | `sw / 300`, the ratio `sdp` uses (so `base * ratio` = `sdp`) |
+| `phone` `tablet` `desktop` `tv` `watch` `car` `vr` · `landscape` `portrait` `multiWindow` | 1 when true, 0 when false |
+| `density` · `fontScale` | screen density · user font scale |
+
+You can use `+ - * / ^`, `cond ? a : b`, `min` `max` `clamp` `pow` `sqrt` `log` `round` `lerp` `smoothstep`, and more (see [Free-form formulas](#free-form-formulas-no-limits-from-the-built-in-curves)). Typos fail right away with the position, for example `unknown variable 'sww'`.
+
+**Fast path.** When the formula has the shape `base * (…)` and the `(…)` part does not read `base`, it costs one multiply per value: the `(…)` part is computed once per window. Any other shape also works and is cached per value and window. `base * sw / 360` is evaluated as written, `(base * sw) / 360`. Write `base * (sw / 360)` for the fast path.
+
+The same text works in the strategies JSON (`{"id": "hud", "formula": "base * pow(sw / 360, 0.8)"}`) and gives the same numbers on every AppDimens platform. If you need more structure (rules per device, factor bounds, font-scale policy), use the full configuration below.
+
 ## What it is
 
 Your own scaling strategy, defined as a configuration instead of a fixed growth law:

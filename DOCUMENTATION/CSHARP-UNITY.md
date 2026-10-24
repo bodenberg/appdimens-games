@@ -293,6 +293,19 @@ protected override void OnSizeAllocated(double w, double h)   // or Window.SizeC
 
 Drop `AppDimensGamesCustom.cs` and `AppDimensGamesCustom.Engine.cs` next to `AppDimensGames.cs` (Unity 2021.2+ / .NET Standard 2.1; the engine is generated from `AppDimens.Net.Custom` by `scripts/sync-csharp-custom.py`, so results match every AppDimens platform).
 
+The simplest form is to write the formula yourself (`base` = the value you pass; the result is the value):
+
+```csharp
+using AppDimensGames.Custom;
+
+float button = 64f.Cdp("base * pow(sw / 360, 0.8)");                   // dp; also CdpPx, Cdpi, Csp, CspPx
+float label  = CustomKernels.Csp(18f, "base * min(sw / 360, 1.3)");     // final text size in dp
+var hudFormula = CustomGames.Formula("base * (tablet ? 0.9 : 1) * clamp(sw / 360, 0.85, 1.6)"); // shared per text
+var product = CustomScaleStrategy.Create(screen => Math.Clamp(screen.WidthDp / 360f, 0.85f, 1.8f)); // programmable factor, once per window
+```
+
+For rules per device, factor bounds or a font-scale policy, use the full configuration:
+
 ```csharp
 using AppDimensGames.Custom;
 

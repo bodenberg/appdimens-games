@@ -11,8 +11,9 @@ Compose: compileOnly (runtime+ui), no version pinned in the POM — consumer sup
 ## Artifacts (version 3.2.0)
 io.github.bodenberg:appdimens-games (core) + -auto -density -diagonal -fill -fit -fluid
 -interpolated -logarithmic -percent -perimeter -power -resize -units -native + -bom
-(+ -custom, unreleased: own strategies `64f.cdp(Hud)` / `18.csp` / `scalingStrategy("hud") { … }`, JSON shared with every AppDimens platform,
- rules per device class, free-form formulas `expression("…")` / `formula("…")`; C#: `CustomKernels.Cdp(64f, hud)`; doc DOCUMENTATION/strategies/custom.md)
+(+ -custom, unreleased: simplest = write the formula `64.cdp("base * pow(sw / 360, 0.8)")` / `scalingFormula("…")` / `scalingFormula { base, screen -> … }`; programmable factor `CustomScaleStrategy { screen -> … }`;
+ own strategies `64f.cdp(Hud)` / `18.csp` / `scalingStrategy("hud") { … }`, JSON shared with every AppDimens platform,
+ rules per device class, free-form formulas `expression("…")` / `formula("…")`; C#: `CustomKernels.Cdp(64f, hud)`, `64f.Cdp("base * …")`; doc DOCUMENTATION/strategies/custom.md)
 
 ## Kotlin/Java code API (returns PX)
 Int/Float extensions: sdp sdpa sdpi sdpia · hdp hdpa hdpi hdpia · wdp wdpa wdpi wdpia (+Px variants)

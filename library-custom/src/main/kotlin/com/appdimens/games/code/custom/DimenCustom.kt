@@ -85,6 +85,27 @@ fun Number.csp(strategy: ScalingStrategy): Float = csp(null, strategy)
 fun Number.cspDp(strategy: ScalingStrategy = ScalingStrategies.default): Float =
     strategy.resolve(GameScreen.metrics()).scaleSpDp(toFloat())
 
+// EN Inline formulas — the formula **is** the value. Shared per text (see `scalingFormula`).
+// PT Fórmulas inline — a fórmula **é** o valor. Compartilhadas por texto.
+
+/** EN `16.cdpDp(metrics, "base * pow(sw / 360, 0.8)")` → **dp**. */
+fun Number.cdpDp(metrics: GameMetrics, formula: String): Float = cdpDp(metrics, ScalingStrategies.formula(formula))
+
+/** EN `16.cdpDp("base * pow(sw / 360, 0.8)")` → **dp**, live snapshot. */
+fun Number.cdpDp(formula: String): Float = cdpDp(GameScreen.metrics(), ScalingStrategies.formula(formula))
+
+/** EN `16.cdp("base * pow(sw / 360, 0.8)")` → **px**, live snapshot. */
+fun Number.cdp(formula: String): Float = cdp(null, ScalingStrategies.formula(formula))
+
+/** EN `16.cdpi("…")` → **px**, resize-invariant. */
+fun Number.cdpi(formula: String): Float = cdpi(null, ScalingStrategies.formula(formula))
+
+/** EN `14.csp("base * min(sw / 360, 1.3)")` → **px** for text (font-scale policy applied). */
+fun Number.csp(formula: String): Float = csp(null, ScalingStrategies.formula(formula))
+
+/** EN `14.cspDp("…")` → **dp** for text. */
+fun Number.cspDp(formula: String): Float = cspDp(ScalingStrategies.formula(formula))
+
 // EN Strategy-first facilitators. PT Facilitadores a partir da estratégia.
 
 /** EN `Hud.px(16)` → px. */
@@ -125,6 +146,23 @@ object DimenCustom {
 
     @JvmStatic @JvmOverloads
     fun csp(value: Float, strategy: ScalingStrategy = ScalingStrategies.default): Float = value.csp(null, strategy)
+
+    /** EN `DimenCustom.cdp(16f, DimenCustom.formula("base * (sw / 360)"))`. Shared per text. */
+    @JvmStatic
+    fun formula(formula: String): ScalingStrategy = ScalingStrategies.formula(formula)
+
+    /** EN `DimenCustom.cdp(16f, "base * pow(sw / 360, 0.8)")` → px. */
+    @JvmStatic
+    fun cdp(value: Float, formula: String): Float = value.cdp(formula)
+
+    @JvmStatic
+    fun cdpDp(value: Float, formula: String): Float = value.cdpDp(formula)
+
+    @JvmStatic
+    fun cdpi(value: Float, formula: String): Float = value.cdpi(formula)
+
+    @JvmStatic
+    fun csp(value: Float, formula: String): Float = value.csp(formula)
 
     @JvmStatic
     fun factor(strategy: ScalingStrategy): Float = strategy.factor()

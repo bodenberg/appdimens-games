@@ -10,7 +10,7 @@
   - `world/`: Vec2/Vec3, RectF, ViewportMode+ViewportTransform, WorldScale (fitPx/fillPx ≡ FIT_ALL/CROP)
   - `units/`, `resize/`
 - Satellites (`appdimens-games-<strategy>`): percent·power·fluid·auto·diagonal·fill·fit·interpolated·logarithmic·perimeter·density·resize·units (+BOM)
-- `appdimens-games-custom` (unreleased, `:library-custom`): `com.appdimens.games.custom` (engine identical to appdimens-dynamic-custom: `scalingStrategy { }`, `ScalingStrategies`, `ScalingStrategyJson`, `ScalingExpression`, presets, bridge `GameMetrics.toScreenSnapshot()` / `resolve(GameMetrics)`), `code.custom` (`cdp` px, `cdpDp`, `cdpi`, `csp`, `DimenCustom`), `compose.custom` (`cdp`, `csp`, `ProvideScalingStrategy`). C#: `csharp/AppDimensGames/AppDimensGamesCustom.cs` (+ generated `.Engine.cs`).
+- `appdimens-games-custom` (unreleased, `:library-custom`): `com.appdimens.games.custom` (engine identical to appdimens-dynamic-custom: `scalingFormula("…")` / `scalingFormula { base, screen -> … }`, `scalingStrategy { }`, `ScalingStrategies`, `ScalingStrategyJson`, `ScalingExpression`, presets, bridge `GameMetrics.toScreenSnapshot()` / `resolve(GameMetrics)`), `code.custom` (`cdp` px, `cdpDp`, `cdpi`, `csp`, each also taking a formula string, `DimenCustom`), `compose.custom` (`cdp`, `csp`, `ProvideScalingStrategy`). C#: `csharp/AppDimensGames/AppDimensGamesCustom.cs` (+ generated `.Engine.cs`).
 - `library-native`: cpp/include/appdimens/games/{core.h,math.h,render.h} + c/appdimens_games_c.h + jni bridge (Kotlin: com.appdimens.games.jni.NativeBridge)
 - `csharp/AppDimensGames/AppDimensGames.cs` (+asmdef) — Unity/Godot port
 - `sample/` (Compose · GLSurfaceView · Vulkan surface) · `benchlab/` (vs games-2.0.1 & dynamic-3.1.9)

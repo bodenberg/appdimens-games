@@ -110,6 +110,39 @@ fun Number.cspPx(strategy: ScalingStrategy): Float {
 @get:ReadOnlyComposable
 val Number.cspPx: Float get() = cspPx(currentScalingStrategy)
 
+// EN Inline formulas ───────────────────────────────────────────────────────────
+// PT Fórmulas inline ───────────────────────────────────────────────────────────
+
+/**
+ * EN Scales with a text formula — the formula **is** the value: `16.cdp("base * pow(sw / 360, 0.8)")`.
+ * Shared per text (see [com.appdimens.games.custom.scalingFormula]); write `base * (…)` for the
+ * one-multiply fast path.
+ * PT Escala com uma fórmula em texto — a fórmula **é** o valor.
+ */
+@Composable
+@ReadOnlyComposable
+fun Number.cdp(formula: String): Dp = cdp(ScalingStrategies.formula(formula))
+
+/** EN `16.cdpi("…")` — resize-invariant. */
+@Composable
+@ReadOnlyComposable
+fun Number.cdpi(formula: String): Dp = cdpi(ScalingStrategies.formula(formula))
+
+/** EN `16.cdpPx("base * (sw / 360)")` → px. */
+@Composable
+@ReadOnlyComposable
+fun Number.cdpPx(formula: String): Float = cdpPx(ScalingStrategies.formula(formula))
+
+/** EN `14.csp("base * min(sw / 360, 1.3)")` → [TextUnit] (font-scale policy applied). */
+@Composable
+@ReadOnlyComposable
+fun Number.csp(formula: String): TextUnit = csp(ScalingStrategies.formula(formula))
+
+/** EN `14.cspPx("…")` → px. */
+@Composable
+@ReadOnlyComposable
+fun Number.cspPx(formula: String): Float = cspPx(ScalingStrategies.formula(formula))
+
 /** EN `Hud.dp(16)`. */
 @Composable
 @ReadOnlyComposable
