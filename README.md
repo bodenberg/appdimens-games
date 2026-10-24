@@ -142,7 +142,7 @@ val px = 16f.toDynamicScaledPx(ctx)
 | logarithmic | `logsdp…` | `50f.logsdp(ctx)` |
 | perimeter | `prsdp…` | `16f.prsdp(ctx)` |
 | density | `dsdp…` | `16f.dsdp(ctx)` |
-| custom *(unreleased)* | `cdp/csp` + your strategy | `64.cdp("base * pow(sw / 360, 0.8)")` (just write the formula) or `64f.cdp(Hud)` — DSL/JSON, rules per device, free-form formulas → [custom.md](DOCUMENTATION/strategies/custom.md) |
+| custom *(unreleased)* | `cdp/csp` + your strategy | `CustomScaleStrategy { (width / 360f).coerceIn(0.85f, 1.8f) }` / `scalingFormula { base * pow(sw / 360f, 0.8f) }` (typed one-liners, autocomplete), text `64.cdp("base * …")` for JSON, or `64f.cdp(Hud)` — DSL/JSON, rules per device, free-form formulas → [custom.md](DOCUMENTATION/strategies/custom.md) |
 
 ### Compose games — same stems, reactive
 
@@ -187,7 +187,7 @@ auto vp = render::vkViewport(render::Mode::FitAll, surfW, surfH, 1920.f, 1080.f)
 | **DirectX 11/12** | `ResizeBuffers` → republish + `dxViewport` | [Guide §7](DOCUMENTATION/GUIDE-FOR-BEGINNERS.md#7-tutorial-f--directx-1112-windowsxbox-shared-code) |
 | **Pure C (raylib/SDL)** | header-only `adg_*` API | [Native §2](DOCUMENTATION/NATIVE-GAME-ENGINES.md) |
 
-**Unity/C#:** bootstrap + `MathKernels.Scaled/ScaledInvariant/Auto/Fit/Fill` + `World.ViewportRect(letterbox)` + `Units.CmToPx(2f)` + custom strategies `64f.Cdp("base * pow(sw / 360, 0.8)")` / `CustomKernels.Cdp(64f, hud)` → [Guide §8](DOCUMENTATION/GUIDE-FOR-BEGINNERS.md#8-tutorial-g--unity-c) · deep dive [CSHARP-UNITY.md](DOCUMENTATION/CSHARP-UNITY.md) (uGUI, câmera letterbox, Godot 4, MAUI, DOTS/Burst).
+**Unity/C#:** bootstrap + `MathKernels.Scaled/ScaledInvariant/Auto/Fit/Fill` + `World.ViewportRect(letterbox)` + `Units.CmToPx(2f)` + custom strategies `CustomScaleStrategy.Create(s => s.Clamp(s.Width / 360f, 0.85f, 1.8f))` / `CustomKernels.Cdp(64f, hud)` → [Guide §8](DOCUMENTATION/GUIDE-FOR-BEGINNERS.md#8-tutorial-g--unity-c) · deep dive [CSHARP-UNITY.md](DOCUMENTATION/CSHARP-UNITY.md) (uGUI, câmera letterbox, Godot 4, MAUI, DOTS/Burst).
 
 ---
 

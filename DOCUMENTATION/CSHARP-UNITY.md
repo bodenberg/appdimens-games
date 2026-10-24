@@ -301,7 +301,8 @@ using AppDimensGames.Custom;
 float button = 64f.Cdp("base * pow(sw / 360, 0.8)");                   // dp; also CdpPx, Cdpi, Csp, CspPx
 float label  = CustomKernels.Csp(18f, "base * min(sw / 360, 1.3)");     // final text size in dp
 var hudFormula = CustomGames.Formula("base * (tablet ? 0.9 : 1) * clamp(sw / 360, 0.85, 1.6)"); // shared per text
-var product = CustomScaleStrategy.Create(screen => Math.Clamp(screen.WidthDp / 360f, 0.85f, 1.8f)); // programmable factor, once per window
+var product = CustomScaleStrategy.Create(s => s.Clamp(s.Width / 360f, 0.85f, 1.8f));   // typed factor (autocomplete), once per window
+var hud = ScalingStrategy.Formula(s => s.Base * s.Pow(s.Sw / 360f, 0.8f));             // typed final-value formula
 ```
 
 For rules per device, factor bounds or a font-scale policy, use the full configuration:
