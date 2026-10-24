@@ -549,6 +549,7 @@ namespace AppDimensGames.Custom
         public bool AspectRatio { get; }
         public float? Sensitivity { get; }
         public FontScalePolicy FontScale { get; }
+        /// <summary>In multi-window the value stays unscaled (only value bounds apply); formulas and transforms are skipped.</summary>
         public bool IgnoreMultiWindow { get; }
         /// <summary>Code-only per-value hook (not serializable).</summary>
         public ValueTransform? Transform { get; }
@@ -571,6 +572,9 @@ namespace AppDimensGames.Custom
                 throw new ArgumentException("minFactor must be <= maxFactor");
             if (MinValue.HasValue && MaxValue.HasValue && MinValue.Value > MaxValue.Value)
                 throw new ArgumentException("minValue must be <= maxValue");
+            // Value bounds clamp the magnitude, so they must not be negative.
+            if (MinValue.HasValue && MinValue.Value < 0f) throw new ArgumentException("minValue must be >= 0");
+            if (MaxValue.HasValue && MaxValue.Value < 0f) throw new ArgumentException("maxValue must be >= 0");
             foreach (var r in Rules) Apply(r.Patch).WithRules(Array.Empty<ScalingRule>()).Validate();
             return this;
         }
@@ -1104,8 +1108,9 @@ namespace AppDimensGames.Custom
     public sealed class ResolvedScaling
     {
         internal ResolvedScaling(ScreenSnapshot screen, ScalingConfig config, float factor, IReadOnlyList<string> appliedRules,
-            float axisDp, float referenceDp, float curveFactor, float aspectRatioMultiplier)
+            float axisDp, float referenceDp, float curveFactor, float aspectRatioMultiplier, bool multiWindowIgnored = false)
         {
+            MultiWindowIgnored = multiWindowIgnored;
             Screen = screen; Config = config; Factor = factor; AppliedRules = appliedRules;
             AxisDp = axisDp; ReferenceDp = referenceDp; CurveFactor = curveFactor; AspectRatioMultiplier = aspectRatioMultiplier;
             var coefficient = config.Formula?.Expression.BaseCoefficient;
@@ -1128,6 +1133,11 @@ namespace AppDimensGames.Custom
         public float ReferenceDp { get; }
         public float CurveFactor { get; }
         public float AspectRatioMultiplier { get; }
+        /// <summary>
+        /// True when <see cref="ScalingConfig.IgnoreMultiWindow"/> applied: in multi-window the value stays
+        /// unscaled (only value bounds apply); formulas and transforms are skipped.
+        /// </summary>
+        public bool MultiWindowIgnored { get; }
 
         /// <summary>Scales <paramref name="baseValue"/> (dp) → dp.</summary>
         public float Scale(float baseValue)
@@ -1143,6 +1153,7 @@ namespace AppDimensGames.Custom
                 if (max.HasValue && magnitude > max.Value) magnitude = max.Value;
                 output = output < 0f ? -magnitude : magnitude;
             }
+            if (MultiWindowIgnored) return output;
             if (Config.Formula != null)
                 output = Config.Formula.IsProportional
                     ? (float)(baseValue * _formulaCoefficient) // bit-identical to evaluating base * E per value
@@ -1330,9 +1341,18 @@ namespace AppDimensGames.Custom
         public ScalingStrategy WithAxis(ScalingAxis axis)
         {
             if (axis == Config.Axis) return this;
+            // Cached per source instance, so a re-registered id never returns another config's variant.
+            // A race only builds an equivalent variant twice.
+            var slot = (int)axis;
+            var cached = Volatile.Read(ref _axisVariants[slot]);
+            if (cached != null) return cached;
             var derivedId = Id + "@" + axis.JsonName();
-            return ScalingStrategies.Derived(derivedId, () => new ScalingStrategy(derivedId, Config.With(axis: axis)));
+            var variant = new ScalingStrategy(derivedId, Config.With(axis: axis));
+            Volatile.Write(ref _axisVariants[slot], variant);
+            return variant;
         }
+
+        private readonly ScalingStrategy?[] _axisVariants = new ScalingStrategy?[Enum.GetValues(typeof(ScalingAxis)).Length];
 
         /// <summary>JSON for this strategy (throws for lambda curves/transforms).</summary>
         public string ToJson() => ScalingStrategyJson.Encode(this);
@@ -1361,7 +1381,7 @@ namespace AppDimensGames.Custom
             var axisDp = screen.Read(cfg.Axis);
             var refDp = cfg.Reference.Read(cfg.Axis);
             if (cfg.IgnoreMultiWindow && screen.IsMultiWindow)
-                return new ResolvedScaling(screen, cfg, 1f, applied, axisDp, refDp, 1f, 1f);
+                return new ResolvedScaling(screen, cfg, 1f, applied, axisDp, refDp, 1f, 1f, multiWindowIgnored: true);
             var ratio = refDp > 0f ? axisDp / refDp : 1f;
             var curveFactor = Curve(cfg.Curve, ratio, axisDp, refDp, cfg.Reference, screen);
             var factor = curveFactor * cfg.Multiplier;
@@ -1419,7 +1439,6 @@ namespace AppDimensGames.Custom
         public const int MaxCacheId = 0xFFFF;
 
         private static readonly ConcurrentDictionary<string, ScalingStrategy> ById = new ConcurrentDictionary<string, ScalingStrategy>();
-        private static readonly ConcurrentDictionary<string, ScalingStrategy> DerivedCache = new ConcurrentDictionary<string, ScalingStrategy>();
         private static int _cacheIds = -1;
         private static volatile ScalingStrategy? _default;
 
@@ -1467,9 +1486,12 @@ namespace AppDimensGames.Custom
         public static IReadOnlyDictionary<string, ScalingStrategy> LoadJson(string json)
         {
             var doc = ScalingStrategyJson.Decode(json);
-            foreach (var s in doc.Strategies.Values) Register(s);
+            // Resolve the default first, so a bad document registers nothing.
+            ScalingStrategy? defaultStrategy = null;
             if (doc.DefaultId != null)
-                Default = doc.Strategies.TryGetValue(doc.DefaultId, out var d) ? d : Require(doc.DefaultId);
+                defaultStrategy = doc.Strategies.TryGetValue(doc.DefaultId, out var d) ? d : Require(doc.DefaultId);
+            foreach (var s in doc.Strategies.Values) Register(s);
+            if (defaultStrategy != null) Default = defaultStrategy;
             return doc.Strategies;
         }
 
@@ -1484,14 +1506,10 @@ namespace AppDimensGames.Custom
         /// </summary>
         public static ScalingStrategy Formula(string formula) => FormulaStrategies.Get(formula);
 
-        internal static ScalingStrategy Derived(string id, Func<ScalingStrategy> create) =>
-            DerivedCache.GetOrAdd(id, _ => create());
-
         /// <summary>Test helper: clears registrations, shared formula strategies and the default.</summary>
         public static void ResetForTesting()
         {
             ById.Clear();
-            DerivedCache.Clear();
             FormulaStrategies.Clear();
             _default = null;
         }
@@ -2028,8 +2046,8 @@ namespace AppDimensGames.Custom
                 {
                     var rp = $"{path}.rules[{i}]";
                     var rule = list[i] as Dictionary<string, object?> ?? throw new ArgumentException($"{rp} must be an object");
-                    var when = Get(rule, "when") as Dictionary<string, object?> ?? new Dictionary<string, object?>();
-                    var set = Get(rule, "set") as Dictionary<string, object?> ?? throw new ArgumentException($"{rp}.set is required");
+                    var when = Obj(Get(rule, "when"), rp + ".when") ?? new Dictionary<string, object?>();
+                    var set = Obj(Get(rule, "set"), rp + ".set") ?? throw new ArgumentException($"{rp}.set is required");
                     rules.Add(new ScalingRule(ReadCondition(when, rp + ".when"), ReadPatch(set, rp + ".set"), Get(rule, "name") as string));
                 }
             }
@@ -2038,8 +2056,8 @@ namespace AppDimensGames.Custom
 
         private static ScalingPatch ReadPatch(Dictionary<string, object?> obj, string path)
         {
-            var clamp = Get(obj, "clamp") as Dictionary<string, object?>;
-            var valueClamp = Get(obj, "valueClamp") as Dictionary<string, object?>;
+            var clamp = Obj(Get(obj, "clamp"), path + ".clamp");
+            var valueClamp = Obj(Get(obj, "valueClamp"), path + ".valueClamp");
             var ar = Get(obj, "aspectRatio");
             ReferenceScreen? reference = null;
             if (Get(obj, "reference") is Dictionary<string, object?> r)
@@ -2050,7 +2068,7 @@ namespace AppDimensGames.Custom
             {
                 case null: aspect = null; break;
                 case bool b: aspect = b; break;
-                case Dictionary<string, object?> m: aspect = Get(m, "enabled") as bool? ?? true; break;
+                case Dictionary<string, object?> m: aspect = Bool(Get(m, "enabled"), path + ".aspectRatio.enabled") ?? true; break;
                 default: throw new ArgumentException($"{path}.aspectRatio must be a boolean or object");
             }
             var sensitivity = ar is Dictionary<string, object?> arMap
@@ -2078,7 +2096,7 @@ namespace AppDimensGames.Custom
                 aspectRatio: aspect,
                 sensitivity: sensitivity,
                 fontScale: fontScale == null ? null : ReadFontScale(fontScale, path + ".fontScale"),
-                ignoreMultiWindow: Get(obj, "ignoreMultiWindow") as bool?,
+                ignoreMultiWindow: Bool(Get(obj, "ignoreMultiWindow"), path + ".ignoreMultiWindow"),
                 formula: formula);
         }
 
@@ -2131,7 +2149,9 @@ namespace AppDimensGames.Custom
         {
             (float?, float?) Range(string key)
             {
-                if (!(Get(obj, key) is Dictionary<string, object?> r)) return (null, null);
+                var value = Get(obj, key);
+                if (value == null) return (null, null);
+                if (!(value is Dictionary<string, object?> r)) throw new ArgumentException($"{path}.{key} must be an object with min/max");
                 return (Num(Get(r, "min"), $"{path}.{key}.min"), Num(Get(r, "max"), $"{path}.{key}.max"));
             }
 
@@ -2158,8 +2178,24 @@ namespace AppDimensGames.Custom
             var h = Range("height");
             var ar = Range("aspectRatio");
             return new ScreenCondition(devices, landscape, sw.Item1, sw.Item2, w.Item1, w.Item2, h.Item1, h.Item2,
-                ar.Item1, ar.Item2, Get(obj, "multiWindow") as bool?);
+                ar.Item1, ar.Item2, Bool(Get(obj, "multiWindow"), path + ".multiWindow"));
         }
+
+        /// <summary>Present values must be objects; null/absent → null.</summary>
+        private static Dictionary<string, object?>? Obj(object? v, string path) => v switch
+        {
+            null => null,
+            Dictionary<string, object?> m => m,
+            _ => throw new ArgumentException($"{path} must be an object"),
+        };
+
+        /// <summary>Present values must be booleans; null/absent → null.</summary>
+        private static bool? Bool(object? v, string path) => v switch
+        {
+            null => null,
+            bool b => b,
+            _ => throw new ArgumentException($"{path} must be a boolean"),
+        };
 
         private static float? Num(object? v, string path)
         {
@@ -2223,6 +2259,8 @@ namespace AppDimensGames.Custom
                 if (p.Sensitivity.HasValue) sb.Append(",\"sensitivity\":").Append(N(p.Sensitivity.Value));
                 sb.Append('}');
             }
+            else if (!p.AspectRatio.HasValue && p.Sensitivity.HasValue)
+                sb.Append(",\"sensitivity\":").Append(N(p.Sensitivity.Value)); // sensitivity-only patch
             if (p.FontScale != null && (!defaults || p.FontScale != FontScalePolicy.Follow))
             {
                 sb.Append(",\"fontScale\":");
