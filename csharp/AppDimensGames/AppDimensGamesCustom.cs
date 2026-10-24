@@ -4,8 +4,9 @@
 //   var hud = ScalingStrategy.Define("hud", b => { b.Axis = ScalingAxis.Min; b.Curve = ScalingCurve.Expression("pow(ratio, 0.85)"); });
 //   float button = CustomKernels.Cdp(64f, hud);          // dp, live window
 //   float label  = CustomKernels.Csp(18f, hud);          // final text size in dp (policy applied)
-//   float inline = 64f.Cdp("base * pow(sw / 360, 0.8)");  // just write the formula (shared per text)
-//   var product  = CustomScaleStrategy.Create(screen => Math.Clamp(screen.WidthDp / 360f, 0.85f, 1.8f));
+//   var product  = CustomScaleStrategy.Create(s => s.Clamp(s.Width / 360f, 0.85f, 1.8f));  // typed factor (autocomplete)
+//   var title    = ScalingStrategy.Formula(s => s.Base * s.Pow(s.Sw / 360f, 0.8f));       // typed final value
+//   float inline = 64f.Cdp("base * pow(sw / 360, 0.8)");  // same as text, for JSON / remote config (shared per text)
 #nullable enable
 using System;
 #if UNITY_5_3_OR_NEWER
@@ -47,12 +48,18 @@ namespace AppDimensGames.Custom
         public static ScalingStrategy Formula(string formula, string? id = null, bool? register = null) =>
             ScalingStrategy.Formula(formula, id, register);
 
-        /// <summary>Strategy from a code formula, <c>(base, screen) =&gt; dp</c> (not JSON-serializable).</summary>
-        public static ScalingStrategy Formula(ScalingFormula formula, string? id = null, bool? register = null) =>
+        /// <summary>
+        /// Strategy from a typed code formula, <c>s =&gt; s.Base * s.Pow(s.Sw / 360f, 0.8f)</c>: <see cref="FormulaScope"/>
+        /// exposes the text-language names in PascalCase (Base, Sw, Width, Ratio, Tablet, Pow, Clamp…). Not JSON-serializable.
+        /// </summary>
+        public static ScalingStrategy Formula(Func<FormulaScope, float> formula, string? id = null, bool? register = null) =>
             ScalingStrategy.Formula(formula, id, register);
 
-        /// <summary>Programmable factor, <c>screen =&gt; factor</c>: runs once per window, then one multiply per value.</summary>
-        public static ScalingStrategy CustomScaleStrategy(ScreenFactor factor, string? id = null, bool? register = null) =>
+        /// <summary>
+        /// Programmable factor over a typed <see cref="ScreenScope"/>, <c>s =&gt; s.Clamp(s.Width / 360f, 0.85f, 1.8f)</c>:
+        /// runs once per window, then one multiply per value.
+        /// </summary>
+        public static ScalingStrategy CustomScaleStrategy(Func<ScreenScope, float> factor, string? id = null, bool? register = null) =>
             global::AppDimensGames.Custom.CustomScaleStrategy.Create(factor, id, register);
 
         /// <summary>Resolves for <paramref name="metrics"/>; memoized per snapshot (one multiply on hit).</summary>
