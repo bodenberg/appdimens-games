@@ -39,7 +39,7 @@ appdimens-games/
 | `…-density` | `dsdp…` | core |
 | `…-resize` | container auto-fit | core |
 | `…-units` | mm/cm/inch | core |
-| `…-custom` *(unreleased)* | `cdp/csp` — your own strategies (DSL, JSON, rules, free-form formulas, presets) | core |
+| `…-custom` *(unreleased)* | `cdp/csp` — your own strategies (code and text formulas, DSL, JSON, rules, presets); see [custom.md](strategies/custom.md) and [custom/](strategies/custom/README.md) | core |
 | `…-native` | JNI + C/C++ + render interop | core |
 | `…-bom` | version alignment | — |
 

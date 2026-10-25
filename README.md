@@ -142,7 +142,7 @@ val px = 16f.toDynamicScaledPx(ctx)
 | logarithmic | `logsdp…` | `50f.logsdp(ctx)` |
 | perimeter | `prsdp…` | `16f.prsdp(ctx)` |
 | density | `dsdp…` | `16f.dsdp(ctx)` |
-| custom *(unreleased)* | `cdp/csp` + your strategy | `CustomScaleStrategy { (width / 360f).coerceIn(0.85f, 1.8f) }` / `scalingFormula { base * pow(sw / 360f, 0.8f) }` (typed one-liners, autocomplete), text `64.cdp("base * …")` for JSON, or `64f.cdp(Hud)` — DSL/JSON, rules per device, free-form formulas → [custom.md](DOCUMENTATION/strategies/custom.md) |
+| custom *(unreleased)* | `cdp/csp` + your strategy | `CustomScaleStrategy { (width / 360f).coerceIn(0.85f, 1.8f) }` / `scalingFormula { base * pow(sw / 360f, 0.8f) }` (typed one-liners, autocomplete), text `64.cdp("base * …")` for JSON, or `64f.cdp(Hud)` — DSL/JSON, rules per device, free-form formulas → [custom.md](DOCUMENTATION/strategies/custom.md) · [full guide](DOCUMENTATION/strategies/custom/README.md) |
 
 ### Compose games — same stems, reactive
 

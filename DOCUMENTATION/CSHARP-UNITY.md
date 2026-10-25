@@ -326,7 +326,7 @@ label.fontSize = Mathf.RoundToInt(CustomKernels.Csp(18f, GameStrategies.Hud));  
 ScalingStrategies.LoadJson(Resources.Load<TextAsset>("appdimens-strategies").text); // same JSON as the other platforms
 ```
 
-Device class: `SystemInfo.deviceType` Desktop → `desktop`, Console → `tv`, else phone/tablet by size; override with `CustomGames.DeviceClassResolver = m => …`. Full guide: [strategies/custom.md](strategies/custom.md).
+Device class: `SystemInfo.deviceType` Desktop → `desktop`, Console → `tv`, else phone/tablet by size; override with `CustomGames.DeviceClassResolver = m => …`. Overview: [strategies/custom.md](strategies/custom.md); full guides with the C# API next to the Kotlin one (quick start, code and text formulas, configuration, JSON, API reference, cookbook, troubleshooting): [strategies/custom/](strategies/custom/README.md).
 
 ## 🧵 Performance rules (managed)
 
