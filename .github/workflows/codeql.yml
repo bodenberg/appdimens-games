@@ -55,6 +55,7 @@ jobs:
                  :library-percent:assembleRelease \
                  :library-perimeter:assembleRelease \
                  :library-power:assembleRelease \
+                 :library-custom:assembleRelease \
                  :library-resize:assembleRelease \
                  :library-units:assembleRelease --no-daemon
       - name: Build analyzed sources (cpp)

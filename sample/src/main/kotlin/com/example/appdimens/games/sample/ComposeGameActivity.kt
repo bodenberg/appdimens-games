@@ -34,6 +34,10 @@ import com.appdimens.games.compose.currentDimenMetrics
 import com.appdimens.games.compose.sdpi
 import com.appdimens.games.compose.sdp
 import com.appdimens.games.core.GameScreen
+import com.appdimens.games.compose.custom.cdp
+import com.appdimens.games.compose.custom.csp
+import com.appdimens.games.custom.CustomScaleStrategy
+import com.appdimens.games.custom.scalingFormula
 import kotlinx.coroutines.delay
 
 /**
@@ -54,6 +58,12 @@ class ComposeGameActivity : ComponentActivity() {
         }
     }
 }
+
+// Custom scaling (library-custom): declared once at top level, never inside the frame loop.
+// Boss: factor from the window width, kept between 0.85× and 1.8×.
+private val BossScale = CustomScaleStrategy { (width / 360f).coerceIn(0.85f, 1.8f) }
+// Banner text: the formula is the final value (smaller growth on tablets/TVs).
+private val BannerText = scalingFormula { base * pow(sw / 360f, if (tablet || tv) 0.5f else 0.8f) }
 
 private data class Sprite(val fx: Float, val fy: Float, val hue: Float)
 
@@ -76,6 +86,8 @@ private fun GameScene() {
     val enemyDp = 32f.asdp
     val hudPadDp = 12.sdp        // scaled — follows the window
     val hudIconInv = 20.sdpi     // invariant (`i`) HUD element
+    val bossDp = 40.cdp(BossScale)        // custom strategy (library-custom)
+    val bannerSp = 13.csp(BannerText)     // custom text formula
 
     Box(
         Modifier
@@ -87,9 +99,16 @@ private fun GameScene() {
             val h = size.height
             val playerPx = playerDp.value * metrics.density
             val enemyPx = enemyDp.value * metrics.density
+            val bossPx = bossDp.value * metrics.density
 
             // Player (center)
             drawCircle(Color(0xFF00E5FF), radius = playerPx / 2f, center = Offset(w / 2f, h / 2f))
+
+            // Boss (custom strategy) bobbing near the top
+            drawCircle(
+                Color(0xFFFF7043), radius = bossPx / 2f,
+                center = Offset(w / 2f, h * 0.22f + kotlin.math.sin(t * 1.4f) * h * 0.03f)
+            )
 
             // Enemies orbiting
             repeat(8) { i ->
@@ -131,6 +150,10 @@ private fun GameScene() {
             Text(
                 "Rotate or split-screen: sprites auto-adjust; HUD stays (suffix i)",
                 color = Color(0xFF59627A), fontSize = 11.sp
+            )
+            Text(
+                "Boss: 40.cdp(BossScale) = ${"%.1f".format(bossDp.value)} dp · custom formula text",
+                color = Color(0xFFFFAB91), fontSize = bannerSp
             )
         }
     }

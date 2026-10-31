@@ -11,6 +11,9 @@ Compose: compileOnly (runtime+ui), no version pinned in the POM — consumer sup
 ## Artifacts (version 3.2.0)
 io.github.bodenberg:appdimens-games (core) + -auto -density -diagonal -fill -fit -fluid
 -interpolated -logarithmic -percent -perimeter -power -resize -units -native + -bom
+(+ -custom, unreleased: simplest = one line of typed Kotlin (autocomplete) `CustomScaleStrategy { (width / 360f).coerceIn(0.85f, 1.8f) }` (factor) / `scalingFormula { base * pow(sw / 360f, 0.8f) }` (final value); as text for JSON `scalingFormula("base * pow(sw / 360, 0.8)")` / `64.cdp("…")`;
+ own strategies `64f.cdp(Hud)` / `18.csp` / `scalingStrategy("hud") { … }`, JSON shared with every AppDimens platform,
+ rules per device class, free-form formulas `expression("…")` / `formula("…")`; C#: `CustomKernels.Cdp(64f, hud)`, `CustomScaleStrategy.Create(s => s.Clamp(s.Width / 360f, 0.85f, 1.8f))`, `64f.Cdp("base * …")`; doc DOCUMENTATION/strategies/custom.md; full guides (Kotlin + C#) DOCUMENTATION/strategies/custom/README.md: quick-start, code-formulas, text-formulas, configuration, json, api-reference, performance, cookbook, troubleshooting; agent notes skills/custom.md)
 
 ## Kotlin/Java code API (returns PX)
 Int/Float extensions: sdp sdpa sdpi sdpia · hdp hdpa hdpi hdpia · wdp wdpa wdpi wdpia (+Px variants)
@@ -58,4 +61,4 @@ ScaledInvariant/Auto/Fluid/Fit/Fill/…) · World.ViewportRect(mode,w,h,dw,dh) �
 ## Strategies (13)
 scaled(sdp) percentage/balanced(auto) logarithmic power fluid interpolated diagonal perimeter fit fill autosize none.
 Formulas: DOCUMENTATION/MATHEMATICS-AND-CALCULUS.md · Oracle validator: scripts/oracle.py (30 cases).
-Agent skill: skills/SKILL.md + skills/library-map.md + skills/reference.md
+Agent skill: skills/SKILL.md + skills/library-map.md + skills/reference.md (+ skills/custom.md for custom strategies)
