@@ -63,7 +63,20 @@ in C, C++, C#, GDScript, Kotlin and Java.
 
 Reverse-Z and infinite far planes are supported for open worlds. Details: [GRAPHICS-APIS.md](DOCUMENTATION/GRAPHICS-APIS.md).
 
-### One idea, every engine
+### One idea, every engine — the same tokens, the AppDimens way
+
+Every binding uses the family tokens applied to a value, named like each language's AppDimens library:
+
+| Where | Call | Same as |
+|---|---|---|
+| Android (Kotlin / Compose) | `64.asdp`, `64f.asdp(ctx)` | appdimens-dynamic |
+| C# (.NET, Unity, Godot .NET) | `64f.ASdp()`, `24f.FTSdp()`, `28f.Ssp()`, `10f.HdpLw()` | AppDimens.Net (`16.Sdp()`) |
+| GDScript (Godot) | `AppDimens.asdp(64)`, `AppDimens.sdpPh(16)` | Web (`sdp(16)`) |
+| C++ | `appdimens::asdp(64)`, `64_asdp` (`native/include/appdimens/tokens.hpp`) | Qt (`AppDimens::sdp(16)`, `16_sdp`) |
+| C | `ad_asdp(&m, 64)`, `adg_ref_px(&m, AD_AUTO, 64)` | GTK / LVGL core |
+| Unreal (Blueprint / C++) | `UAppDimensLibrary::ASdp(64)`, `ResolveToken("hdpLwa", v)` | AppDimens.Net casing |
+| any token by name | `resolve("hdpLwa", v)` / `Resolve(...)` / `adg_live_resolve(...)` | every library |
+
 
 ```c
 /* C / C++ — any engine */
@@ -77,17 +90,17 @@ float vfov = adg_fov_for_aspect(ADG_FOV_HYBRID, 60 * ADG_DEG2RAD, 16.f / 9, (flo
 ```
 ```csharp
 // Unity — components do the wiring; in code:
-float bar = AppDimensScreen.Asdp(320);
+float bar = 320f.ASdp();                 // the AppDimens.Net way (every token: 24f.FTSdp(), 28f.Ssp() …)
 AppDimensUpscaling.ApplyToPipeline(Upscaler.Fsr3, UpscaleQuality.Quality);
 ```
 ```gdscript
 # Godot 4
-var bar := AppDimens.asdp(320)
+var bar := AppDimens.asdp(320)            # every family token: sdp, asdpa, ftsdp, sdpPh, logssp …
 AppDimensGames.configure_3d_scaling(get_viewport(), AppDimensGames.Upscaler.FSR2, AppDimensGames.Quality.QUALITY)
 ```
 ```cpp
 // Unreal — DPI rule drives UMG; in Blueprint/C++:
-float Bar = UAppDimensLibrary::Asdp(320.f);
+float Bar = UAppDimensLibrary::ASdp(320.f);   // nodes Sdp, ASdp, FTSdp, LOGSsp… + ResolveToken("hdpLwa", v)
 UAppDimensLibrary::ApplyUpscalerPreset(EAppDimensUpscaler::TSR, EAppDimensQuality::Quality);
 ```
 

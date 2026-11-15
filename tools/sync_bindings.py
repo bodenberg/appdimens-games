@@ -16,6 +16,7 @@ PAIRS = [
     ("native/include/appdimens/appdimens_custom.h", "engines/unreal/AppDimens/Source/AppDimens/ThirdParty/appdimens/appdimens_custom.h"),
     ("native/include/appdimens/games.h", "engines/unreal/AppDimens/Source/AppDimens/ThirdParty/appdimens/games.h"),
     ("dotnet/AppDimens.Games/Core.cs", "engines/unity/com.bodenberg.appdimens.games/Runtime/Core/Core.cs"),
+    ("dotnet/AppDimens.Games/Tokens.cs", "engines/unity/com.bodenberg.appdimens.games/Runtime/Core/Tokens.cs"),
     ("dotnet/AppDimens.Games/Games.cs", "engines/unity/com.bodenberg.appdimens.games/Runtime/Core/Games.cs"),
     ("native/tests/golden.json", "engines/godot/tests/golden.json"),
 ]

@@ -65,6 +65,7 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with: { dotnet-version: "8.0.x" }
       - run: python3 tools/sync_bindings.py --check
+      - run: python3 tools/gen_tokens.py --check
       - run: dotnet run --project dotnet/AppDimens.Games.Tests -c Release
       - run: dotnet build engines/unity/tests/UnityCompileCheck.csproj -c Release
 

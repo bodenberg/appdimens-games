@@ -9,6 +9,8 @@
 static int fails = 0;
 #define CHECK(c, msg) do { if (!(c)) { std::printf("FAIL %d: %s\n", __LINE__, msg); ++fails; } } while (0)
 
+#include "appdimens/tokens.hpp"
+
 int main() {
     CHECK(adg_version() == 0x030300u, "version");
     CHECK(std::fabs(adg_live_px(AD_SCALED, 0, 16) - 16) < 1e-5f, "default snapshot identity");
@@ -65,6 +67,16 @@ int main() {
     for (auto &t : readers) t.join();
     std::printf("stress: %ld reads, %ld inconsistent\n", reads.load(), bad.load());
     CHECK(bad == 0, "torn reads");
+    {   // family token API: appdimens::sdp(64), 64_asdp — from the live snapshot
+        using namespace appdimens::literals;
+        adg_publish_px(3840, 2160, 0, 1080, 1, 0);
+        const ad_metrics *m = adg_acquire();
+        CHECK(std::fabs(appdimens::sdp(64) - ad_sdp(m, 64)) < 1e-4f, "appdimens::sdp");
+        CHECK(std::fabs(64_asdp - ad_asdp(m, 64)) < 1e-4f, "64_asdp literal");
+        CHECK(std::fabs(appdimens::hdpLw(10) - adg_live_resolve("hdpLw", 10)) < 1e-4f, "appdimens::hdpLw");
+        CHECK(std::fabs(appdimens::logssp(10) - adg_live_resolve("logssp", 10)) < 1e-4f, "appdimens::logssp");
+        CHECK(std::fabs(2.5_ftsdp - adg_live_resolve("ftsdp", 2.5f)) < 1e-4f, "2.5_ftsdp literal");
+    }
     std::printf("%s\n", fails ? "FAILED" : "OK");
     return fails != 0;
 }

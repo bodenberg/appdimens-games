@@ -85,11 +85,12 @@ namespace AppDimens.Games.Unity
 #endif
         }
 
-        // Convenience (Reference mode: px at the reference → px now).
+        // Convenience (Reference mode: px at the reference → px now). Every family token is also an extension
+        // method, the AppDimens.Net way: 320f.ASdp(), 24f.FTSdp(), 28f.Ssp() (AppDimens.Games.Tokens).
         public static float Sdp(float v) { return Live.Current.Sdp(v); }
-        public static float Asdp(float v) { return Live.Current.Asdp(v); }
+        public static float ASdp(float v) { return Live.Current.Asdp(v); }
         public static float Ssp(float v) { return Live.Current.Ssp(v); }
-        public static float Ftsdp(float v) { return Live.Current.Ftsdp(v); }
+        public static float FTSdp(float v) { return Live.Current.Ftsdp(v); }
         public static float Resolve(string token, float v) { return Live.Current.Resolve(token, v); }
     }
 }

@@ -11,6 +11,12 @@ Unreal Engine 5, Godot 4, custom C/C++ engines, .NET engines.
 `dotnet/` (.NET package + C# drop-in) · `tools/` (oracle, sync) · `DOCUMENTATION/`. Android builds run from `android/`
 (`cd android && ./gradlew …`); shared C headers are copied into the engines by `python3 tools/sync_bindings.py`.
 
+## Token calls per language (the AppDimens way: token applied to a value)
+
+C# `64f.ASdp()` / `24f.FTSdp()` (AppDimens.Net casing) · GDScript `AppDimens.asdp(64)` · C++ `appdimens::asdp(64)`,
+`64_asdp` (`tokens.hpp`, live snapshot) · C `ad_asdp(&m, 64)` · Unreal `UAppDimensLibrary::ASdp(64)` · Kotlin `64.asdp`.
+Never multiply by a factor by hand.
+
 ## Cross-platform quick rules (3.3.0)
 
 1. **Pick the binding:** Unity → UPM package components; Unreal → enable the plugin and set the UMG DPI rule to
