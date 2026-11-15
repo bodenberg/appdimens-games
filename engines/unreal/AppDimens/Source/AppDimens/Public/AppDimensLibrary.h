@@ -10,14 +10,23 @@ class APPDIMENS_API UAppDimensLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 public:
-	/** Scaled: px at the reference → px now. */
+	// Family tokens, named like AppDimens.Net (Sdp, ASdp, FTSdp…): px at the reference → px now.
+	// Any other token: ResolveToken("hdpLwa", v).
+	/** Scaled. */
 	UFUNCTION(BlueprintPure, Category = "AppDimens") static float Sdp(float ReferencePx);
+	/** Scaled on the height / width axis. */
+	UFUNCTION(BlueprintPure, Category = "AppDimens") static float Hdp(float ReferencePx);
+	UFUNCTION(BlueprintPure, Category = "AppDimens") static float Wdp(float ReferencePx);
 	/** Auto: calm growth on 4K / ultrawide / TVs. */
-	UFUNCTION(BlueprintPure, Category = "AppDimens") static float Asdp(float ReferencePx);
-	/** Text (× accessibility text scale). */
+	UFUNCTION(BlueprintPure, Category = "AppDimens") static float ASdp(float ReferencePx);
+	/** Text (× accessibility text scale): scaled, auto, logarithmic. */
 	UFUNCTION(BlueprintPure, Category = "AppDimens") static float Ssp(float ReferencePx);
-	/** Fit: never overflows on unusual aspects. */
-	UFUNCTION(BlueprintPure, Category = "AppDimens") static float Ftsdp(float ReferencePx);
+	UFUNCTION(BlueprintPure, Category = "AppDimens") static float ASsp(float ReferencePx);
+	UFUNCTION(BlueprintPure, Category = "AppDimens") static float LOGSsp(float ReferencePx);
+	/** Fit: never overflows on unusual aspects. Fill: always covers. Logarithmic: TVs / very large screens. */
+	UFUNCTION(BlueprintPure, Category = "AppDimens") static float FTSdp(float ReferencePx);
+	UFUNCTION(BlueprintPure, Category = "AppDimens") static float FLSdp(float ReferencePx);
+	UFUNCTION(BlueprintPure, Category = "AppDimens") static float LOGSdp(float ReferencePx);
 	UFUNCTION(BlueprintPure, Category = "AppDimens") static float ResolveToken(const FString& Token, float Value);
 
 	/** Horizontal FOV (degrees, UE camera convention) for the current/any aspect from the FOV designed at DesignAspect. */

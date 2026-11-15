@@ -12,9 +12,15 @@ static const ad_metrics* Live()
 }
 
 float UAppDimensLibrary::Sdp(float V) { return adg_ref_px(Live(), AD_SCALED, V); }
-float UAppDimensLibrary::Asdp(float V) { return adg_ref_px(Live(), AD_AUTO, V); }
+float UAppDimensLibrary::Hdp(float V) { return ad_dp(Live(), AD_SCALED, AD_SLOT(AD_VAR_H, 0), V); }
+float UAppDimensLibrary::Wdp(float V) { return ad_dp(Live(), AD_SCALED, AD_SLOT(AD_VAR_W, 0), V); }
+float UAppDimensLibrary::ASdp(float V) { return adg_ref_px(Live(), AD_AUTO, V); }
 float UAppDimensLibrary::Ssp(float V) { return adg_ref_text_px(Live(), AD_SCALED, V); }
-float UAppDimensLibrary::Ftsdp(float V) { return adg_ref_px(Live(), AD_FIT, V); }
+float UAppDimensLibrary::ASsp(float V) { return adg_ref_text_px(Live(), AD_AUTO, V); }
+float UAppDimensLibrary::LOGSsp(float V) { return adg_ref_text_px(Live(), AD_LOGARITHMIC, V); }
+float UAppDimensLibrary::FTSdp(float V) { return adg_ref_px(Live(), AD_FIT, V); }
+float UAppDimensLibrary::FLSdp(float V) { return adg_ref_px(Live(), AD_FILL, V); }
+float UAppDimensLibrary::LOGSdp(float V) { return adg_ref_px(Live(), AD_LOGARITHMIC, V); }
 
 float UAppDimensLibrary::ResolveToken(const FString& Token, float Value)
 {

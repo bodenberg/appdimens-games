@@ -12,5 +12,5 @@ Install: *Package Manager ▸ + ▸ Add package from git URL* →
 | `AppDimensDynamicResolution` | GPU-time → `ScalableBufferManager.ResizeBuffers` |
 | `AppDimensUpscaling` | DLSS/FSR/XeSS preset → URP `renderScale`, mip bias |
 
-Code: `AppDimensScreen.Asdp(64)` (px at 1080p → px now), `Live.Current.Resolve("ftsdp", 24)`.
+Code: `64f.ASdp()` / `AppDimensScreen.ASdp(64)` (px at 1080p → px now), `Live.Current.Resolve("ftsdp", 24)`.
 All platforms (no native plugin): Windows, macOS, Linux/Steam Deck, Android, iOS, WebGL, consoles, XR.

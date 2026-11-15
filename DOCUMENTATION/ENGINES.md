@@ -12,7 +12,7 @@ before the first scene and publishes a snapshot whenever `Screen.width/height/dp
 | `AppDimensDynamicResolution` | cameras with *Allow Dynamic Resolution* |
 | UI Toolkit | set `PanelSettings.scale = Live.Current.Factor(Strategy.Auto, 0)` in `AppDimensScreen.Changed` |
 
-Code: `AppDimensScreen.Asdp(64)`, `Live.Current.Resolve("ftsdp", 24)`, `AppDimensUpscaling.RenderScale(...)`.
+Code: `64f.ASdp()` (every token as an extension method, like AppDimens.Net), `AppDimensScreen.ASdp(64)`, `Live.Current.Resolve("ftsdp", 24)`, `AppDimensUpscaling.RenderScale(...)`.
 
 ## Unreal Engine 5
 Copy `engines/unreal/AppDimens` to `Plugins/`. Set *User Interface ▸ DPI Scale Rule = Custom* with

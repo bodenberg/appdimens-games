@@ -98,6 +98,17 @@ static class Program
         foreach (var th in readers) th.Join();
         True(bad == 0, "torn reads");
         Console.WriteLine($"stress: {reads} reads, {bad} inconsistent, {changed} change events");
+        // Family token API (the AppDimens.Net way): 64f.Sdp(), 64.ASdp(), 18f.Ssp() — from Live.Current
+        GameDimens.Publish(new Surface(3840, 2160));
+        var lm = Live.Current;
+        Near(64f.Sdp(), lm.Sdp(64f), 1e-5, "64f.Sdp()");
+        Near(64.ASdp(), lm.Asdp(64f), 1e-5, "64.ASdp()");
+        Near(18f.Ssp(), lm.Ssp(18f), 1e-5, "18f.Ssp()");
+        Near(10f.HdpLw(), lm.Resolve("hdpLw", 10f), 1e-5, "10f.HdpLw()");
+        Near(10f.LOGSsp(), lm.Resolve("logssp", 10f), 1e-5, "10f.LOGSsp()");
+        Near(10f.FTWemia(), lm.Resolve("ftwemia", 10f), 1e-5, "10f.FTWemia()");
+        Near(10f.SdpPx(), lm.Resolve("sdpPx", 10f), 1e-5, "10f.SdpPx()");
+        Near(10f.DGSdpa(), lm.Resolve("dgsdpa", 10f), 1e-5, "10f.DGSdpa()");
         Console.WriteLine($"csharp: {checks} checks, {fails} failures");
         return fails;
     }
