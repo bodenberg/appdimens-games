@@ -1,0 +1,90 @@
+name: cross-platform (native, engines, .NET)
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  oracle:
+    name: Formula oracle audit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.10" }
+      - name: Formula oracle audit
+        run: python3 tools/oracle.py
+
+  native:
+    name: Native SDK (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, ubuntu-24.04-arm, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Vulkan headers (layout check)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libvulkan-dev
+      - run: cmake -S native -B build -DCMAKE_BUILD_TYPE=Release
+      - run: cmake --build build --config Release
+      - run: ctest --test-dir build -C Release --output-on-failure
+
+  windows-on-linux:
+    name: Windows build under Wine (Proton path)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y mingw-w64 wine64
+      - run: cmake -S native -B build-win -DCMAKE_TOOLCHAIN_FILE=cmake-mingw64.cmake
+        working-directory: .
+      - run: cmake --build build-win
+      - run: |
+          cd build-win
+          export WINEDEBUG=-all
+          for t in adg_test_core adg_test_custom adg_test_games adg_test_layout adg_test_api; do wine ./$t.exe; done
+          STEAM_COMPAT_DATA_PATH=/tmp SteamDeck=1 wine ./adg_test_api.exe | grep "platform mask"
+
+  ios-android:
+    name: Cross builds (iOS, Android NDK, WebAssembly)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: cmake -S native -B build-ios -G Xcode -DCMAKE_SYSTEM_NAME=iOS -DAPPDIMENS_GAMES_TESTS=OFF && cmake --build build-ios --config Release
+      - run: cmake -S native -B build-android -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_LATEST_HOME/build/cmake/android.toolchain.cmake -DANDROID_ABI=arm64-v8a -DAPPDIMENS_GAMES_TESTS=OFF && cmake --build build-android
+      - uses: mymindstorm/setup-emsdk@v14
+      - run: emcmake cmake -S native -B build-wasm -DAPPDIMENS_GAMES_TESTS=OFF && cmake --build build-wasm
+
+  dotnet:
+    name: C# core + Unity package compile check
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with: { dotnet-version: "8.0.x" }
+      - run: python3 tools/sync_bindings.py --check
+      - run: dotnet run --project dotnet/AppDimens.Games.Tests -c Release
+      - run: dotnet build engines/unity/tests/UnityCompileCheck.csproj -c Release
+
+  unreal-stub:
+    name: Unreal plugin (API stubs, no engine)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          P=engines/unreal/AppDimens/Source/AppDimens
+          for f in $P/Private/*.cpp; do clang++ -std=c++20 -Wall -Wextra -Werror -Wno-unused-parameter -fsyntax-only -Iengines/unreal/tests/stubs -I$P/Public -I$P/ThirdParty $f; done
+          clang++ -std=c++20 -Iengines/unreal/tests/stubs -I$P/Public -I$P/ThirdParty engines/unreal/tests/plugin_logic_test.cpp $P/Private/AppDimensSubsystem.cpp $P/Private/AppDimensLibrary.cpp $P/Private/AppDimensDPIScalingRule.cpp -o ue_check && ./ue_check
+
+  godot:
+    name: Godot 4 addon (headless)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          curl -sSL -o godot.zip https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_linux.x86_64.zip
+          unzip -q godot.zip
+          ./Godot_v4.3-stable_linux.x86_64 --headless --path engines/godot --import || true
+          ./Godot_v4.3-stable_linux.x86_64 --headless --path engines/godot -s tests/test_runner.gd

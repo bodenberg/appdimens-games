@@ -42,6 +42,7 @@ jobs:
       # C++ é coberto pela matriz 'cpp' abaixo).
       - name: Build analyzed sources (java-kotlin)
         if: matrix.language == 'java-kotlin'
+        working-directory: android
         run: |
           gradle :library:assembleRelease \
                  :library-auto:assembleRelease \
@@ -55,15 +56,16 @@ jobs:
                  :library-percent:assembleRelease \
                  :library-perimeter:assembleRelease \
                  :library-power:assembleRelease \
+                 :library-custom:assembleRelease \
                  :library-resize:assembleRelease \
                  :library-units:assembleRelease --no-daemon
       - name: Build analyzed sources (cpp)
         if: matrix.language == 'cpp'
         run: |
           g++ -std=c++20 -fsyntax-only \
-            -I library-native/src/main/cpp/include \
+            -I android/library-native/src/main/cpp/include \
             -I "$JAVA_HOME/include" -I "$JAVA_HOME/include/linux" \
-            library-native/src/main/cpp/jni/appdimens_games_jni.cpp
+            android/library-native/src/main/cpp/jni/appdimens_games_jni.cpp
       - uses: github/codeql-action/analyze@c4dd10e44af883a891fe31ced449bcb4a6728b9b # v3
         with:
           category: /language:${{ matrix.language }}

@@ -1,0 +1,12 @@
+; AppDimens Games — Godot 4 demo/test project. The addon lives in addons/appdimens.
+config_version=5
+
+[application]
+config/name="AppDimens Games (Godot)"
+config/features=PackedStringArray("4.2")
+
+[autoload]
+AppDimens="*res://addons/appdimens/appdimens.gd"
+
+[editor_plugins]
+enabled=PackedStringArray("res://addons/appdimens/plugin.cfg")

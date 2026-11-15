@@ -10,3 +10,14 @@ captures/
 *.keystore
 !test_keystore.jks
 .DS_Store
+
+# native SDK builds
+native/build*/
+
+# .NET build outputs
+dotnet/**/bin/
+dotnet/**/obj/
+engines/**/bin/
+engines/**/obj/
+# Godot import cache
+engines/godot/.godot/

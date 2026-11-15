@@ -1,8 +1,32 @@
-# AppDimens Games 3.x (3.2.0) — Skill for Coding Agents
+# AppDimens Games 3.x (3.3.0) — Skill for Coding Agents
 
 Use this skill whenever writing or reviewing code that sizes game UI/HUD/world
-elements on Android with the AppDimens Games library (family: appdimens-dynamic,
-appdimens-kmp, appdimens-games — same vocabulary).
+elements with AppDimens Games — Android (Compose/Kotlin/Java/NDK) **and** every other
+platform/engine: Windows, Linux, Steam Deck, Proton, macOS, iOS, Web, consoles; Unity,
+Unreal Engine 5, Godot 4, custom C/C++ engines, .NET engines.
+
+## Repository layout
+
+`android/` (Gradle: Kotlin, Compose, Java, NDK) · `native/` (C/C++ SDK, every OS) · `engines/{unity,unreal,godot}` ·
+`dotnet/` (.NET package + C# drop-in) · `tools/` (oracle, sync) · `DOCUMENTATION/`. Android builds run from `android/`
+(`cd android && ./gradlew …`); shared C headers are copied into the engines by `python3 tools/sync_bindings.py`.
+
+## Cross-platform quick rules (3.3.0)
+
+1. **Pick the binding:** Unity → UPM package components; Unreal → enable the plugin and set the UMG DPI rule to
+   `AppDimensDPIScalingRule`; Godot → `addons/appdimens` autoload; C/C++ → `native/include/appdimens/games.h`;
+   .NET → `dotnet/AppDimens.Games`; other languages → C ABI.
+2. **Scale mode:** games use REFERENCE (author at 1920×1080). Values are px at the reference; plain tokens
+   (`sdp`, `asdp`, `ftsdp`) return final px — never add `Px` in REFERENCE mode.
+3. **Strategies by element:** HUD/menus `asdp`, crosshair/minimap/anything that must never overflow `ftsdp`,
+   backgrounds `flsdp`, text `assp` + accessibility text scale, pixel art `ADG_VIEW_INTEGER`.
+4. **Upscaling:** build the snapshot from the *display* size; render 3D at `adg_upscale_render_size`; apply
+   `adg_upscale_mip_bias` and `adg_upscale_jitter`; HUD is drawn at display resolution.
+5. **Cameras:** `ADG_FOV_HYBRID` by default; FPS: Hor+ with a `max_hfov` cap; convert sensitivity with `adg_sensitivity_scale`.
+6. **Graphics API:** use `adg_native_viewport`/`adg_gl_viewport`/`adg_metal_viewport` and `adg_ortho/adg_perspective(api…)`
+   — never hand-roll Y flips or depth ranges.
+7. **Safe areas:** `adg_safe_rect(w, h, os_insets, overscan)` (0.05 on TVs) + `adg_hud_band(…, 16/9)` on ultrawide.
+8. **Threads:** publish from the window thread (`adg_publish_px`), read with `adg_acquire()`/`adg_read()`.
 
 ## Golden rules
 
@@ -44,6 +68,7 @@ reintroduce the old min/max-dimension (orientation-agnostic) formula.
 | scaled (core) | sdp/hdp/wdp | ssp/hsp/wsp · sem/hem/wem | `48.sdp(ctx)` · `16.ssp(ctx)` |
 | percent | psdp/phdp/pwdp + spaceW/Sw/H | pssp… | `10.spaceW(ctx)` |
 | power | pwsdp… | pwssp… | `48f.pwsdp(ctx)` |
+| custom *(unreleased)* | cdp, cdpi, cdpDp | csp, cspDp | simplest: typed one-liners with autocomplete `CustomScaleStrategy { (width / 360f).coerceIn(0.85f, 1.8f) }` (factor, once per window) / `scalingFormula { base * pow(sw / 360f, 0.8f) }` (final value; scope names = text names: base sw width height ratio tablet tv landscape pow clamp…); text for JSON `scalingFormula("…")` / `64.cdp("base * …")` (`base * (…)` = one-multiply fast path); C# `CustomScaleStrategy.Create(s => s.Clamp(s.Width / 360f, 0.85f, 1.8f))`, `ScalingStrategy.Formula(s => s.Base * s.Pow(s.Sw / 360f, 0.8f))`; `64f.cdp(Hud)` — your own strategy (DSL/JSON, rules per device class, free-form `expression("…")`/`formula("…")`); C# `CustomKernels.Cdp(64f, hud)`, `64f.Cdp("base * …")`; see DOCUMENTATION/strategies/custom.md, the guides in DOCUMENTATION/strategies/custom/ and the agent notes [custom.md](custom.md) |
 | fluid | fsdp… | fssp… | `16f.fsdp(ctx)` |
 | auto ⭐ gameplay | asdp… | assp… | `64f.asdp(ctx)` |
 | diagonal | dgsdp… | dgssp… | `48f.dgsdp(ctx)` |
@@ -81,8 +106,8 @@ field-compatible with VkViewport/D3D11_VIEWPORT; letterbox via
 
 ## Validation
 
-Any formula change MUST pass `python3 scripts/oracle.py` (30 cases) and the JVM
-tests with oracle-generated expectations (`./gradlew testDebugUnitTest`; suites cover
+Any formula change MUST pass `python3 tools/oracle.py` (30 cases) and the JVM
+tests with oracle-generated expectations (`cd android && ./gradlew testDebugUnitTest`; suites cover
 GameMath, GameCache, GameMetrics, GameScreen, GameWorld, code API, units, resize).
 Release (current: **3.2.0**): bump together `appdimens.version` (published coordinate)
 and `VERSION_NAME` in `gradle.properties`, the `orElse("…")` fallbacks in every

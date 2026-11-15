@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../AppDimens.Games/AppDimens.Games.csproj" />
+    <None Include="../../native/tests/golden.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

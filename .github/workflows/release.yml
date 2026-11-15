@@ -40,8 +40,8 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           INPUT_TAG: ${{ inputs.tag }}
         run: |
-          test "$(sed -n 's/^VERSION_NAME=//p' gradle.properties)" = '3.2.0'
-          test "$(sed -n 's/^appdimens.version=//p' gradle.properties)" = '3.2.0'
+          test "$(sed -n 's/^VERSION_NAME=//p' android/gradle.properties)" = '3.2.0'
+          test "$(sed -n 's/^appdimens.version=//p' android/gradle.properties)" = '3.2.0'
           release_tag="$GITHUB_REF_NAME"
           if [ "$EVENT_NAME" = 'workflow_dispatch' ]; then release_tag="$INPUT_TAG"; fi
           test "$release_tag" = '3.2.0' || test "$release_tag" = 'v3.2.0'
@@ -53,13 +53,13 @@ jobs:
       # (platforms;android-37, build-tools, NDK 28.2.13676358, CMake 3.22.1).
       - name: Validate formulas and build release artifacts
         run: |
-          python3 scripts/oracle.py
-          gradle --stacktrace --no-daemon assembleRelease testDebugUnitTest :library-bom:build
+          python3 tools/oracle.py
+          (cd android && gradle --stacktrace --no-daemon assembleRelease testDebugUnitTest :library-bom:build)
       - name: Collect artifacts and checksums
         run: |
           mkdir -p dist
           find . -path '*/build/outputs/aar/*.aar' -exec cp {} dist/ \;
-          find library-bom -path '*/build/publications/*' -name '*.pom' -exec cp {} dist/ \;
+          find android/library-bom -path '*/build/publications/*' -name '*.pom' -exec cp {} dist/ \;
           (cd dist && sha256sum * > SHA256SUMS)
       - uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
         with:

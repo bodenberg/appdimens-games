@@ -1,6 +1,18 @@
 # 📚 AppDimens Games — Documentation Index
 
-> **Artifact:** `io.github.bodenberg:appdimens-games:3.2.0` (+13 satellites, BOM, native)
+Repository layout (one folder per platform: `android/`, `native/`, `engines/`, `dotnet/`): [MODULES.md](MODULES.md).
+
+## Cross-platform (3.3.0)
+
+| Guide | What it covers |
+|-------|----------------|
+| [CROSS-PLATFORM.md](CROSS-PLATFORM.md) | scale modes, Windows/Proton/Steam Deck/Linux/macOS/iOS/Android/Web/consoles/XR, threads |
+| [GRAPHICS-APIS.md](GRAPHICS-APIS.md) | OpenGL/Vulkan/D3D11/D3D12/Metal/WebGPU viewports, scissors, projections, reverse-Z |
+| [UPSCALING.md](UPSCALING.md) | FSR/DLSS/XeSS/MetalFX/TSR presets, mip bias, jitter, dynamic resolution |
+| [ENGINES.md](ENGINES.md) | Unity, Unreal Engine 5, Godot 4, custom C/C++, .NET, other languages |
+| [GENRES.md](GENRES.md) | recipes for 2D, pixel art, 3D, FPS, open world/AAA, racing, strategy, mobile, TV, handheld, VR |
+
+> **Artifact:** `io.github.bodenberg:appdimens-games:3.3.0` (+13 satellites, BOM, native)
 
 ## Quick links
 
@@ -9,7 +21,7 @@
 2. [Modules & Artifacts](MODULES.md)
 3. [Native Game Engines — C/C++/NDK · OpenGL ES · Vulkan · DirectX · JNI (exemplos completos)](NATIVE-GAME-ENGINES.md)
 4. [C# / Unity / Godot / MAUI — bootstrap, uGUI, câmera letterbox, DOTS/Burst](CSHARP-UNITY.md)
-5. [Performance / BenchLab](../PERFORMANCE.md)
+5. [Performance / BenchLab](PERFORMANCE.md)
 
 ## Strategy docs
 
@@ -30,6 +42,7 @@ Each doc follows the family skeleton: *What it is · Calculation · How to use �
 | 11 | Perimeter | [perimeter.md](strategies/perimeter.md) | `…-perimeter` |
 | 12 | Density | [density.md](strategies/density.md) | `…-density` |
 | 13 | Resize (container fit) | [resize.md](strategies/resize.md) | `…-resize` |
+| 14 | Custom (`cdp/csp`, unreleased) — your own strategy: one-line code formulas, text formulas, rules, JSON (Kotlin + Unity/C#) | [custom.md](strategies/custom.md) · [full guide](strategies/custom/README.md) | `…-custom` |
 
 ## Decision flow
 

@@ -1,16 +1,36 @@
-# AppDimens Games 3.x (3.2.0) — LLM index
+# AppDimens Games 3.x (3.3.0) — LLM index
 # Family: appdimens (hub) · appdimens-dynamic 3.x (Android) · appdimens-kmp 1.x (KMP) · appdimens-games 3.0 (GAMES)
 # API vocabulary is IDENTICAL across the family (stems/suffixes/facilitators/builders).
 # Math is bit-parity everywhere. Constants: W0=300, H0=533, diag0=611.6305 (family literal,
 # true sqrt=611.628155…), perim0=833, ARref=1.78, inv300=1/300, ADJ=0.10/30, K=0.08/30.
 
+## Repository layout
+android/ (Gradle build: library*, sample, benchlab) · native/ (C/C++ SDK) · engines/{unity,unreal,godot} · dotnet/ (AppDimens.Games, Tests, dropin/) · tools/ · DOCUMENTATION/ · skills/
+
 ## Toolchain
 AGP 9.3.1 · Kotlin 2.4.10 · Gradle 9.5.0 (daemon JVM 25) · compileSdk 37 · minSdk 24 · JVM target 17
 Compose: compileOnly (runtime+ui), no version pinned in the POM — consumer supplies compose-bom (any version)
 
-## Artifacts (version 3.2.0)
+## Cross-platform (3.3.0)
+Platforms: Windows (incl. Proton/Wine detection), Linux, Steam Deck, macOS, iOS/tvOS, Android, Web (Emscripten), consoles, XR.
+Engines: Unity UPM (engines/unity), Unreal Engine 5 plugin (engines/unreal, UMG DPI rule), Godot 4 addon (engines/godot),
+.NET netstandard2.0 (dotnet: MonoGame/FNA/Stride/Godot .NET), custom C/C++ (native/), any language via the C ABI.
+native/include/appdimens/games.h (header-only C99): adg_surface + adg_metrics_from_surface (scale modes REFERENCE|CONTENT|DPI;
+REFERENCE = values are px at the reference resolution, dp tokens return final px: adg_ref_px), adg_viewport_compute
+(FIT|FILL|STRETCH|FIT_WIDTH|FIT_HEIGHT|EXPAND|INTEGER), adg_screen_to_design, adg_gl_viewport, adg_native_viewport
+(VkViewport/D3D11/D3D12/WebGPU), adg_metal_viewport, adg_scissor, adg_ortho/adg_perspective (per API depth range/NDC Y,
+reverse-Z, infinite far, row/column major), adg_fov_for_aspect (HOR_PLUS|VERT_MINUS|HYBRID, max hfov), adg_ortho_half_height,
+adg_sensitivity_scale, adg_upscale_ratio/render_size/mip_bias/jitter (FSR1/2/3, DLSS, XeSS, MetalFX, TSR, PSSR, SGSR),
+adg_dynres_*, adg_safe_rect, adg_hud_band, adg_min_text_px, adg_min_touch_px, adg_lod_distance, adg_pixel_snap.
+C ABI (appdimens_games_api.h): adg_publish*, adg_acquire, adg_read, adg_live_px/ref_px/resolve/dimen, adg_platform().
+Docs: DOCUMENTATION/CROSS-PLATFORM.md · GRAPHICS-APIS.md · UPSCALING.md · ENGINES.md · GENRES.md
+
+## Artifacts (version 3.3.0)
 io.github.bodenberg:appdimens-games (core) + -auto -density -diagonal -fill -fit -fluid
 -interpolated -logarithmic -percent -perimeter -power -resize -units -native + -bom
+(+ -custom, unreleased: simplest = one line of typed Kotlin (autocomplete) `CustomScaleStrategy { (width / 360f).coerceIn(0.85f, 1.8f) }` (factor) / `scalingFormula { base * pow(sw / 360f, 0.8f) }` (final value); as text for JSON `scalingFormula("base * pow(sw / 360, 0.8)")` / `64.cdp("…")`;
+ own strategies `64f.cdp(Hud)` / `18.csp` / `scalingStrategy("hud") { … }`, JSON shared with every AppDimens platform,
+ rules per device class, free-form formulas `expression("…")` / `formula("…")`; C#: `CustomKernels.Cdp(64f, hud)`, `CustomScaleStrategy.Create(s => s.Clamp(s.Width / 360f, 0.85f, 1.8f))`, `64f.Cdp("base * …")`; doc DOCUMENTATION/strategies/custom.md; full guides (Kotlin + C#) DOCUMENTATION/strategies/custom/README.md: quick-start, code-formulas, text-formulas, configuration, json, api-reference, performance, cookbook, troubleshooting; agent notes skills/custom.md)
 
 ## Kotlin/Java code API (returns PX)
 Int/Float extensions: sdp sdpa sdpi sdpia · hdp hdpa hdpi hdpia · wdp wdpa wdpi wdpia (+Px variants)
@@ -57,5 +77,5 @@ ScaledInvariant/Auto/Fluid/Fit/Fill/…) · World.ViewportRect(mode,w,h,dw,dh) �
 
 ## Strategies (13)
 scaled(sdp) percentage/balanced(auto) logarithmic power fluid interpolated diagonal perimeter fit fill autosize none.
-Formulas: DOCUMENTATION/MATHEMATICS-AND-CALCULUS.md · Oracle validator: scripts/oracle.py (30 cases).
-Agent skill: skills/SKILL.md + skills/library-map.md + skills/reference.md
+Formulas: DOCUMENTATION/MATHEMATICS-AND-CALCULUS.md · Oracle validator: tools/oracle.py (30 cases).
+Agent skill: skills/SKILL.md + skills/library-map.md + skills/reference.md (+ skills/custom.md for custom strategies)

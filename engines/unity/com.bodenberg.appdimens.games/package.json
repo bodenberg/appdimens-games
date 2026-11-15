@@ -1,0 +1,12 @@
+{
+  "name": "com.bodenberg.appdimens.games",
+  "version": "3.3.0",
+  "displayName": "AppDimens Games",
+  "description": "Responsive HUD/UI sizes (sdp/asdp/ftsdp…), safe areas, Hor+/Vert- FOV, viewports, upscaler render scale (FSR/DLSS/XeSS/STP presets) and dynamic resolution for every Unity platform: Windows, macOS, Linux/Steam Deck, Android, iOS, WebGL, consoles, XR.",
+  "unity": "2019.4",
+  "documentationUrl": "https://github.com/bodenberg/appdimens-games/blob/main/DOCUMENTATION/ENGINES.md#unity",
+  "license": "Apache-2.0",
+  "author": { "name": "Jean Bodenberg", "url": "https://github.com/bodenberg" },
+  "keywords": ["appdimens", "ui", "hud", "responsive", "safe area", "fov", "ultrawide", "dlss", "fsr", "dynamic resolution"],
+  "samples": [{ "displayName": "Basic HUD", "description": "Canvas scaler + safe area + camera FOV", "path": "Samples~/Basic" }]
+}

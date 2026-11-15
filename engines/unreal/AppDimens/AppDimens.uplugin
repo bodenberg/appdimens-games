@@ -1,0 +1,18 @@
+{
+  "FileVersion": 3,
+  "Version": 30300,
+  "VersionName": "3.3.0",
+  "FriendlyName": "AppDimens Games",
+  "Description": "Responsive UMG/HUD sizes (sdp/asdp/ftsdp…), a DPI scaling rule for UMG, FOV per aspect (Hor+/Vert-/hybrid), upscaler presets (TSR/DLSS/FSR/XeSS screen percentage), mip bias and LOD helpers. Windows, Linux (Steam Deck), macOS, iOS, Android, consoles.",
+  "Category": "User Interface",
+  "CreatedBy": "Jean Bodenberg",
+  "CreatedByURL": "https://github.com/bodenberg",
+  "DocsURL": "https://github.com/bodenberg/appdimens-games/blob/main/DOCUMENTATION/ENGINES.md#unreal-engine",
+  "SupportURL": "https://github.com/bodenberg/appdimens-games/issues",
+  "EngineVersion": "5.0.0",
+  "CanContainContent": false,
+  "Installed": false,
+  "Modules": [
+    { "Name": "AppDimens", "Type": "Runtime", "LoadingPhase": "PostConfigInit" }
+  ]
+}

@@ -1,6 +1,6 @@
 # 🧮 AppDimens Games — Mathematics & Calculus
 
-> All kernels are validated by [`scripts/oracle.py`](../scripts/oracle.py) (30 cases, 0 failures) against the canonical family math (`appdimens-dynamic` 3.1.9 / `appdimens-kmp` 1.0.1).
+> All kernels are validated by [`tools/oracle.py`](../tools/oracle.py) (30 cases, 0 failures) against the canonical family math (`appdimens-dynamic` 3.1.9 / `appdimens-kmp` 1.0.1).
 
 ## Symbols
 
@@ -37,6 +37,12 @@ $$W_0 = 300\ \text{dp},\quad H_0 = 533\ \text{dp},\quad D_0 = 611.6305,\quad P_0
 | DENSITY | $b\cdot\rho$ |
 | World FIT / FILL (`WorldScale.fitPx/fillPx`, native `scaleVecFit`) | $\min/\max\left(\dfrac{w}{W_d},\ \dfrac{h}{H_d}\right)\cdot\rho$ px per world unit — identical to `ViewportMode.FIT_ALL` / `CROP` |
 | AR multiplier | $1 + K\ln\!\big((max/min)/1.78\big)$ |
+
+## Custom strategies (`cdp`)
+
+$$r = \frac{A(\text{window})}{A(\text{reference})},\quad f = \operatorname{clamp}\big(C(r)\cdot m\cdot \text{AR},\ f_{min},\ f_{max}\big),\quad \text{dp} = F\big(b,\ \operatorname{clampValue}(b\cdot f),\ f\big)$$
+
+$C$ is a built-in curve (linear, power, logarithmic, interpolated, constant, breakpoints) or a **free-form expression** $E(r, \text{window})$ written as text; $F$ is an optional per-value formula. $f$ is memoized per `GameMetrics` snapshot, so factor-only strategies cost one multiply. Expressions run in 64-bit floating point and are rounded to `Float` at the end.
 
 ## Snapshot pre-computation matrix
 

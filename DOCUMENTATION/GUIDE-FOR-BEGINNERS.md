@@ -171,7 +171,7 @@ That is all — `AppDimensProvider` recomposes on every configuration/window cha
 
 **Goal:** same snapshot model inside your native loop.
 
-**Step 1 — headers** (copy `library-native/src/main/cpp/include` into your include path):
+**Step 1 — headers** (copy `android/library-native/src/main/cpp/include` into your include path):
 
 ```cmake
 target_include_directories(your_game PRIVATE path/to/include)
@@ -313,7 +313,7 @@ DX12: same struct feeds `CD3DX12_VIEWPORT`. HLSL mirrors the Vulkan shader above
 
 **Goal:** family semantics inside Unity, uGUI + 2D camera.
 
-**Step 1 — copy** [`csharp/AppDimensGames/`](../csharp/AppDimensGames/AppDimensGames.cs) (+`.asmdef`) into `Assets/Plugins/`.
+**Step 1 — copy** [`dotnet/dropin/AppDimensGames/`](../dotnet/dropin/AppDimensGames/AppDimensGames.cs) (+`.asmdef`) into `Assets/Plugins/`.
 
 **Step 2 — bootstrap (runs before everything):**
 
@@ -384,6 +384,6 @@ Escape hatch: `Number.toDynamicScaledDp/Px(ctx, qualifier, inverter, ignoreMulti
 
 ## 12. Next steps
 
-[MATHEMATICS](MATHEMATICS-AND-CALCULUS.md) (formulas/LaTeX) · [MODULES](MODULES.md) (artifacts + migration 2.x→3.x) · [NATIVE-GAME-ENGINES](NATIVE-GAME-ENGINES.md) (deep dive C/C++/GL/VK/DX/JNI) · [CSHARP-UNITY](CSHARP-UNITY.md) (Unity/Godot/MAUI deep dive) · [PERFORMANCE](../PERFORMANCE.md) (BenchLab) · strategy docs under [`strategies/`](README.md).
+[MATHEMATICS](MATHEMATICS-AND-CALCULUS.md) (formulas/LaTeX) · [MODULES](MODULES.md) (artifacts + migration 2.x→3.x) · [NATIVE-GAME-ENGINES](NATIVE-GAME-ENGINES.md) (deep dive C/C++/GL/VK/DX/JNI) · [CSHARP-UNITY](CSHARP-UNITY.md) (Unity/Godot/MAUI deep dive) · [PERFORMANCE](PERFORMANCE.md) (BenchLab) · strategy docs under [`strategies/`](README.md).
 
 [Back to index](README.md)
