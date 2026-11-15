@@ -488,11 +488,11 @@ static double adc__eval(const adc_expr *e, int n, const double *v) {
     }
     default: {
         double a[64] = {0};
-        const int n = x->nargs < 64 ? x->nargs : 64;
-        for (int k = 0; k < n; k++) a[k] = adc__eval(e, x->args[k], v);
+        const int na = x->nargs < 64 ? x->nargs : 64;
+        for (int k = 0; k < na; k++) a[k] = adc__eval(e, x->args[k], v);
         switch (x->op) {
-        case F_MIN: { double m = a[0]; for (int k = 1; k < n; k++) if (a[k] < m) m = a[k]; return m; }
-        case F_MAX: { double m = a[0]; for (int k = 1; k < n; k++) if (a[k] > m) m = a[k]; return m; }
+        case F_MIN: { double m = a[0]; for (int k = 1; k < na; k++) if (a[k] < m) m = a[k]; return m; }
+        case F_MAX: { double m = a[0]; for (int k = 1; k < na; k++) if (a[k] > m) m = a[k]; return m; }
         case F_CLAMP: { double t = a[0] < a[2] ? a[0] : a[2]; return a[1] > t ? a[1] : t; }
         case F_POW: return pow(a[0], a[1]);
         case F_SQRT: return sqrt(a[0]);
