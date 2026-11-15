@@ -8,6 +8,8 @@ THIRD_PARTY_INCLUDES_END
 #include "AppDimensTypes.h"
 #include "AppDimensSubsystem.generated.h"
 
+class FViewport;
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAppDimensChanged, FIntPoint, ViewportSize);
 
 /** Tracks the game viewport and keeps an AppDimens snapshot (Reference mode). */

@@ -56,6 +56,16 @@ jobs:
       - run: dotnet run --project bindings/csharp/AppDimens.Games.Tests -c Release
       - run: dotnet build bindings/unity/tests/UnityCompileCheck.csproj -c Release
 
+  unreal-stub:
+    name: Unreal plugin (API stubs, no engine)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          P=bindings/unreal/AppDimens/Source/AppDimens
+          for f in $P/Private/*.cpp; do clang++ -std=c++20 -Wall -Wextra -Werror -Wno-unused-parameter -fsyntax-only -Ibindings/unreal/tests/stubs -I$P/Public -I$P/ThirdParty $f; done
+          clang++ -std=c++20 -Ibindings/unreal/tests/stubs -I$P/Public -I$P/ThirdParty bindings/unreal/tests/plugin_logic_test.cpp $P/Private/AppDimensSubsystem.cpp $P/Private/AppDimensLibrary.cpp $P/Private/AppDimensDPIScalingRule.cpp -o ue_check && ./ue_check
+
   godot:
     name: Godot 4 addon (headless)
     runs-on: ubuntu-24.04
