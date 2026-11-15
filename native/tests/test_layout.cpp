@@ -24,7 +24,7 @@ static_assert(sizeof(adg_rect_ltrb) == sizeof(D3D12_RECT), "D3D12_RECT");
 static_assert(offsetof(adg_rect_ltrb, bottom) == offsetof(RECT, bottom), "RECT.bottom");
 #define HAVE_DX 1
 #endif
-#if defined(__APPLE__) && __has_include(<Metal/MTLRenderCommandEncoder.h>)
+#if defined(__APPLE__) && defined(__OBJC__) && __has_include(<Metal/MTLRenderCommandEncoder.h>)  // Metal headers are Objective-C
 #include <Metal/MTLRenderCommandEncoder.h>
 static_assert(sizeof(adg_mtl_viewport) == sizeof(MTLViewport), "MTLViewport");
 #define HAVE_MTL 1
