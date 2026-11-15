@@ -121,3 +121,12 @@ module `build.gradle.kts`, `versionName` of `sample`/`benchlab`, and the tag/ver
 checks in `.github/workflows/release.yml` (tags are bare, e.g. `3.2.0`; `v3.2.0` also accepted). Constants are family-canonical:
 300/533/611.6305(literal)/833/1.78 — never "fix" 611.6305 to the true sqrt;
 parity beats pedantry (delta documented).
+
+<!-- appdimens-family:begin -->
+## Other AppDimens platforms
+
+The same token names and math exist on Android (Compose, Views, XML), Kotlin Multiplatform, iOS/macOS, Flutter, React
+Native, Web, .NET, Qt, GTK, LVGL, Roku, Python/Blender and games (Unity, Unreal, Godot, C/C++). For code on another
+platform, use that library's skill — every skill, plus the layout-intent decision table, installs with
+`npx appdimens-skills` (https://github.com/bodenberg/appdimens-skills). Hub: https://github.com/bodenberg/appdimens.
+<!-- appdimens-family:end -->

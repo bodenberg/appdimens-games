@@ -82,3 +82,5 @@ ScaledInvariant/Auto/Fluid/Fit/Fill/…) · World.ViewportRect(mode,w,h,dw,dh) �
 scaled(sdp) percentage/balanced(auto) logarithmic power fluid interpolated diagonal perimeter fit fill autosize none.
 Formulas: DOCUMENTATION/MATHEMATICS-AND-CALCULUS.md · Oracle validator: tools/oracle.py (30 cases).
 Agent skill: skills/SKILL.md + skills/library-map.md + skills/reference.md (+ skills/custom.md for custom strategies)
+
+Family (same tokens and math): appdimens-dynamic (Android), appdimens-sdps/ssps (XML), appdimens-kmp, appdimens-ios, appdimens-flutter, appdimens-react-native, appdimens-web, appdimens-net-binding (.NET), appdimens-qt, appdimens-gtk, appdimens-lvgl, appdimens-roku, appdimens-py, appdimens-games — https://github.com/bodenberg/appdimens · agent skills: https://github.com/bodenberg/appdimens-skills
