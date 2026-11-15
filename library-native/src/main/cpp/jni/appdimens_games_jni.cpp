@@ -6,20 +6,21 @@
 
 using namespace appdimens::games;
 
-static thread_local Metrics* tlsScratch = nullptr;
-
-static inline Metrics* scratch() {
-    if (!tlsScratch) tlsScratch = new Metrics();
-    return tlsScratch;
-}
+#include "appdimens/appdimens_games_api.h"   // cross-platform SDK (native/include)
 
 extern "C" JNIEXPORT void JNICALL
 Java_com_appdimens_games_jni_NativeBridge_updateMetrics(
         JNIEnv*, jclass,
         jfloat widthDp, jfloat heightDp, jfloat smallestWidthDp,
         jfloat densityDpi, jfloat fontScale, jboolean fullscreen) {
-    *scratch() = Metrics::make(widthDp, heightDp, smallestWidthDp, densityDpi, fontScale, fullscreen);
-    updateMetrics(*scratch());
+    updateMetrics(Metrics::make(widthDp, heightDp, smallestWidthDp, densityDpi, fontScale, fullscreen));
+    // Mirror into the cross-platform C ABI so C/C++ engines on Android read the same snapshot.
+    ad_input in;
+    ad_input_default(&in);
+    in.width = widthDp; in.height = heightDp; in.smallest_width = smallestWidthDp;
+    in.density = densityDpi / 160.0f; in.font_scale = fontScale; in.dpi = densityDpi;
+    in.multi_window = fullscreen ? 0 : 1;
+    adg_publish(&in);
 }
 
 extern "C" JNIEXPORT jfloat JNICALL

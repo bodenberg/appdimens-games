@@ -1,0 +1,67 @@
+# AppDimens Games — cross-platform native SDK.
+# Windows (MSVC/clang-cl/MinGW, runs under Proton/Wine), Linux (x64/arm64, Steam Deck),
+# macOS (universal), iOS/tvOS, Android NDK, Emscripten/WebAssembly, consoles (C99 + C++17).
+cmake_minimum_required(VERSION 3.16)
+project(appdimens_games VERSION 3.3.0 LANGUAGES C CXX)
+
+option(APPDIMENS_GAMES_SHARED "Build the C ABI as a shared library (DLL/.so/.dylib)" ON)
+option(APPDIMENS_GAMES_TESTS "Build tests" ON)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_C_STANDARD 99)
+
+# Header-only API (appdimens.h core + games.h): just include it.
+add_library(appdimens_games_headers INTERFACE)
+target_include_directories(appdimens_games_headers INTERFACE
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:include>)
+if(NOT MSVC)
+  target_link_libraries(appdimens_games_headers INTERFACE m)
+endif()
+add_library(AppDimens::games_headers ALIAS appdimens_games_headers)
+
+# Compiled C ABI (live snapshot, FFI entry points, platform detection).
+if(APPDIMENS_GAMES_SHARED AND NOT EMSCRIPTEN AND NOT IOS)
+  add_library(appdimens_games SHARED src/appdimens_games.cpp)
+  target_compile_definitions(appdimens_games PRIVATE ADG_BUILD_SHARED INTERFACE ADG_USE_SHARED)
+else()
+  add_library(appdimens_games STATIC src/appdimens_games.cpp)
+endif()
+target_link_libraries(appdimens_games PUBLIC appdimens_games_headers)
+set_target_properties(appdimens_games PROPERTIES CXX_VISIBILITY_PRESET hidden VERSION ${PROJECT_VERSION} SOVERSION 3)
+if(MSVC)
+  target_compile_options(appdimens_games PRIVATE /W4 /fp:precise)
+else()
+  target_compile_options(appdimens_games PRIVATE -Wall -Wextra -fno-fast-math)
+endif()
+if(MINGW)
+  # Self-contained DLL/EXEs (no libstdc++/libgcc/winpthread DLLs to ship).
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
+  target_link_options(appdimens_games PRIVATE -static)
+endif()
+add_library(AppDimens::games ALIAS appdimens_games)
+
+if(APPDIMENS_GAMES_TESTS)
+  enable_testing()
+  find_package(Threads)
+  add_executable(adg_test_core tests/test_core.c)
+  target_include_directories(adg_test_core PRIVATE tests)
+  target_link_libraries(adg_test_core appdimens_games_headers)
+  add_test(NAME core COMMAND adg_test_core)
+  add_executable(adg_test_games tests/test_games.c)
+  target_link_libraries(adg_test_games appdimens_games_headers)
+  add_test(NAME games COMMAND adg_test_games)
+  add_executable(adg_test_api tests/test_api.cpp)
+  target_link_libraries(adg_test_api appdimens_games Threads::Threads)
+  add_test(NAME api COMMAND adg_test_api)
+  add_executable(adg_test_layout tests/test_layout.cpp)
+  target_link_libraries(adg_test_layout appdimens_games_headers)
+  add_test(NAME layout COMMAND adg_test_layout)
+  if(MINGW OR WIN32)
+    set_tests_properties(api PROPERTIES ENVIRONMENT "PATH=$<TARGET_FILE_DIR:appdimens_games>")
+  endif()
+endif()
+
+include(GNUInstallDirs)
+install(TARGETS appdimens_games appdimens_games_headers EXPORT AppDimensGamesTargets)
+install(DIRECTORY include/appdimens DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(EXPORT AppDimensGamesTargets NAMESPACE AppDimens:: DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/AppDimensGames)

@@ -62,18 +62,22 @@ inline DxViewport dxViewport(Mode mode, float wpx, float hpx, float dw, float dh
     return {r.x, r.y, r.w, r.h, 0.0f, 1.0f};
 }
 
-/// Column-major orthographic projection mapping design units → clip space
-/// (usable as-is in GLSL `mat4`, HLSL `float4x4` with transpose, or std140 UBO).
+/// Column-major orthographic projection mapping design units → OpenGL clip space
+/// (glOrtho semantics: view-space z = -near → -1, z = -far → +1; top → +1).
+/// For Vulkan / Direct3D / Metal depth ranges and Y conventions use adg_ortho() from
+/// <appdimens/games.h> (native/include), which handles every API.
 inline void ortho(float left, float top, float right, float bottom, float nearZ, float farZ,
                   float* out16 /* column-major */) {
     const float rl = 1.0f / (right - left);
-    const float tb = 1.0f / (bottom - top);
+    const float tb = 1.0f / (top - bottom);
     const float fn = 1.0f / (farZ - nearZ);
-    out16[0]  = 2.0f * rl;      out16[1] = 0.0f;          out16[2]  = 0.0f;                out16[3]  = 0.0f;
-    out16[4]  = 0.0f;           out16[5] = 2.0f * tb;     out16[6]  = 0.0f;                out16[7]  = 0.0f;
-    out16[8]  = 0.0f;           out16[9] = 0.0f;          out16[10] = fn * (farZ - nearZ); out16[11] = 0.0f;
-    out16[12] = -(left + right) * rl; out16[13] = -(top + bottom) * tb;
-    out16[14] = nearZ * fn * (farZ - nearZ) - 1.0f;   out16[15] = 1.0f;
+    out16[0]  = 2.0f * rl; out16[1]  = 0.0f;      out16[2]  = 0.0f;         out16[3]  = 0.0f;
+    out16[4]  = 0.0f;      out16[5]  = 2.0f * tb; out16[6]  = 0.0f;         out16[7]  = 0.0f;
+    out16[8]  = 0.0f;      out16[9]  = 0.0f;      out16[10] = -2.0f * fn;   out16[11] = 0.0f;
+    out16[12] = -(right + left) * rl;
+    out16[13] = -(top + bottom) * tb;
+    out16[14] = -(farZ + nearZ) * fn;
+    out16[15] = 1.0f;
 }
 
 } // namespace appdimens::games::render

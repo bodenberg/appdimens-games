@@ -103,29 +103,41 @@ struct Metrics {
     }
 };
 
-// ─── Global live snapshot (lock-free reads, double-buffer publish) ─────────
+// ─── Global live snapshot (lock-free reads, ring-buffer publish) ──────────
+// Snapshots are COPIED into a static ring, so the caller's storage may die right after
+// updateMetrics() returns (3.2.x stored the caller's pointer: a thread_local scratch that
+// the next update overwrote in place → torn reads). Readers get a pointer that stays valid
+// for 7 further publishes.
 namespace detail {
+    constexpr uint32_t kRing = 8;
+    inline Metrics* ring() { static Metrics r[kRing]; return r; }
+    inline Metrics* frozenRing() { static Metrics r[kRing]; return r; }
+    inline std::atomic<uint32_t>& head() { static std::atomic<uint32_t> h{0}; return h; }
+    inline std::atomic<uint32_t>& frozenHead() { static std::atomic<uint32_t> h{0}; return h; }
+    inline const Metrics* defaults() {
+        static const Metrics def = Metrics::make(300.f, 533.f, 300.f, 160.f, 1.0f, true);
+        return &def;
+    }
     inline std::atomic<const Metrics*>& slot() {
-        static std::atomic<const Metrics*> s{nullptr};
-        static Metrics def = Metrics::make(300.f, 533.f, 300.f, 160.f, 1.0f, true);
-        const Metrics* expected = nullptr;
-        s.compare_exchange_strong(expected, &def);
+        static std::atomic<const Metrics*> s{defaults()};
         return s;
     }
     inline std::atomic<const Metrics*>& frozenSlot() {
-        static std::atomic<const Metrics*> f{nullptr};
-        static Metrics def = Metrics::make(300.f, 533.f, 300.f, 160.f, 1.0f, true);
-        const Metrics* expected = nullptr;
-        f.compare_exchange_strong(expected, &def);
+        static std::atomic<const Metrics*> f{defaults()};
         return f;
     }
 }
 
-/// Publishes a new live snapshot (call on surface resize / config change).
+/// Publishes a new live snapshot (call on surface resize / config change). Copies `m`.
 inline void updateMetrics(const Metrics& m) {
-    detail::slot().store(&m, std::memory_order_release);
-    if (m.fullscreen && ((m.widthDp < m.heightDp ? m.widthDp : m.heightDp) > 0.0f))
-        detail::frozenSlot().store(&m, std::memory_order_release);
+    const uint32_t i = detail::head().fetch_add(1, std::memory_order_relaxed) % detail::kRing;
+    detail::ring()[i] = m;
+    detail::slot().store(&detail::ring()[i], std::memory_order_release);
+    if (m.fullscreen && ((m.widthDp < m.heightDp ? m.widthDp : m.heightDp) > 0.0f)) {
+        const uint32_t j = detail::frozenHead().fetch_add(1, std::memory_order_relaxed) % detail::kRing;
+        detail::frozenRing()[j] = m;
+        detail::frozenSlot().store(&detail::frozenRing()[j], std::memory_order_release);
+    }
 }
 
 /// Live metrics (auto-adjust path). / Métricas vivas (ajuste automático).

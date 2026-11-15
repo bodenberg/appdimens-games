@@ -10,3 +10,6 @@ captures/
 *.keystore
 !test_keystore.jks
 .DS_Store
+
+# native SDK builds
+native/build*/
