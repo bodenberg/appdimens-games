@@ -1,4 +1,4 @@
-name: CI
+name: Android (Gradle)
 
 on:
   push:
@@ -11,17 +11,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  oracle:
-    name: Formula oracle audit
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: { python-version: "3.10" }
-      - name: Formula oracle audit
-        run: python3 scripts/oracle.py
-
   android:
     name: Build & unit tests (all modules)
     runs-on: ubuntu-24.04
@@ -39,6 +28,7 @@ jobs:
       # já tem as licenças aceitas e o AGP baixa sob demanda o que faltar
       # (platforms;android-37, build-tools, NDK 28.2.13676358, CMake 3.22.1).
       - name: Build & test (JVM unit tests)
-        # Agregação na raiz cobre todos os módulos Android (library* + sample + benchlab).
+        # Agregação em android/ cobre todos os módulos Android (library* + sample + benchlab).
         # Variantes debug e release exercitam R8 do sample e o build nativo (JNI/C++).
+        working-directory: android
         run: gradle assembleDebug assembleRelease testDebugUnitTest --no-daemon

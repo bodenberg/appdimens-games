@@ -7,6 +7,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../AppDimens.Games/AppDimens.Games.csproj" />
-    <None Include="../../../native/tests/golden.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../native/tests/golden.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

@@ -2,7 +2,7 @@
 
 > **Unreleased** — on `main`, ships with the next release. Same engine and JSON format as every AppDimens platform (`appdimens-dynamic-custom`, KMP, Web, React Native, Flutter, Apple, .NET).
 
-**Kotlin:** `io.github.bodenberg:appdimens-games-custom` (`:library-custom`) · **Unity / C#:** `csharp/AppDimensGames/AppDimensGamesCustom.cs` + `AppDimensGamesCustom.Engine.cs` · See [MODULES.md](../MODULES.md) · [Mathematics §Custom](../MATHEMATICS-AND-CALCULUS.md#custom-strategies-cdp) · [Unity / C# guide §7](../CSHARP-UNITY.md) · **[Full custom-strategy documentation](custom/README.md)**
+**Kotlin:** `io.github.bodenberg:appdimens-games-custom` (`:library-custom`) · **Unity / C#:** `dotnet/dropin/AppDimensGames/AppDimensGamesCustom.cs` + `AppDimensGamesCustom.Engine.cs` · See [MODULES.md](../MODULES.md) · [Mathematics §Custom](../MATHEMATICS-AND-CALCULUS.md#custom-strategies-cdp) · [Unity / C# guide §7](../CSHARP-UNITY.md) · **[Full custom-strategy documentation](custom/README.md)**
 
 The built-in strategies cover most games. When a game (or a studio sharing one look across titles) needs its **own** growth law for HUD, menus and text, this module lets you write it. The simplest form is one line of typed code; the full form is a configuration that loads from JSON on every AppDimens platform with the same numbers, in Kotlin and in C#.
 

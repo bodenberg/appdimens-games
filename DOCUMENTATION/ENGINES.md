@@ -1,7 +1,7 @@
 # Engines
 
 ## Unity
-Install the UPM package (`bindings/unity/com.bodenberg.appdimens.games`, Unity 2019.4+). `AppDimensScreen` is created
+Install the UPM package (`engines/unity/com.bodenberg.appdimens.games`, Unity 2019.4+). `AppDimensScreen` is created
 before the first scene and publishes a snapshot whenever `Screen.width/height/dpi/safeArea/fullScreen` change.
 
 | Component | Setup |
@@ -15,24 +15,24 @@ before the first scene and publishes a snapshot whenever `Screen.width/height/dp
 Code: `AppDimensScreen.Asdp(64)`, `Live.Current.Resolve("ftsdp", 24)`, `AppDimensUpscaling.RenderScale(...)`.
 
 ## Unreal Engine 5
-Copy `bindings/unreal/AppDimens` to `Plugins/`. Set *User Interface ▸ DPI Scale Rule = Custom* with
+Copy `engines/unreal/AppDimens` to `Plugins/`. Set *User Interface ▸ DPI Scale Rule = Custom* with
 `AppDimensDPIScalingRule`; configure *Plugins ▸ AppDimens* (reference short side, strategy). Blueprint nodes live under
 *AppDimens* (sizes, `HorizontalFovForAspect`, `ApplyUpscalerPreset`, `RenderResolution`, `MipBias`, `LodDistance`).
 `UAppDimensSubsystem::OnChanged` fires on game-viewport resize. Note: UE camera FOV is horizontal; the helper converts.
 
 ## Godot 4
-Copy `bindings/godot/addons/appdimens`, enable the plugin (adds the `AppDimens` autoload).
+Copy `engines/godot/addons/appdimens`, enable the plugin (adds the `AppDimens` autoload).
 - Whole-UI scaling: set *Display ▸ Window ▸ Stretch ▸ Mode = disabled* and `AppDimens.auto_ui_scale = true` (uses
   `Window.content_scale_factor`), or size controls with `AppDimens.asdp(…)` / `AppDimens.font_size(…)`.
 - 3D: `AppDimensGames.apply_camera_fov(camera, HYBRID, 60, 16.0/9.0)`, `configure_3d_scaling(viewport, FSR2, QUALITY)`.
-- Tests: `godot --headless --path bindings/godot -s tests/test_runner.gd`.
+- Tests: `godot --headless --path engines/godot -s tests/test_runner.gd`.
 
 ## Custom C / C++ engines
 `add_subdirectory(native)` and link `AppDimens::games_headers` (header-only) or `AppDimens::games` (C ABI + live snapshot).
 Works with SDL2/3, GLFW, raylib, sokol, bgfx, Dear ImGui (`io.FontGlobalScale = factor`, `style.ScaleAllSizes(factor)`).
 
 ## .NET engines
-`bindings/csharp/AppDimens.Games` (netstandard2.0): MonoGame/FNA (`GraphicsDevice.PresentationParameters.BackBufferWidth`),
+`dotnet/AppDimens.Games` (netstandard2.0): MonoGame/FNA (`GraphicsDevice.PresentationParameters.BackBufferWidth`),
 Stride, Godot .NET, Unity. Publish with `GameDimens.Publish(new Surface(w, h))`.
 
 ## Other languages

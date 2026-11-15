@@ -5,8 +5,8 @@ DPICustomScalingRule, DeveloperSettings, UnrealClient/FViewport, IConsoleManager
 and checks the plugin logic; it does **not** replace building inside Unreal Engine.
 
 ```bash
-P=bindings/unreal/AppDimens/Source/AppDimens
-c++ -std=c++20 -Ibindings/unreal/tests/stubs -I$P/Public -I$P/ThirdParty \
-    bindings/unreal/tests/plugin_logic_test.cpp $P/Private/AppDimensSubsystem.cpp \
+P=engines/unreal/AppDimens/Source/AppDimens
+c++ -std=c++20 -Iengines/unreal/tests/stubs -I$P/Public -I$P/ThirdParty \
+    engines/unreal/tests/plugin_logic_test.cpp $P/Private/AppDimensSubsystem.cpp \
     $P/Private/AppDimensLibrary.cpp $P/Private/AppDimensDPIScalingRule.cpp -o ue_check && ./ue_check
 ```

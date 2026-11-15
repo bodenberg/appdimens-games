@@ -1,6 +1,6 @@
 # Custom strategies: agent reference
 
-Use when the user wants their own game-UI scaling (a formula, per-device rules, a shared JSON) instead of a built-in. Docs: `DOCUMENTATION/strategies/custom/` (start at `README.md`). Kotlin module `io.github.bodenberg:appdimens-games-custom` (unreleased); Unity / C#: `csharp/AppDimensGames/AppDimensGamesCustom.cs` + `AppDimensGamesCustom.Engine.cs` (namespace `AppDimensGames.Custom`).
+Use when the user wants their own game-UI scaling (a formula, per-device rules, a shared JSON) instead of a built-in. Docs: `DOCUMENTATION/strategies/custom/` (start at `README.md`). Kotlin module `io.github.bodenberg:appdimens-games-custom` (unreleased); Unity / C#: `dotnet/dropin/AppDimensGames/AppDimensGamesCustom.cs` + `AppDimensGamesCustom.Engine.cs` (namespace `AppDimensGames.Custom`).
 
 ## Decide the form
 
@@ -58,6 +58,6 @@ Scope names (code and text; PascalCase in C#): `base` (formula only) `sw width h
 ## Verify
 
 - `Brand.explain()` (Kotlin code), `Brand.explainCurrent()` (Compose), `CustomKernels.Explain(brand)` (C#) print the axis, curve, factor, applied rules and formula.
-- Kotlin tests: `./gradlew :library-custom:testDebugUnitTest` (includes the 540-case cross-platform fixture).
+- Kotlin tests: `cd android && ./gradlew :library-custom:testDebugUnitTest` (includes the 540-case cross-platform fixture).
 - JSON files: `npx appdimens-skills kit custom check <file>` and `kit custom explain --formula "<text>" --devices medium-phone,medium-tablet`.
 - Errors carry the JSON path or the formula position; see `DOCUMENTATION/strategies/custom/troubleshooting.md`.

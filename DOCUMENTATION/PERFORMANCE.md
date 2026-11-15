@@ -30,7 +30,7 @@ Cases compared on-device: `games-3.0 kernel` · `games-3.0 ext (16.sdp)` ·
 ## Running
 
 ```bash
-./gradlew :benchlab:installDebug
+cd android && ./gradlew :benchlab:installDebug
 adb shell am start -n com.example.benchlab/.BenchlabActivity
 # press RUN — results stream on screen per case (ns/op), summary ratios at the end
 ```
@@ -41,6 +41,6 @@ Expected outcome on modern devices (consistent with family numbers): games-3.0 f
 
 ## Audit tooling
 
-* [`scripts/oracle.py`](scripts/oracle.py) — validates every formula/constant numerically (30 cases).
-* Unit tests with oracle-generated expectations: `library/src/test/...`.
+* [`tools/oracle.py`](../tools/oracle.py) — validates every formula/constant numerically (30 cases).
+* Unit tests with oracle-generated expectations: `android/library/src/test/...`.
 * CI runs JVM tests + oracle on every push.

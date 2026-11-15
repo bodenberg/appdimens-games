@@ -1,3 +1,5 @@
+> **Histórico.** Plano original da conversão 3.0 (Android). A estrutura atual do repositório (por plataforma: `android/`, `native/`, `engines/`, `dotnet/`) está em [MODULES.md](../MODULES.md).
+
 # PLANO DETALHADO — Conversão AppDimens → AppDimens Games 3.0 (Unified)
 
 > Branch: `feat/games-3.0-unified` — substitui a biblioteca `appdimens-games` 2.0.1 (depreciada/WIP).
@@ -62,10 +64,10 @@ appdimens-games/
 │   └── cpp/include/appdimens/games/*.h   # núcleo header-only cross-plataforma (Win/Linux/Android)
 │   ├── cpp/src/*.cpp            # implementações não-inline + JNI
 │   └── cpp/c/appdimens_games_c.h/.c     # API C pura p/ engines C
-├── csharp/AppDimensGames/       # port C# single-file (Unity asmdef incluído)
+├── dotnet/dropin/AppDimensGames/       # port C# single-file (Unity asmdef incluído)
 ├── sample/                      # jogo de teste: menu + demo Compose Canvas + GLSurfaceView + Vulkan mínimo
 ├── benchlab/                    # laboratório de benchmark (games 3.0 vs games 2.0.1 vs dynamic 3.1.9)
-├── scripts/oracle.py            # oráculo Python: valida todas as fórmulas/constantes numericamente
+├── tools/oracle.py            # oráculo Python: valida todas as fórmulas/constantes numericamente
 ├── DOCUMENTATION/               # docs no padrão da família
 └── .github/workflows/ci.yml    # build+test JVM/Android
 ```

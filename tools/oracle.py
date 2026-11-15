@@ -2,7 +2,7 @@
 """
 AppDimens Games 3.0 — Formula Oracle & Audit
 Validates every kernel formula against the canonical family math
-(appdimens-dynamic 3.x parity). Run: python3 scripts/oracle.py [--json]
+(appdimens-dynamic 3.x parity). Run: python3 tools/oracle.py [--json]
 """
 import argparse
 import json

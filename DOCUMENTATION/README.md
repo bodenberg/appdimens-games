@@ -1,5 +1,7 @@
 # 📚 AppDimens Games — Documentation Index
 
+Repository layout (one folder per platform: `android/`, `native/`, `engines/`, `dotnet/`): [MODULES.md](MODULES.md).
+
 ## Cross-platform (3.3.0)
 
 | Guide | What it covers |
@@ -19,7 +21,7 @@
 2. [Modules & Artifacts](MODULES.md)
 3. [Native Game Engines — C/C++/NDK · OpenGL ES · Vulkan · DirectX · JNI (exemplos completos)](NATIVE-GAME-ENGINES.md)
 4. [C# / Unity / Godot / MAUI — bootstrap, uGUI, câmera letterbox, DOTS/Burst](CSHARP-UNITY.md)
-5. [Performance / BenchLab](../PERFORMANCE.md)
+5. [Performance / BenchLab](PERFORMANCE.md)
 
 ## Strategy docs
 

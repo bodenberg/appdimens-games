@@ -1,4 +1,4 @@
-## Headless test (CI): godot --headless --path bindings/godot -s tests/test_runner.gd
+## Headless test (CI): godot --headless --path engines/godot -s tests/test_runner.gd
 extends SceneTree
 
 var fails := 0

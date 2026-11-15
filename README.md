@@ -31,15 +31,25 @@ in C, C++, C#, GDScript, Kotlin and Java.
 
 ---
 
+## 🗂️ Repository map — one folder per platform
+
+| Folder | Platform | Start here |
+|---|---|---|
+| [`android/`](android) | Android: Kotlin, Jetpack Compose, Java, NDK (Gradle, Maven Central) | [android/README.md](android/README.md) |
+| [`native/`](native) | C / C++ for every OS: Windows, Proton/Wine, Linux, Steam Deck, macOS, iOS, NDK, WebAssembly, consoles | [native/README.md](native/README.md) |
+| [`engines/unity/`](engines/unity) · [`engines/unreal/`](engines/unreal) · [`engines/godot/`](engines/godot) | Unity, Unreal Engine 5, Godot 4 | [engines/README.md](engines/README.md) |
+| [`dotnet/`](dotnet) | .NET / C#: MonoGame, FNA, Stride, Godot .NET, Unity drop-in | [dotnet/README.md](dotnet/README.md) |
+| [`DOCUMENTATION/`](DOCUMENTATION) · [`skills/`](skills) · [`tools/`](tools) | guides, agent skills, oracle and sync scripts | [DOCUMENTATION/README.md](DOCUMENTATION/README.md) |
+
 ## 🌍 Platforms, engines and APIs (3.3.0)
 
 | You ship with… | Use | Install |
 |---|---|---|
-| **Unity** (2019.4+; every platform incl. WebGL, consoles, XR) | UPM package — `AppDimensScreen`, `AppDimensCanvasScaler`, `AppDimensSafeArea`, `AppDimensCamera`, `AppDimensDynamicResolution`, `AppDimensUpscaling` | Package Manager ▸ git URL `https://github.com/bodenberg/appdimens-games.git?path=/bindings/unity/com.bodenberg.appdimens.games` |
-| **Unreal Engine 5** | Plugin — UMG **DPI scaling rule**, `UAppDimensSubsystem`, Blueprint library (sizes, FOV, `r.ScreenPercentage` presets, LOD) | copy `bindings/unreal/AppDimens` into `Plugins/` |
-| **Godot 4** (GDScript; C# via the .NET package) | Addon — `AppDimens` autoload, `content_scale_factor` UI scaling, FSR/FSR2/MetalFX `scaling_3d_mode`, FOV, safe area | copy `bindings/godot/addons/appdimens` |
+| **Unity** (2019.4+; every platform incl. WebGL, consoles, XR) | UPM package — `AppDimensScreen`, `AppDimensCanvasScaler`, `AppDimensSafeArea`, `AppDimensCamera`, `AppDimensDynamicResolution`, `AppDimensUpscaling` | Package Manager ▸ git URL `https://github.com/bodenberg/appdimens-games.git?path=/engines/unity/com.bodenberg.appdimens.games` |
+| **Unreal Engine 5** | Plugin — UMG **DPI scaling rule**, `UAppDimensSubsystem`, Blueprint library (sizes, FOV, `r.ScreenPercentage` presets, LOD) | copy `engines/unreal/AppDimens` into `Plugins/` |
+| **Godot 4** (GDScript; C# via the .NET package) | Addon — `AppDimens` autoload, `content_scale_factor` UI scaling, FSR/FSR2/MetalFX `scaling_3d_mode`, FOV, safe area | copy `engines/godot/addons/appdimens` |
 | **Custom C/C++ engines** (SDL, GLFW, raylib, bgfx, sokol, Vulkan/D3D/Metal renderers) | header-only `native/include/appdimens/games.h` + optional thread-safe C ABI | `add_subdirectory(native)` → `AppDimens::games` / `AppDimens::games_headers` |
-| **.NET** (MonoGame, FNA, Stride, Godot .NET, Unity) | `AppDimens.Games` (netstandard2.0, pure managed) | `bindings/csharp/AppDimens.Games` |
+| **.NET** (MonoGame, FNA, Stride, Godot .NET, Unity) | `AppDimens.Games` (netstandard2.0, pure managed) | `dotnet/AppDimens.Games` |
 | **Rust · Zig · Python · Lua · Swift · Java (Panama)** | C ABI `appdimens_games` (`appdimens_games_api.h`) | shared library from `native/` |
 | **Android** — Compose, Kotlin, Java, NDK | the existing Maven artifacts (below); the `.so` now also exports the C ABI | `io.github.bodenberg:appdimens-games:3.3.0` |
 
@@ -285,7 +295,7 @@ flowchart LR
 | Kernel cold | 15–40 ns, allocation-free |
 | Snapshot rebuild | once per resize (exact `ln()` only here) |
 
-On-device comparison vs games-2.0.1 & dynamic-3.1.9: [`benchlab/`](benchlab) · [PERFORMANCE.md](PERFORMANCE.md).
+On-device comparison vs games-2.0.1 & dynamic-3.1.9: [`android/benchlab/`](android/benchlab) · [PERFORMANCE.md](DOCUMENTATION/PERFORMANCE.md).
 
 ## ✨ What's new in 3.3.0
 
@@ -315,7 +325,7 @@ On-device comparison vs games-2.0.1 & dynamic-3.1.9: [`benchlab/`](benchlab) · 
 | Change | Detail |
 |---|---|
 | 🧬 **Family-standard API** | Same extensions/stems/suffixes/facilitators/builders as dynamic 3.x & kmp 1.x — one learning curve for the whole family. |
-| 🔁 Bit-exact kernels | Oracle-validated parity with dynamic/kmp (`scripts/oracle.py`, 30 cases). |
+| 🔁 Bit-exact kernels | Oracle-validated parity with dynamic/kmp (`tools/oracle.py`, 30 cases). |
 | 🚀 Snapshot engine | Precomputed factors replace legacy hash-per-call gateway (~10–50× faster than 2.0.1 paths). |
 | 🔒 `i` for games | `ignoreMultiWindows` anchors to frozen fullscreen metrics under split-screen/freeform. |
 | ⚙️ True native layer | Header-only C++20 core + pure C99 header + JNI; GL/Vulkan/DirectX viewport interop. |
@@ -324,7 +334,7 @@ On-device comparison vs games-2.0.1 & dynamic-3.1.9: [`benchlab/`](benchlab) · 
 
 ## 📚 Documentation
 
-[DOCUMENTATION/README.md](DOCUMENTATION/README.md) (index + decision flow) · [GUIDE-FOR-BEGINNERS](DOCUMENTATION/GUIDE-FOR-BEGINNERS.md) · [MODULES](DOCUMENTATION/MODULES.md) (+ migration table 2.x→3.x) · [MATHEMATICS](DOCUMENTATION/MATHEMATICS-AND-CALCULUS.md) · [NATIVE-GAME-ENGINES](DOCUMENTATION/NATIVE-GAME-ENGINES.md) · [CSHARP-UNITY](DOCUMENTATION/CSHARP-UNITY.md) · [PERFORMANCE](PERFORMANCE.md) · [`skills/`](skills/SKILL.md) for coding agents.
+[DOCUMENTATION/README.md](DOCUMENTATION/README.md) (index + decision flow) · [GUIDE-FOR-BEGINNERS](DOCUMENTATION/GUIDE-FOR-BEGINNERS.md) · [MODULES](DOCUMENTATION/MODULES.md) (+ migration table 2.x→3.x) · [MATHEMATICS](DOCUMENTATION/MATHEMATICS-AND-CALCULUS.md) · [NATIVE-GAME-ENGINES](DOCUMENTATION/NATIVE-GAME-ENGINES.md) · [CSHARP-UNITY](DOCUMENTATION/CSHARP-UNITY.md) · [PERFORMANCE](DOCUMENTATION/PERFORMANCE.md) · [`skills/`](skills/SKILL.md) for coding agents.
 
 ## 🤝 Family
 

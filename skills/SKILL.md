@@ -5,11 +5,17 @@ elements with AppDimens Games — Android (Compose/Kotlin/Java/NDK) **and** ever
 platform/engine: Windows, Linux, Steam Deck, Proton, macOS, iOS, Web, consoles; Unity,
 Unreal Engine 5, Godot 4, custom C/C++ engines, .NET engines.
 
+## Repository layout
+
+`android/` (Gradle: Kotlin, Compose, Java, NDK) · `native/` (C/C++ SDK, every OS) · `engines/{unity,unreal,godot}` ·
+`dotnet/` (.NET package + C# drop-in) · `tools/` (oracle, sync) · `DOCUMENTATION/`. Android builds run from `android/`
+(`cd android && ./gradlew …`); shared C headers are copied into the engines by `python3 tools/sync_bindings.py`.
+
 ## Cross-platform quick rules (3.3.0)
 
 1. **Pick the binding:** Unity → UPM package components; Unreal → enable the plugin and set the UMG DPI rule to
    `AppDimensDPIScalingRule`; Godot → `addons/appdimens` autoload; C/C++ → `native/include/appdimens/games.h`;
-   .NET → `bindings/csharp/AppDimens.Games`; other languages → C ABI.
+   .NET → `dotnet/AppDimens.Games`; other languages → C ABI.
 2. **Scale mode:** games use REFERENCE (author at 1920×1080). Values are px at the reference; plain tokens
    (`sdp`, `asdp`, `ftsdp`) return final px — never add `Px` in REFERENCE mode.
 3. **Strategies by element:** HUD/menus `asdp`, crosshair/minimap/anything that must never overflow `ftsdp`,
@@ -100,8 +106,8 @@ field-compatible with VkViewport/D3D11_VIEWPORT; letterbox via
 
 ## Validation
 
-Any formula change MUST pass `python3 scripts/oracle.py` (30 cases) and the JVM
-tests with oracle-generated expectations (`./gradlew testDebugUnitTest`; suites cover
+Any formula change MUST pass `python3 tools/oracle.py` (30 cases) and the JVM
+tests with oracle-generated expectations (`cd android && ./gradlew testDebugUnitTest`; suites cover
 GameMath, GameCache, GameMetrics, GameScreen, GameWorld, code API, units, resize).
 Release (current: **3.2.0**): bump together `appdimens.version` (published coordinate)
 and `VERSION_NAME` in `gradle.properties`, the `orElse("…")` fallbacks in every

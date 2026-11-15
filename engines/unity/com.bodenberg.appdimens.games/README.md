@@ -1,7 +1,7 @@
 # AppDimens Games for Unity
 
 Install: *Package Manager ▸ + ▸ Add package from git URL* →
-`https://github.com/bodenberg/appdimens-games.git?path=/bindings/unity/com.bodenberg.appdimens.games`
+`https://github.com/bodenberg/appdimens-games.git?path=/engines/unity/com.bodenberg.appdimens.games`
 
 | Component | What it does |
 |-----------|--------------|

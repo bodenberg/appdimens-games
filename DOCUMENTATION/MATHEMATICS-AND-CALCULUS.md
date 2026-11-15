@@ -1,6 +1,6 @@
 # 🧮 AppDimens Games — Mathematics & Calculus
 
-> All kernels are validated by [`scripts/oracle.py`](../scripts/oracle.py) (30 cases, 0 failures) against the canonical family math (`appdimens-dynamic` 3.1.9 / `appdimens-kmp` 1.0.1).
+> All kernels are validated by [`tools/oracle.py`](../tools/oracle.py) (30 cases, 0 failures) against the canonical family math (`appdimens-dynamic` 3.1.9 / `appdimens-kmp` 1.0.1).
 
 ## Symbols
 

@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Cross-platform SDK shared with Windows/Linux/macOS/iOS/engines (repo-root native/).
-set(ADG_NATIVE_SDK ${CMAKE_CURRENT_SOURCE_DIR}/../../../../native)
+set(ADG_NATIVE_SDK ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../native)
 
 add_library(appdimens_games SHARED
     jni/appdimens_games_jni.cpp

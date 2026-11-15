@@ -4,14 +4,17 @@
 # Math is bit-parity everywhere. Constants: W0=300, H0=533, diag0=611.6305 (family literal,
 # true sqrt=611.628155…), perim0=833, ARref=1.78, inv300=1/300, ADJ=0.10/30, K=0.08/30.
 
+## Repository layout
+android/ (Gradle build: library*, sample, benchlab) · native/ (C/C++ SDK) · engines/{unity,unreal,godot} · dotnet/ (AppDimens.Games, Tests, dropin/) · tools/ · DOCUMENTATION/ · skills/
+
 ## Toolchain
 AGP 9.3.1 · Kotlin 2.4.10 · Gradle 9.5.0 (daemon JVM 25) · compileSdk 37 · minSdk 24 · JVM target 17
 Compose: compileOnly (runtime+ui), no version pinned in the POM — consumer supplies compose-bom (any version)
 
 ## Cross-platform (3.3.0)
 Platforms: Windows (incl. Proton/Wine detection), Linux, Steam Deck, macOS, iOS/tvOS, Android, Web (Emscripten), consoles, XR.
-Engines: Unity UPM (bindings/unity), Unreal Engine 5 plugin (bindings/unreal, UMG DPI rule), Godot 4 addon (bindings/godot),
-.NET netstandard2.0 (bindings/csharp: MonoGame/FNA/Stride/Godot .NET), custom C/C++ (native/), any language via the C ABI.
+Engines: Unity UPM (engines/unity), Unreal Engine 5 plugin (engines/unreal, UMG DPI rule), Godot 4 addon (engines/godot),
+.NET netstandard2.0 (dotnet: MonoGame/FNA/Stride/Godot .NET), custom C/C++ (native/), any language via the C ABI.
 native/include/appdimens/games.h (header-only C99): adg_surface + adg_metrics_from_surface (scale modes REFERENCE|CONTENT|DPI;
 REFERENCE = values are px at the reference resolution, dp tokens return final px: adg_ref_px), adg_viewport_compute
 (FIT|FILL|STRETCH|FIT_WIDTH|FIT_HEIGHT|EXPAND|INTEGER), adg_screen_to_design, adg_gl_viewport, adg_native_viewport
@@ -74,5 +77,5 @@ ScaledInvariant/Auto/Fluid/Fit/Fill/…) · World.ViewportRect(mode,w,h,dw,dh) �
 
 ## Strategies (13)
 scaled(sdp) percentage/balanced(auto) logarithmic power fluid interpolated diagonal perimeter fit fill autosize none.
-Formulas: DOCUMENTATION/MATHEMATICS-AND-CALCULUS.md · Oracle validator: scripts/oracle.py (30 cases).
+Formulas: DOCUMENTATION/MATHEMATICS-AND-CALCULUS.md · Oracle validator: tools/oracle.py (30 cases).
 Agent skill: skills/SKILL.md + skills/library-map.md + skills/reference.md (+ skills/custom.md for custom strategies)

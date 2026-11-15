@@ -1,6 +1,6 @@
 # 🎯 AppDimens Games — C# · Unity · Godot · MAUI
 
-> File: [`csharp/AppDimensGames/AppDimensGames.cs`](../csharp/AppDimensGames/AppDimensGames.cs) (+ `.asmdef` for Unity)
+> File: [`dotnet/dropin/AppDimensGames/AppDimensGames.cs`](../dotnet/dropin/AppDimensGames/AppDimensGames.cs) (+ `.asmdef` for Unity)
 > Single file · zero dependencies · allocation-free hot paths · bit-parity with Kotlin/C++ core.
 
 ---
@@ -291,7 +291,7 @@ protected override void OnSizeAllocated(double w, double h)   // or Window.SizeC
 
 ## 7️⃣ Custom strategies (unreleased) — `AppDimensGamesCustom*.cs`
 
-Drop `AppDimensGamesCustom.cs` and `AppDimensGamesCustom.Engine.cs` next to `AppDimensGames.cs` (Unity 2021.2+ / .NET Standard 2.1; the engine is generated from `AppDimens.Net.Custom` by `scripts/sync-csharp-custom.py`, so results match every AppDimens platform).
+Drop `AppDimensGamesCustom.cs` and `AppDimensGamesCustom.Engine.cs` next to `AppDimensGames.cs` (Unity 2021.2+ / .NET Standard 2.1; the engine is generated from `AppDimens.Net.Custom` by `tools/sync-csharp-custom.py`, so results match every AppDimens platform).
 
 The simplest form is to write the formula yourself (`base` = the value you pass; the result is the value):
 

@@ -18,7 +18,7 @@ import com.appdimens.games.compose.custom.*    // Compose: 64.cdp(…) → Dp, 1
 
 The code API reads the live `GameScreen` snapshot, so keep it updated as for the rest of the library (`GameScreen.updateFromContext(context)` in `onSurfaceChanged` / `onConfigurationChanged`, or `GameScreen.update(metrics)`). Compose reads `LocalDimenMetrics` inside `AppDimensProvider { … }`.
 
-**Unity / Godot (C#):** copy `csharp/AppDimensGames/AppDimensGames.cs`, `AppDimensGamesCustom.cs` and `AppDimensGamesCustom.Engine.cs` into the project (Unity 2021.2+ / .NET Standard 2.1). Feed the window as usual with `AppDimensGames.Screen.Update(widthDp, heightDp, densityDpi, fontScale, fullscreen)` (see [CSHARP-UNITY.md](../../CSHARP-UNITY.md)).
+**Unity / Godot (C#):** copy `dotnet/dropin/AppDimensGames/AppDimensGames.cs`, `AppDimensGamesCustom.cs` and `AppDimensGamesCustom.Engine.cs` into the project (Unity 2021.2+ / .NET Standard 2.1). Feed the window as usual with `AppDimensGames.Screen.Update(widthDp, heightDp, densityDpi, fontScale, fullscreen)` (see [CSHARP-UNITY.md](../../CSHARP-UNITY.md)).
 
 ```csharp
 using AppDimensGames.Custom;
