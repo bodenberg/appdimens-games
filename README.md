@@ -152,7 +152,7 @@ implementation("io.github.bodenberg:appdimens-games:3.3.0")          // core
 // Modular satellites (same shape as dynamic/kmp):
 // appdimens-games-{auto,density,diagonal,fill,fit,fluid,interpolated,
 //                   logarithmic,percent,perimeter,power,resize,units,custom*}
-// *custom: unreleased — your own strategies (DOCUMENTATION/strategies/custom.md)
+// *custom: your own strategies (DOCUMENTATION/strategies/custom.md)
 implementation("io.github.bodenberg:appdimens-games-native:3.3.0")   // C/C++/JNI + GL/VK/DX
 implementation(platform("io.github.bodenberg:appdimens-games-bom:3.3.0"))
 ```
@@ -239,7 +239,7 @@ val px = 16f.toDynamicScaledPx(ctx)
 | logarithmic | `logsdp…` | `50f.logsdp(ctx)` |
 | perimeter | `prsdp…` | `16f.prsdp(ctx)` |
 | density | `dsdp…` | `16f.dsdp(ctx)` |
-| custom *(unreleased)* | `cdp/csp` + your strategy | `CustomScaleStrategy { (width / 360f).coerceIn(0.85f, 1.8f) }` / `scalingFormula { base * pow(sw / 360f, 0.8f) }` (typed one-liners, autocomplete), text `64.cdp("base * …")` for JSON, or `64f.cdp(Hud)` — DSL/JSON, rules per device, free-form formulas → [custom.md](DOCUMENTATION/strategies/custom.md) · [full guide](DOCUMENTATION/strategies/custom/README.md) |
+| custom | `cdp/csp` + your strategy | `CustomScaleStrategy { (width / 360f).coerceIn(0.85f, 1.8f) }` / `scalingFormula { base * pow(sw / 360f, 0.8f) }` (typed one-liners, autocomplete), text `64.cdp("base * …")` for JSON, or `64f.cdp(Hud)` — DSL/JSON, rules per device, free-form formulas → [custom.md](DOCUMENTATION/strategies/custom.md) · [full guide](DOCUMENTATION/strategies/custom/README.md) |
 
 ### Compose games — same stems, reactive
 
@@ -368,7 +368,7 @@ Same token names and the same math on every platform — [hub](https://github.co
 | Qt 5/6 — QML, Widgets | [appdimens-qt](https://github.com/bodenberg/appdimens-qt) | `AppDimens.sdp(16)` · `16_sdp` |
 | GTK 3/4 and portable C99 | [appdimens-gtk](https://github.com/bodenberg/appdimens-gtk) | `16sdp` (CSS) · `ad_sdp(&m, 16)` |
 | LVGL 8/9 — MCUs, embedded Linux | [appdimens-lvgl](https://github.com/bodenberg/appdimens-lvgl) | `lv_ad_sdp(16)` |
-| Roku — BrightScript / SceneGraph | [appdimens-roku](https://github.com/bodenberg/appdimens-roku) | `ad.sdp(16)` |
+| Roku — BrightScript / SceneGraph | [appdimens-roku](https://github.com/bodenberg/appdimens-roku) | `sdp(16)` · `ad.sdp(16)` |
 | Python — Tkinter, Qt, Kivy, pygame, Blender | [appdimens-py](https://github.com/bodenberg/appdimens-py) | `ad.sdp(16)` |
 | Games — Unity, Unreal, Godot, C/C++, .NET, Android | **appdimens-games** (this repository) | `64f.ASdp()` · `AppDimens.asdp(64)` · `appdimens::asdp(64)` |
 

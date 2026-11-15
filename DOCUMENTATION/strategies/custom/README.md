@@ -1,6 +1,6 @@
 # Custom strategies: documentation
 
-**Kotlin module:** `io.github.bodenberg:appdimens-games-custom` (`:library-custom`, unreleased) · packages `com.appdimens.games.custom` (engine + `GameMetrics` bridge), `com.appdimens.games.code.custom` (engines / Kotlin / Java, px, live `GameScreen`), `com.appdimens.games.compose.custom` (Compose)
+**Kotlin module:** `io.github.bodenberg:appdimens-games-custom` (`:library-custom`) · packages `com.appdimens.games.custom` (engine + `GameMetrics` bridge), `com.appdimens.games.code.custom` (engines / Kotlin / Java, px, live `GameScreen`), `com.appdimens.games.compose.custom` (Compose)
 **Unity / C#:** `dotnet/dropin/AppDimensGames/AppDimensGamesCustom.cs` + `AppDimensGamesCustom.Engine.cs`, namespace `AppDimensGames.Custom` (`CustomGames`, `CustomKernels`, `float` extensions)
 
 The built-in strategies (`sdp`, `asdp`, `fit`, `fill`…) cover most games. When yours needs its **own** growth law for HUD, menus and text, this module lets you write it, in one line of code or as a full configuration that is shared through JSON with every AppDimens platform (Android, KMP, iOS, Flutter, React Native, Web, Games, .NET). The Kotlin and the C# engines give the same numbers.

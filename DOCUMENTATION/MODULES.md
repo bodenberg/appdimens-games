@@ -16,7 +16,7 @@ appdimens-games/
 │   │   └── resize/  binary-search auto-fit
 │   ├── library-{strategy}/  → appdimens-games-{strategy}
 │   │   percent · power · fluid · auto · diagonal · fill · fit · interpolated ·
-│   │   logarithmic · perimeter · density · resize · units · custom (unreleased)
+│   │   logarithmic · perimeter · density · resize · units · custom
 │   ├── library-bom/         → appdimens-games-bom
 │   ├── library-native/      → appdimens-games-native (AAR: JNI over ../native)
 │   ├── sample/              demo game (Compose · OpenGL ES · Vulkan surface)
@@ -71,7 +71,7 @@ appdimens-games/
 | `…-density` | `dsdp…` | core |
 | `…-resize` | container auto-fit | core |
 | `…-units` | mm/cm/inch | core |
-| `…-custom` *(unreleased)* | `cdp/csp` — your own strategies (code and text formulas, DSL, JSON, rules, presets); see [custom.md](strategies/custom.md) and [custom/](strategies/custom/README.md) | core |
+| `…-custom` | `cdp/csp` — your own strategies (code and text formulas, DSL, JSON, rules, presets); see [custom.md](strategies/custom.md) and [custom/](strategies/custom/README.md) | core |
 | `…-native` | JNI + C/C++ + render interop | core |
 | `…-bom` | version alignment | — |
 
