@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
+    <LangVersion>7.3</LangVersion>
+    <Nullable>disable</Nullable>
+    <RootNamespace>AppDimens.Games</RootNamespace>
+    <PackageId>AppDimens.Games</PackageId>
+    <Version>3.3.0</Version>
+    <Authors>Jean Bodenberg</Authors>
+    <Description>AppDimens Games for .NET — responsive HUD/UI sizes, viewports, projections (GL/Vulkan/D3D/Metal), FOV, upscalers (FSR/DLSS/XeSS) for Unity, Godot .NET, MonoGame, FNA, Stride.</Description>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>CS1591</NoWarn>
+  </PropertyGroup>
+</Project>

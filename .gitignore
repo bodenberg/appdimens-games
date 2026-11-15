@@ -13,3 +13,9 @@ captures/
 
 # native SDK builds
 native/build*/
+
+# .NET build outputs
+bindings/**/bin/
+bindings/**/obj/
+# Godot import cache
+bindings/godot/.godot/

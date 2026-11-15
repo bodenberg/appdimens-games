@@ -3,30 +3,104 @@
 # 🎮 AppDimens Games
 <img referrerpolicy="no-referrer-when-downgrade" src="https://static.scarf.sh/a.png?x-pxid=67e3226a-74b2-4b63-aef1-523d4ba8eba8" />
 
-### Unified, high-performance dimension scaling for Android games — Compose · Kotlin · Java · C++/NDK · C · OpenGL ES · Vulkan · DirectX · Unity/C#
+### Responsive HUD/UI, viewports, cameras and upscaling for every game platform, engine and graphics API
 
-[![Version](https://img.shields.io/badge/version-3.2.0-00E5FF?style=flat-square)](#)
+**Windows · Linux · Steam Deck · Proton/Wine · macOS · iOS · Android · Web · consoles · XR**
+**Unity · Unreal Engine 5 · Godot 4 · custom C/C++ engines · MonoGame/FNA/Stride · Android (Compose/Kotlin/NDK)**
+**OpenGL / ES / WebGL · Vulkan · Direct3D 11/12 · Metal · WebGPU · FSR · DLSS · XeSS · MetalFX · TSR**
+
+[![Version](https://img.shields.io/badge/version-3.3.0-00E5FF?style=flat-square)](#)
 [![License](https://img.shields.io/badge/License-Apache--2.0-white?style=flat-square)](LICENSE)
-[![Platform](https://img.shields.io/badge/Platform-Android%20%7B%20NDK%20%7D-3DDC84?style=flat-square)](#)
-[![APIs](https://img.shields.io/badge/Game%20APIs-JNI%20·%20C%20·%20C%23%20·%20Vulkan%20·%20OpenGL%20·%20DirectX%20·%20Compose-orange?style=flat-square)](#)
-[![AGP](https://img.shields.io/badge/AGP-9.x-blue?style=flat-square)](#)
-[![Compile SDK](https://img.shields.io/badge/compileSdk-37-green?style=flat-square)](#)
-[![Min SDK](https://img.shields.io/badge/minSdk-24-yellow?style=flat-square)](#)
-[![Scaling modes](https://img.shields.io/badge/scaling%20modes-13-FFC400?style=flat-square)](DOCUMENTATION/README.md)
+[![Platforms](https://img.shields.io/badge/Platforms-Win%20·%20Linux%20·%20Deck%20·%20Proton%20·%20macOS%20·%20iOS%20·%20Android%20·%20Web-3DDC84?style=flat-square)](DOCUMENTATION/CROSS-PLATFORM.md)
+[![Engines](https://img.shields.io/badge/Engines-Unity%20·%20Unreal%20·%20Godot%20·%20custom-orange?style=flat-square)](DOCUMENTATION/ENGINES.md)
+[![Graphics](https://img.shields.io/badge/Graphics-GL%20·%20Vulkan%20·%20D3D11%2F12%20·%20Metal%20·%20WebGPU-blue?style=flat-square)](DOCUMENTATION/GRAPHICS-APIS.md)
+[![Upscalers](https://img.shields.io/badge/Upscalers-FSR%20·%20DLSS%20·%20XeSS%20·%20MetalFX%20·%20TSR-critical?style=flat-square)](DOCUMENTATION/UPSCALING.md)
 
 [![Beginner guide](https://img.shields.io/badge/📘_GUIDE-FOR_BEGINNERS-blue?style=for-the-badge)](DOCUMENTATION/GUIDE-FOR-BEGINNERS.md)
+[![Engines](https://img.shields.io/badge/🎮_ENGINES-UNITY·UNREAL·GODOT-orange?style=for-the-badge)](DOCUMENTATION/ENGINES.md)
+[![Genres](https://img.shields.io/badge/🗺️_GENRES-2D·3D·FPS·OPEN_WORLD-success?style=for-the-badge)](DOCUMENTATION/GENRES.md)
 [![Docs](https://img.shields.io/badge/📚_DOCS-INDEX-blueviolet?style=for-the-badge)](DOCUMENTATION/README.md)
-[![Math](https://img.shields.io/badge/🧮_MATHEMATICS-REFERENCE-informational?style=for-the-badge)](DOCUMENTATION/MATHEMATICS-AND-CALCULUS.md)
-[![Native](https://img.shields.io/badge/⚙️_NATIVE-C%2FC%2B%2B%2FJNI-critical?style=for-the-badge)](DOCUMENTATION/NATIVE-GAME-ENGINES.md)
-[![Performance](https://img.shields.io/badge/⚡_PERFORMANCE-BENCHLAB-success?style=for-the-badge)](PERFORMANCE.md)
 
 </div>
 
-**AppDimens Games 3.0** is the family conversion of AppDimens (`appdimens-dynamic` 3.x, `appdimens-kmp` 1.x) to **game development**, replacing the deprecated games 2.0.1. **Same API vocabulary, same suffixes, same facilitators** as the rest of the family — engineered for **60+ FPS game loops**: every hot path is a single multiply over pre-computed factors from an immutable window snapshot.
-
-> 💡 **One rule:** when the window resizes (rotation, split-screen, freeform), **every value auto-adjusts** — except variants with the **`i`** suffix (`ignoreMultiWindows`), which stay anchored to the frozen fullscreen reference.
+**AppDimens Games** answers the questions every shipped game has to answer on every screen: *how big is this HUD element
+here? what do I render at? which FOV keeps my framing on 4:3, 16:9, 21:9, 32:9 and a portrait phone? which render
+resolution, mip bias and jitter does DLSS/FSR/XeSS need? where is the safe area on this TV, notch or Steam Deck?* —
+with the **same math as the whole AppDimens family**, **one multiply per size**, zero allocations and identical results
+in C, C++, C#, GDScript, Kotlin and Java.
 
 ---
+
+## 🌍 Platforms, engines and APIs (3.3.0)
+
+| You ship with… | Use | Install |
+|---|---|---|
+| **Unity** (2019.4+; every platform incl. WebGL, consoles, XR) | UPM package — `AppDimensScreen`, `AppDimensCanvasScaler`, `AppDimensSafeArea`, `AppDimensCamera`, `AppDimensDynamicResolution`, `AppDimensUpscaling` | Package Manager ▸ git URL `https://github.com/bodenberg/appdimens-games.git?path=/bindings/unity/com.bodenberg.appdimens.games` |
+| **Unreal Engine 5** | Plugin — UMG **DPI scaling rule**, `UAppDimensSubsystem`, Blueprint library (sizes, FOV, `r.ScreenPercentage` presets, LOD) | copy `bindings/unreal/AppDimens` into `Plugins/` |
+| **Godot 4** (GDScript; C# via the .NET package) | Addon — `AppDimens` autoload, `content_scale_factor` UI scaling, FSR/FSR2/MetalFX `scaling_3d_mode`, FOV, safe area | copy `bindings/godot/addons/appdimens` |
+| **Custom C/C++ engines** (SDL, GLFW, raylib, bgfx, sokol, Vulkan/D3D/Metal renderers) | header-only `native/include/appdimens/games.h` + optional thread-safe C ABI | `add_subdirectory(native)` → `AppDimens::games` / `AppDimens::games_headers` |
+| **.NET** (MonoGame, FNA, Stride, Godot .NET, Unity) | `AppDimens.Games` (netstandard2.0, pure managed) | `bindings/csharp/AppDimens.Games` |
+| **Rust · Zig · Python · Lua · Swift · Java (Panama)** | C ABI `appdimens_games` (`appdimens_games_api.h`) | shared library from `native/` |
+| **Android** — Compose, Kotlin, Java, NDK | the existing Maven artifacts (below); the `.so` now also exports the C ABI | `io.github.bodenberg:appdimens-games:3.3.0` |
+
+| Graphics API | Viewport | Projection | Notes |
+|---|---|---|---|
+| OpenGL / GLES / WebGL | `adg_gl_viewport` (y from bottom) | `adg_ortho/perspective(ADG_GFX_OPENGL…)` depth [-1, 1] | |
+| Vulkan | `adg_native_viewport(v, flip_y)` = `VkViewport` (negative-height flip) | NDC Y down handled | layout `static_assert`ed against `vulkan.h` |
+| Direct3D 11 / 12 | `adg_native_viewport` = `D3D11_VIEWPORT` / `D3D12_VIEWPORT`, `adg_rect_ltrb` = `D3D12_RECT` | depth [0, 1], `row_major` option | layout `static_assert`ed against `d3d11.h`/`d3d12.h` |
+| Metal | `adg_metal_viewport` = `MTLViewport` (doubles) | depth [0, 1] | |
+| WebGPU | `adg_native_viewport` = `setViewport()` args | depth [0, 1] | |
+
+Reverse-Z and infinite far planes are supported for open worlds. Details: [GRAPHICS-APIS.md](DOCUMENTATION/GRAPHICS-APIS.md).
+
+### One idea, every engine
+
+```c
+/* C / C++ — any engine */
+adg_surface s; adg_surface_default(&s, swapchain_w, swapchain_h);   // REFERENCE mode, 1080p design
+ad_metrics m;  adg_metrics_from_surface(&m, &s);
+float bar   = adg_ref_px(&m, AD_AUTO, 320);       // 320 px at 1080p → px now (calm on 4K/ultrawide)
+float cross = adg_ref_px(&m, AD_FIT, 24);         // never overflows on 32:9 or portrait
+adg_viewport vp = adg_viewport_compute(ADG_VIEW_INTEGER, swapchain_w, swapchain_h, 320, 180); // pixel art
+adg_render_size r = adg_upscale_render_size(ADG_UPSCALER_DLSS, ADG_Q_QUALITY, swapchain_w, swapchain_h);
+float vfov = adg_fov_for_aspect(ADG_FOV_HYBRID, 60 * ADG_DEG2RAD, 16.f / 9, (float)swapchain_w / swapchain_h, 0);
+```
+```csharp
+// Unity — components do the wiring; in code:
+float bar = AppDimensScreen.Asdp(320);
+AppDimensUpscaling.ApplyToPipeline(Upscaler.Fsr3, UpscaleQuality.Quality);
+```
+```gdscript
+# Godot 4
+var bar := AppDimens.asdp(320)
+AppDimensGames.configure_3d_scaling(get_viewport(), AppDimensGames.Upscaler.FSR2, AppDimensGames.Quality.QUALITY)
+```
+```cpp
+// Unreal — DPI rule drives UMG; in Blueprint/C++:
+float Bar = UAppDimensLibrary::Asdp(320.f);
+UAppDimensLibrary::ApplyUpscalerPreset(EAppDimensUpscaler::TSR, EAppDimensQuality::Quality);
+```
+
+### Platform matrix
+
+| Platform | Notes |
+|---|---|
+| **Windows** (DirectX/Vulkan/GL) | Per-monitor DPI: `ADG_SCALE_CONTENT` with `GetDpiForWindow()/96`; games should prefer `ADG_SCALE_REFERENCE` (resolution-relative) |
+| **Proton / Wine** | detected (`adg_platform()` → `ADG_PLATFORM_WINE`/`PROTON`); Wine reports 96 DPI, so REFERENCE mode keeps HUDs right regardless — verified by running the Windows test suite under Wine |
+| **Steam Deck / SteamOS** | `ADG_PLATFORM_STEAMDECK` + `adg_suggest_device_class()` → handheld (1280×800, 16:10, ~7"): Hybrid FOV, handheld text minimums |
+| **Linux** (X11/Wayland, x64/arm64) | fractional Wayland scale via CONTENT mode |
+| **macOS / iOS / tvOS** | Metal viewports, backing scale, safe areas (notch, home indicator), tvOS overscan |
+| **Android** | Maven artifacts + NDK; split-screen = multi-window (`i` tokens) |
+| **Web** (Emscripten, WebGL/WebGPU) | static C ABI build; for DOM UIs use [webdimens](https://github.com/bodenberg/appdimens-web) |
+| **Consoles** | plain C99/C++17, no OS calls in the header API; set `ADG_PLATFORM_CONSOLE` yourself |
+
+See [CROSS-PLATFORM.md](DOCUMENTATION/CROSS-PLATFORM.md) · [UPSCALING.md](DOCUMENTATION/UPSCALING.md) · [ENGINES.md](DOCUMENTATION/ENGINES.md) · [GENRES.md](DOCUMENTATION/GENRES.md)
+
+---
+
+## 🤖 Android libraries (Compose · Kotlin · Java · NDK)
+
+The sections below document the Android Maven artifacts, which keep the same API as 3.2.0.
 
 ## 🤔 What is it? (30 seconds)
 
@@ -51,12 +125,12 @@ Full tutorial with copy-paste steps for each stack: **[GUIDE-FOR-BEGINNERS.md](D
 ## 📦 Installation
 
 ```kotlin
-implementation("io.github.bodenberg:appdimens-games:3.2.0")          // core
+implementation("io.github.bodenberg:appdimens-games:3.3.0")          // core
 // Modular satellites (same shape as dynamic/kmp):
 // appdimens-games-{auto,density,diagonal,fill,fit,fluid,interpolated,
 //                   logarithmic,percent,perimeter,power,resize,units}
-implementation("io.github.bodenberg:appdimens-games-native:3.2.0")   // C/C++/JNI + GL/VK/DX
-implementation(platform("io.github.bodenberg:appdimens-games-bom:3.2.0"))
+implementation("io.github.bodenberg:appdimens-games-native:3.3.0")   // C/C++/JNI + GL/VK/DX
+implementation(platform("io.github.bodenberg:appdimens-games-bom:3.3.0"))
 ```
 
 | Requirement | Version |
@@ -210,6 +284,17 @@ flowchart LR
 | Snapshot rebuild | once per resize (exact `ln()` only here) |
 
 On-device comparison vs games-2.0.1 & dynamic-3.1.9: [`benchlab/`](benchlab) · [PERFORMANCE.md](PERFORMANCE.md).
+
+## ✨ What's new in 3.3.0
+
+- **Cross-platform native SDK** (`native/`): Windows, Linux, Steam Deck, Proton/Wine, macOS, iOS, Android, Web, consoles.
+- **Engines:** Unity UPM package, Unreal Engine 5 plugin (UMG DPI rule), Godot 4 addon, .NET package (MonoGame/FNA/Stride).
+- **Graphics APIs:** native viewports/scissors/projections for OpenGL(ES)/WebGL, Vulkan, D3D11/12, Metal, WebGPU — reverse-Z, infinite far.
+- **Upscalers:** FSR 1/2/3, DLSS, XeSS, MetalFX, TSR, PSSR, SGSR presets → render size, mip bias, Halton jitter; dynamic resolution.
+- **Cameras:** Hor+/Vert-/hybrid FOV, ultrawide caps, 2D orthographic size, FOV-consistent sensitivity.
+- **HUD:** safe areas, TV overscan, ultrawide HUD band, minimum text/touch sizes; **LOD** helpers for open worlds.
+- **Fixes:** the NDK snapshot publication no longer exposes a `thread_local` buffer that was overwritten in place (torn
+  reads across threads); `render::ortho()` now produces correct OpenGL depth terms.
 
 ## ✨ What's new in 3.2.0
 

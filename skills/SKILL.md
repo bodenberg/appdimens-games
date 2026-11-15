@@ -1,8 +1,26 @@
-# AppDimens Games 3.x (3.2.0) — Skill for Coding Agents
+# AppDimens Games 3.x (3.3.0) — Skill for Coding Agents
 
 Use this skill whenever writing or reviewing code that sizes game UI/HUD/world
-elements on Android with the AppDimens Games library (family: appdimens-dynamic,
-appdimens-kmp, appdimens-games — same vocabulary).
+elements with AppDimens Games — Android (Compose/Kotlin/Java/NDK) **and** every other
+platform/engine: Windows, Linux, Steam Deck, Proton, macOS, iOS, Web, consoles; Unity,
+Unreal Engine 5, Godot 4, custom C/C++ engines, .NET engines.
+
+## Cross-platform quick rules (3.3.0)
+
+1. **Pick the binding:** Unity → UPM package components; Unreal → enable the plugin and set the UMG DPI rule to
+   `AppDimensDPIScalingRule`; Godot → `addons/appdimens` autoload; C/C++ → `native/include/appdimens/games.h`;
+   .NET → `bindings/csharp/AppDimens.Games`; other languages → C ABI.
+2. **Scale mode:** games use REFERENCE (author at 1920×1080). Values are px at the reference; plain tokens
+   (`sdp`, `asdp`, `ftsdp`) return final px — never add `Px` in REFERENCE mode.
+3. **Strategies by element:** HUD/menus `asdp`, crosshair/minimap/anything that must never overflow `ftsdp`,
+   backgrounds `flsdp`, text `assp` + accessibility text scale, pixel art `ADG_VIEW_INTEGER`.
+4. **Upscaling:** build the snapshot from the *display* size; render 3D at `adg_upscale_render_size`; apply
+   `adg_upscale_mip_bias` and `adg_upscale_jitter`; HUD is drawn at display resolution.
+5. **Cameras:** `ADG_FOV_HYBRID` by default; FPS: Hor+ with a `max_hfov` cap; convert sensitivity with `adg_sensitivity_scale`.
+6. **Graphics API:** use `adg_native_viewport`/`adg_gl_viewport`/`adg_metal_viewport` and `adg_ortho/adg_perspective(api…)`
+   — never hand-roll Y flips or depth ranges.
+7. **Safe areas:** `adg_safe_rect(w, h, os_insets, overscan)` (0.05 on TVs) + `adg_hud_band(…, 16/9)` on ultrawide.
+8. **Threads:** publish from the window thread (`adg_publish_px`), read with `adg_acquire()`/`adg_read()`.
 
 ## Golden rules
 

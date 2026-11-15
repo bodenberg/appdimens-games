@@ -1,6 +1,16 @@
 # 📚 AppDimens Games — Documentation Index
 
-> **Artifact:** `io.github.bodenberg:appdimens-games:3.2.0` (+13 satellites, BOM, native)
+## Cross-platform (3.3.0)
+
+| Guide | What it covers |
+|-------|----------------|
+| [CROSS-PLATFORM.md](CROSS-PLATFORM.md) | scale modes, Windows/Proton/Steam Deck/Linux/macOS/iOS/Android/Web/consoles/XR, threads |
+| [GRAPHICS-APIS.md](GRAPHICS-APIS.md) | OpenGL/Vulkan/D3D11/D3D12/Metal/WebGPU viewports, scissors, projections, reverse-Z |
+| [UPSCALING.md](UPSCALING.md) | FSR/DLSS/XeSS/MetalFX/TSR presets, mip bias, jitter, dynamic resolution |
+| [ENGINES.md](ENGINES.md) | Unity, Unreal Engine 5, Godot 4, custom C/C++, .NET, other languages |
+| [GENRES.md](GENRES.md) | recipes for 2D, pixel art, 3D, FPS, open world/AAA, racing, strategy, mobile, TV, handheld, VR |
+
+> **Artifact:** `io.github.bodenberg:appdimens-games:3.3.0` (+13 satellites, BOM, native)
 
 ## Quick links
 
