@@ -12,7 +12,7 @@ cd android
 |---|---|
 | `library/` | `appdimens-games` — core: `GameScreen`, `GameMetrics`, `GameMath`, Compose and code APIs, world layer |
 | `library-{auto,density,diagonal,fill,fit,fluid,interpolated,logarithmic,percent,perimeter,power,resize,units}/` | `appdimens-games-{strategy}` |
-| `library-custom/` | `appdimens-games-custom` — custom scaling strategies (unreleased) |
+| `library-custom/` | `appdimens-games-custom` — custom scaling strategies |
 | `library-native/` | `appdimens-games-native` — JNI + the C/C++ SDK from [`../native`](../native) |
 | `library-bom/` | `appdimens-games-bom` |
 | `sample/` | demo game (Compose, OpenGL ES, Vulkan surface) |

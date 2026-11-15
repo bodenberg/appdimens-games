@@ -7,7 +7,7 @@
 ```kotlin
 implementation(platform("io.github.bodenberg:appdimens-games-bom:<version>"))
 implementation("io.github.bodenberg:appdimens-games")
-implementation("io.github.bodenberg:appdimens-games-custom")   // unreleased, on main
+implementation("io.github.bodenberg:appdimens-games-custom")
 ```
 
 ```kotlin

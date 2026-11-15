@@ -74,7 +74,7 @@ reintroduce the old min/max-dimension (orientation-agnostic) formula.
 | scaled (core) | sdp/hdp/wdp | ssp/hsp/wsp · sem/hem/wem | `48.sdp(ctx)` · `16.ssp(ctx)` |
 | percent | psdp/phdp/pwdp + spaceW/Sw/H | pssp… | `10.spaceW(ctx)` |
 | power | pwsdp… | pwssp… | `48f.pwsdp(ctx)` |
-| custom *(unreleased)* | cdp, cdpi, cdpDp | csp, cspDp | simplest: typed one-liners with autocomplete `CustomScaleStrategy { (width / 360f).coerceIn(0.85f, 1.8f) }` (factor, once per window) / `scalingFormula { base * pow(sw / 360f, 0.8f) }` (final value; scope names = text names: base sw width height ratio tablet tv landscape pow clamp…); text for JSON `scalingFormula("…")` / `64.cdp("base * …")` (`base * (…)` = one-multiply fast path); C# `CustomScaleStrategy.Create(s => s.Clamp(s.Width / 360f, 0.85f, 1.8f))`, `ScalingStrategy.Formula(s => s.Base * s.Pow(s.Sw / 360f, 0.8f))`; `64f.cdp(Hud)` — your own strategy (DSL/JSON, rules per device class, free-form `expression("…")`/`formula("…")`); C# `CustomKernels.Cdp(64f, hud)`, `64f.Cdp("base * …")`; see DOCUMENTATION/strategies/custom.md, the guides in DOCUMENTATION/strategies/custom/ and the agent notes [custom.md](custom.md) |
+| custom | cdp, cdpi, cdpDp | csp, cspDp | simplest: typed one-liners with autocomplete `CustomScaleStrategy { (width / 360f).coerceIn(0.85f, 1.8f) }` (factor, once per window) / `scalingFormula { base * pow(sw / 360f, 0.8f) }` (final value; scope names = text names: base sw width height ratio tablet tv landscape pow clamp…); text for JSON `scalingFormula("…")` / `64.cdp("base * …")` (`base * (…)` = one-multiply fast path); C# `CustomScaleStrategy.Create(s => s.Clamp(s.Width / 360f, 0.85f, 1.8f))`, `ScalingStrategy.Formula(s => s.Base * s.Pow(s.Sw / 360f, 0.8f))`; `64f.cdp(Hud)` — your own strategy (DSL/JSON, rules per device class, free-form `expression("…")`/`formula("…")`); C# `CustomKernels.Cdp(64f, hud)`, `64f.Cdp("base * …")`; see DOCUMENTATION/strategies/custom.md, the guides in DOCUMENTATION/strategies/custom/ and the agent notes [custom.md](custom.md) |
 | fluid | fsdp… | fssp… | `16f.fsdp(ctx)` |
 | auto ⭐ gameplay | asdp… | assp… | `64f.asdp(ctx)` |
 | diagonal | dgsdp… | dgssp… | `48f.dgsdp(ctx)` |
@@ -121,3 +121,12 @@ module `build.gradle.kts`, `versionName` of `sample`/`benchlab`, and the tag/ver
 checks in `.github/workflows/release.yml` (tags are bare, e.g. `3.2.0`; `v3.2.0` also accepted). Constants are family-canonical:
 300/533/611.6305(literal)/833/1.78 — never "fix" 611.6305 to the true sqrt;
 parity beats pedantry (delta documented).
+
+<!-- appdimens-family:begin -->
+## Other AppDimens platforms
+
+The same token names and math exist on Android (Compose, Views, XML), Kotlin Multiplatform, iOS/macOS, Flutter, React
+Native, Web, .NET, Qt, GTK, LVGL, Roku, Python/Blender and games (Unity, Unreal, Godot, C/C++). For code on another
+platform, use that library's skill — every skill, plus the layout-intent decision table, installs with
+`npx appdimens-skills` (https://github.com/bodenberg/appdimens-skills). Hub: https://github.com/bodenberg/appdimens.
+<!-- appdimens-family:end -->

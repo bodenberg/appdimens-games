@@ -31,7 +31,7 @@ Docs: DOCUMENTATION/CROSS-PLATFORM.md · GRAPHICS-APIS.md · UPSCALING.md · ENG
 ## Artifacts (version 3.3.0)
 io.github.bodenberg:appdimens-games (core) + -auto -density -diagonal -fill -fit -fluid
 -interpolated -logarithmic -percent -perimeter -power -resize -units -native + -bom
-(+ -custom, unreleased: simplest = one line of typed Kotlin (autocomplete) `CustomScaleStrategy { (width / 360f).coerceIn(0.85f, 1.8f) }` (factor) / `scalingFormula { base * pow(sw / 360f, 0.8f) }` (final value); as text for JSON `scalingFormula("base * pow(sw / 360, 0.8)")` / `64.cdp("…")`;
+(+ -custom: simplest = one line of typed Kotlin (autocomplete) `CustomScaleStrategy { (width / 360f).coerceIn(0.85f, 1.8f) }` (factor) / `scalingFormula { base * pow(sw / 360f, 0.8f) }` (final value); as text for JSON `scalingFormula("base * pow(sw / 360, 0.8)")` / `64.cdp("…")`;
  own strategies `64f.cdp(Hud)` / `18.csp` / `scalingStrategy("hud") { … }`, JSON shared with every AppDimens platform,
  rules per device class, free-form formulas `expression("…")` / `formula("…")`; C#: `CustomKernels.Cdp(64f, hud)`, `CustomScaleStrategy.Create(s => s.Clamp(s.Width / 360f, 0.85f, 1.8f))`, `64f.Cdp("base * …")`; doc DOCUMENTATION/strategies/custom.md; full guides (Kotlin + C#) DOCUMENTATION/strategies/custom/README.md: quick-start, code-formulas, text-formulas, configuration, json, api-reference, performance, cookbook, troubleshooting; agent notes skills/custom.md)
 
@@ -82,3 +82,5 @@ ScaledInvariant/Auto/Fluid/Fit/Fill/…) · World.ViewportRect(mode,w,h,dw,dh) �
 scaled(sdp) percentage/balanced(auto) logarithmic power fluid interpolated diagonal perimeter fit fill autosize none.
 Formulas: DOCUMENTATION/MATHEMATICS-AND-CALCULUS.md · Oracle validator: tools/oracle.py (30 cases).
 Agent skill: skills/SKILL.md + skills/library-map.md + skills/reference.md (+ skills/custom.md for custom strategies)
+
+Family (same tokens and math): appdimens-dynamic (Android), appdimens-sdps/ssps (XML), appdimens-kmp, appdimens-ios, appdimens-flutter, appdimens-react-native, appdimens-web, appdimens-net-binding (.NET), appdimens-qt, appdimens-gtk, appdimens-lvgl, appdimens-roku, appdimens-py, appdimens-games — https://github.com/bodenberg/appdimens · agent skills: https://github.com/bodenberg/appdimens-skills

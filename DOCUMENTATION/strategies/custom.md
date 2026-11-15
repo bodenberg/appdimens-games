@@ -1,6 +1,6 @@
 # Custom strategies — `cdp` / `csp` (`appdimens-games-custom`)
 
-> **Unreleased** — on `main`, ships with the next release. Same engine and JSON format as every AppDimens platform (`appdimens-dynamic-custom`, KMP, Web, React Native, Flutter, Apple, .NET).
+> Same engine and JSON format as every AppDimens platform (`appdimens-dynamic-custom`, KMP, Web, React Native, Flutter, Apple, .NET).
 
 **Kotlin:** `io.github.bodenberg:appdimens-games-custom` (`:library-custom`) · **Unity / C#:** `dotnet/dropin/AppDimensGames/AppDimensGamesCustom.cs` + `AppDimensGamesCustom.Engine.cs` · See [MODULES.md](../MODULES.md) · [Mathematics §Custom](../MATHEMATICS-AND-CALCULUS.md#custom-strategies-cdp) · [Unity / C# guide §7](../CSHARP-UNITY.md) · **[Full custom-strategy documentation](custom/README.md)**
 

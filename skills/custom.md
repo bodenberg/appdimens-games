@@ -1,6 +1,6 @@
 # Custom strategies: agent reference
 
-Use when the user wants their own game-UI scaling (a formula, per-device rules, a shared JSON) instead of a built-in. Docs: `DOCUMENTATION/strategies/custom/` (start at `README.md`). Kotlin module `io.github.bodenberg:appdimens-games-custom` (unreleased); Unity / C#: `dotnet/dropin/AppDimensGames/AppDimensGamesCustom.cs` + `AppDimensGamesCustom.Engine.cs` (namespace `AppDimensGames.Custom`).
+Use when the user wants their own game-UI scaling (a formula, per-device rules, a shared JSON) instead of a built-in. Docs: `DOCUMENTATION/strategies/custom/` (start at `README.md`). Kotlin module `io.github.bodenberg:appdimens-games-custom`; Unity / C#: `dotnet/dropin/AppDimensGames/AppDimensGamesCustom.cs` + `AppDimensGamesCustom.Engine.cs` (namespace `AppDimensGames.Custom`).
 
 ## Decide the form
 

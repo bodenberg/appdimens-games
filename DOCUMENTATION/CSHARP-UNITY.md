@@ -5,6 +5,22 @@
 
 ---
 
+## 🎯 Token calls (the AppDimens.Net way)
+
+`AppDimens.Games.Tokens` adds every family token (640: dp/sp/em, `a`/`i`/`ia`, `Px`, inverters) as an extension method on
+`float` and `int`, named like AppDimens.Net, reading the live snapshot (`Live.Current`):
+
+```csharp
+using AppDimens.Games;
+float bar   = 320f.ASdp();     // auto: calm growth on 4K / ultrawide
+float cross = 24f.FTSdp();     // fit: never overflows
+float title = 28f.Ssp();       // text × accessibility scale
+float pad   = 10f.HdpLw();     // inverter
+float any   = Live.Current.Resolve("logsdpa", 12f);
+```
+
+Same on .NET (`dotnet/AppDimens.Games`), the Unity package (`Runtime/Core/Tokens.cs`) and Godot .NET.
+
 ## 📡 API surface (same semantics as the family)
 
 | Family concept | C# member |
@@ -289,7 +305,7 @@ protected override void OnSizeAllocated(double w, double h)   // or Window.SizeC
 
 ---
 
-## 7️⃣ Custom strategies (unreleased) — `AppDimensGamesCustom*.cs`
+## 7️⃣ Custom strategies — `AppDimensGamesCustom*.cs`
 
 Drop `AppDimensGamesCustom.cs` and `AppDimensGamesCustom.Engine.cs` next to `AppDimensGames.cs` (Unity 2021.2+ / .NET Standard 2.1; the engine is generated from `AppDimens.Net.Custom` by `tools/sync-csharp-custom.py`, so results match every AppDimens platform).
 

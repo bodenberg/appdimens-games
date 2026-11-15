@@ -18,6 +18,21 @@
 
 ---
 
+## 🎯 Token calls in C++ (the AppDimens way)
+
+With the shared library (`AppDimens::games`), `native/include/appdimens/tokens.hpp` gives every family token applied to a
+value, over the live snapshot published by `adg_publish*`:
+
+```cpp
+#include "appdimens/tokens.hpp"
+using namespace appdimens::literals;
+float bar   = appdimens::asdp(320);   // REFERENCE mode: px at the reference → px now
+float cross = 24_ftsdp;               // literal form
+float pad   = appdimens::hdpLw(10);   // inverters, flags (sdpa, sdpi), Px, sp/em: all 640 tokens
+```
+
+Header-only users keep the C forms on their own snapshot: `ad_asdp(&m, 320)`, `adg_ref_px(&m, AD_FIT, 24)`.
+
 ## 🧠 Core concepts (read first)
 
 ```cpp
