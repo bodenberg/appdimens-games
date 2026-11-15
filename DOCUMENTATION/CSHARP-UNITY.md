@@ -289,6 +289,45 @@ protected override void OnSizeAllocated(double w, double h)   // or Window.SizeC
 
 ---
 
+## 7️⃣ Custom strategies (unreleased) — `AppDimensGamesCustom*.cs`
+
+Drop `AppDimensGamesCustom.cs` and `AppDimensGamesCustom.Engine.cs` next to `AppDimensGames.cs` (Unity 2021.2+ / .NET Standard 2.1; the engine is generated from `AppDimens.Net.Custom` by `scripts/sync-csharp-custom.py`, so results match every AppDimens platform).
+
+The simplest form is to write the formula yourself (`base` = the value you pass; the result is the value):
+
+```csharp
+using AppDimensGames.Custom;
+
+float button = 64f.Cdp("base * pow(sw / 360, 0.8)");                   // dp; also CdpPx, Cdpi, Csp, CspPx
+float label  = CustomKernels.Csp(18f, "base * min(sw / 360, 1.3)");     // final text size in dp
+var hudFormula = CustomGames.Formula("base * (tablet ? 0.9 : 1) * clamp(sw / 360, 0.85, 1.6)"); // shared per text
+var product = CustomScaleStrategy.Create(s => s.Clamp(s.Width / 360f, 0.85f, 1.8f));   // typed factor (autocomplete), once per window
+var hud = ScalingStrategy.Formula(s => s.Base * s.Pow(s.Sw / 360f, 0.8f));             // typed final-value formula
+```
+
+For rules per device, factor bounds or a font-scale policy, use the full configuration:
+
+```csharp
+using AppDimensGames.Custom;
+
+public static class GameStrategies
+{
+    public static readonly ScalingStrategy Hud = ScalingStrategy.Define("hud", b =>
+    {
+        b.Axis = ScalingAxis.Min;
+        b.Curve = ScalingCurve.Expression("clamp(pow(ratio, 0.85) * (1 + 0.05 * log(aspectRatio / 1.78)), 0.75, 2.5)");
+        b.IgnoreFontScale();
+        b.On(DeviceClass.Tv, r => r.Curve = ScalingCurve.Expression("height / 540"));
+    });
+}
+
+rect.sizeDelta = new Vector2(CustomKernels.Cdp(64f, GameStrategies.Hud), CustomKernels.Cdp(64f, GameStrategies.Hud));
+label.fontSize = Mathf.RoundToInt(CustomKernels.Csp(18f, GameStrategies.Hud));      // final size (policy applied)
+ScalingStrategies.LoadJson(Resources.Load<TextAsset>("appdimens-strategies").text); // same JSON as the other platforms
+```
+
+Device class: `SystemInfo.deviceType` Desktop → `desktop`, Console → `tv`, else phone/tablet by size; override with `CustomGames.DeviceClassResolver = m => …`. Overview: [strategies/custom.md](strategies/custom.md); full guides with the C# API next to the Kotlin one (quick start, code and text formulas, configuration, JSON, API reference, cookbook, troubleshooting): [strategies/custom/](strategies/custom/README.md).
+
 ## 🧵 Performance rules (managed)
 
 | Rule | Why |

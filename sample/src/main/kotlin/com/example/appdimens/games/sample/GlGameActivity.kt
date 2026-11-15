@@ -4,7 +4,9 @@ import android.app.Activity
 import android.opengl.GLSurfaceView
 import android.os.Bundle
 import android.view.SurfaceHolder
+import com.appdimens.games.code.custom.cdp
 import com.appdimens.games.core.GameScreen
+import com.appdimens.games.custom.CustomScaleStrategy
 import com.appdimens.games.math.GameMath
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -84,6 +86,9 @@ internal class GameRenderer(private val activity: Activity) : GLSurfaceView.Rend
         GameScreen.updateFromContext(activity, fullscreen = true)
     }
 
+    // Custom scaling (library-custom): factor from the window width, declared once.
+    private val bossScale = CustomScaleStrategy { (width / 360f).coerceIn(0.85f, 1.8f) }
+
     override fun onDrawFrame(gl: GL10?) {
         val m = GameScreen.metrics()
         val t = (System.nanoTime() - startNs) / 1_000_000_000f
@@ -91,6 +96,7 @@ internal class GameRenderer(private val activity: Activity) : GLSurfaceView.Rend
         // Strategy sizes in px (single-multiply fast lanes).
         val playerPx = GameMath.toPx(GameMath.calculateAutoDp(48f, m), m) / 2f
         val enemyPx = GameMath.toPx(GameMath.calculateAutoDp(32f, m), m) / 2f
+        val bossPx = 40.cdp(bossScale) / 2f   // px from the live GameScreen snapshot
 
         android.opengl.GLES20.glClear(android.opengl.GLES20.GL_COLOR_BUFFER_BIT)
         android.opengl.GLES20.glUseProgram(program)
@@ -101,6 +107,10 @@ internal class GameRenderer(private val activity: Activity) : GLSurfaceView.Rend
         // Player at center
         drawQuad(0f, 0f, pxToClip(playerPx, surfaceW), pxToClip(playerPx, surfaceH),
             floatArrayOf(0f, 0.898f, 1f, 1f))
+
+        // Boss (custom strategy) near the top
+        drawQuad(0f, 0.6f + sin(t * 1.4).toFloat() * 0.05f, pxToClip(bossPx, surfaceW), pxToClip(bossPx, surfaceH),
+            floatArrayOf(1f, 0.44f, 0.26f, 1f))
 
         // Orbiting enemies
         repeat(8) { i ->

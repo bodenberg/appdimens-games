@@ -11,7 +11,7 @@ dependencies {
         api("io.github.bodenberg:appdimens-games:$v")
         listOf(
             "auto", "density", "diagonal", "fill", "fit", "fluid",
-            "interpolated", "logarithmic", "percent", "perimeter", "power",
+            "custom", "interpolated", "logarithmic", "percent", "perimeter", "power",
             "resize", "units"
         ).forEach { s ->
             api("io.github.bodenberg:appdimens-games-$s:$v")
