@@ -37,7 +37,7 @@ static class Program
                 }
                 s++;
             }
-            Near(m.ComputeFactor(Strategy.Scaled, Qualifier.SmallWidth, Inverter.Default, false, true, 0.01), c.GetProperty("customK001").GetProperty("scaled").GetDouble(), 1e-12, "k scaled");
+            Near(m.ComputeFactor(Strategy.Scaled, Qualifier.SmallWidth, Inverter.Default, false, true, 0.01), c.GetProperty("customK001").GetProperty("scaled").GetDouble(), 2e-6, "k scaled");
         }
         // tokens
         Token t;

@@ -24,8 +24,8 @@ func _initialize() -> void:
 		for s in g.strategies.size():
 			var row: Array = c.factors[g.strategies[s]]
 			for i in row.size():
-				near(m.factor(s, i), row[i], 1e-9 * maxf(1.0, absf(row[i])), "%s[%d] %sx%s" % [g.strategies[s], i, c.w, c.h])
-		near(m.compute_factor(0, 0, 0, false, true, 0.01), c.customK001.scaled, 1e-12, "k scaled")
+				near(m.factor(s, i), row[i], 2e-6 * maxf(1.0, absf(row[i])), "%s[%d] %sx%s" % [g.strategies[s], i, c.w, c.h])
+		near(m.compute_factor(0, 0, 0, false, true, 0.01), c.customK001.scaled, 2e-6, "k scaled")
 	ok(AppDimensMetrics.parse_token("sdpPxiaPh").slot == 15, "token sdpPxiaPh")
 	ok(AppDimensMetrics.parse_token("pwdp").strategy == 2, "token pwdp → percent")
 	ok(AppDimensMetrics.parse_token("hdpPh").is_empty(), "bad token")

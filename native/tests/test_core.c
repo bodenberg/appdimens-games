@@ -4,11 +4,8 @@
 #include "appdimens/appdimens.h"
 #include "golden.h"
 
-#ifdef AD_USE_DOUBLE
-#define REL 1e-12
-#else
+/* Reference vectors come from appdimens-dynamic (IEEE-754 float32): compare at float precision. */
 #define REL 3e-6
-#endif
 #ifdef AD_NO_LIBM
 #undef REL
 #define REL 3e-6
