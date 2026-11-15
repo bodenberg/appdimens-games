@@ -1,6 +1,6 @@
 """Copies the single sources of truth into every binding (run after editing them).
 
-  native/include/appdimens/{appdimens.h,games.h}  → Unreal ThirdParty
+  native/include/appdimens/{appdimens.h,appdimens_custom.h,games.h} → Unreal ThirdParty
   bindings/csharp/AppDimens.Games/{Core,Games}.cs  → Unity package Runtime/Core
   native/tests/golden.json                         → Godot tests
 Use --check in CI to fail when a copy is stale.
@@ -13,6 +13,7 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAIRS = [
     ("native/include/appdimens/appdimens.h", "bindings/unreal/AppDimens/Source/AppDimens/ThirdParty/appdimens/appdimens.h"),
+    ("native/include/appdimens/appdimens_custom.h", "bindings/unreal/AppDimens/Source/AppDimens/ThirdParty/appdimens/appdimens_custom.h"),
     ("native/include/appdimens/games.h", "bindings/unreal/AppDimens/Source/AppDimens/ThirdParty/appdimens/games.h"),
     ("bindings/csharp/AppDimens.Games/Core.cs", "bindings/unity/com.bodenberg.appdimens.games/Runtime/Core/Core.cs"),
     ("bindings/csharp/AppDimens.Games/Games.cs", "bindings/unity/com.bodenberg.appdimens.games/Runtime/Core/Games.cs"),

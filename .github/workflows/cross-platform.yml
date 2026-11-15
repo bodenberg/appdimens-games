@@ -32,7 +32,7 @@ jobs:
       - run: |
           cd build-win
           export WINEDEBUG=-all
-          for t in adg_test_core adg_test_games adg_test_layout adg_test_api; do wine ./$t.exe; done
+          for t in adg_test_core adg_test_custom adg_test_games adg_test_layout adg_test_api; do wine ./$t.exe; done
           STEAM_COMPAT_DATA_PATH=/tmp SteamDeck=1 wine ./adg_test_api.exe | grep "platform mask"
 
   ios-android:

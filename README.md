@@ -287,6 +287,8 @@ On-device comparison vs games-2.0.1 & dynamic-3.1.9: [`benchlab/`](benchlab) · 
 
 ## ✨ What's new in 3.3.0
 
+- **Custom strategies in C/C++ and Unreal**: `native/include/appdimens/appdimens_custom.h` (also in the Unreal `ThirdParty/appdimens`) runs the shared JSON document and text formulas with `adc_dp(strategy, adg_acquire(), 64)`; see [DOCUMENTATION/CUSTOM-NATIVE.md](DOCUMENTATION/CUSTOM-NATIVE.md). Reproduces the 540-case fixture.
+
 - **Cross-platform native SDK** (`native/`): Windows, Linux, Steam Deck, Proton/Wine, macOS, iOS, Android, Web, consoles.
 - **Engines:** Unity UPM package, Unreal Engine 5 plugin (UMG DPI rule), Godot 4 addon, .NET package (MonoGame/FNA/Stride).
 - **Graphics APIs:** native viewports/scissors/projections for OpenGL(ES)/WebGL, Vulkan, D3D11/12, Metal, WebGPU — reverse-Z, infinite far.
