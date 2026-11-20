@@ -66,6 +66,6 @@ jobs:
             -I android/library-native/src/main/cpp/include \
             -I "$JAVA_HOME/include" -I "$JAVA_HOME/include/linux" \
             android/library-native/src/main/cpp/jni/appdimens_games_jni.cpp
-      - uses: github/codeql-action/analyze@c4dd10e44af883a891fe31ced449bcb4a6728b9b # v3
+      - uses: github/codeql-action/analyze@33d7b85da1a04171e211befe2c739303b9a4c066 # v3
         with:
           category: /language:${{ matrix.language }}
