@@ -3,7 +3,7 @@
 agp = "9.3.1"
 kotlin = "2.4.10"
 vanniktech = "0.37.0"
-dokka = "2.2.0"
+dokka = "2.3.0"
 coreKtx = "1.19.0"
 activityCompose = "1.13.0"
 composeBom = "2026.06.01"
